@@ -666,6 +666,7 @@
               const formData = new FormData();
               formData.append("file", selectedFile);
               formData.append("session_id", chatConfig.sessionId);
+              formData.append("company_id", chatConfig.companyId);
 
               const fileResponse = await fetch(
                 `${chatConfig.apiBaseUrl}/chatbot/upload/`,
@@ -692,20 +693,22 @@
 
         // Always use DRF API for regular chatbot messages
         console.log("DEBUG: Using DRF API for chatbot message");
-        if (true) {
+        
+        // Only send chat message if there's actually a message to send
+        if (message && message.trim()) {
           // Always use DRF API
           console.log("DEBUG: Using HTTP API");
           // Show typing indicator for HTTP requests
           showTypingIndicator();
 
           try {
-            // Prepare form data
-            const formData = new FormData();
-            if (message) formData.append("message", message);
-            if (selectedFile) formData.append("file", selectedFile);
-            formData.append("company_id", chatConfig.companyId);
-            if (chatConfig.sessionId)
-              formData.append("session_id", chatConfig.sessionId);
+            // Prepare JSON data
+            const requestData = {
+              company_id: chatConfig.companyId,
+              message: message
+            };
+            
+            if (chatConfig.sessionId) requestData.session_id = chatConfig.sessionId;
 
             // Send to API
             console.log(
@@ -713,14 +716,17 @@
               `${chatConfig.apiBaseUrl}/chatbot/chat/`
             );
             console.log(
-              "DEBUG: FormData contents:",
-              Array.from(formData.entries())
+              "DEBUG: Request data:",
+              requestData
             );
             const response = await fetch(
               `${chatConfig.apiBaseUrl}/chatbot/chat/`,
               {
                 method: "POST",
-                body: formData,
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(requestData),
               }
             );
             console.log("DEBUG: Response status:", response.status);
@@ -765,6 +771,45 @@
             );
           } finally {
             hideTypingIndicator();
+          }
+        } else if (selectedFile) {
+          // Handle file-only upload (no message)
+          console.log("DEBUG: File-only upload");
+          try {
+            const formData = new FormData();
+            formData.append("file", selectedFile);
+            formData.append("session_id", chatConfig.sessionId || "");
+            formData.append("company_id", chatConfig.companyId);
+
+            const fileResponse = await fetch(
+              `${chatConfig.apiBaseUrl}/chatbot/upload/`,
+              {
+                method: "POST",
+                body: formData,
+              }
+            );
+
+            if (fileResponse.ok) {
+              const fileResult = await fileResponse.json();
+              // Show file upload success in chat
+              addMessage(
+                `📎 File uploaded: ${fileResult.original_name}`,
+                "user"
+              );
+              console.log("DEBUG: File uploaded successfully:", fileResult);
+            } else {
+              console.error("File upload failed:", fileResponse.status);
+              addMessage(
+                "Sorry, file upload failed. Please try again.",
+                "bot"
+              );
+            }
+          } catch (error) {
+            console.error("File upload error:", error);
+            addMessage(
+              "Sorry, file upload failed. Please try again.",
+              "bot"
+            );
           }
         }
 

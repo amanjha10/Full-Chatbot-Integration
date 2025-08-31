@@ -3,10 +3,10 @@ import { HiRefresh } from "react-icons/hi";
 import { IoMdCheckboxOutline } from "react-icons/io";
 import { IoChatbubbles, IoEye } from "react-icons/io5";
 import { useState } from "react";
-import useSWR from "swr";
 import { axiosClient } from "../../config/axiosConfig";
 import RealTimeChat from "../chat/RealTimeChat";
 import { useCompanyId } from "../../context-provider/CompanyProvider";
+import { useAgentRealTimeData } from "../../hooks/useAgentWebSocket";
 
 interface ActiveSessionData {
   id: number;
@@ -27,15 +27,16 @@ export default function MyActiveSession() {
   const [chatModalVisible, setChatModalVisible] = useState(false);
   const companyId = useCompanyId();
 
-  // Fetch active sessions for this agent
+  // Use the new real-time hook instead of SWR directly
   const {
-    data: activeSessions,
-    isLoading,
-    mutate,
-  } = useSWR<ActiveSessionData[]>("/agent-dashboard/active-sessions/");
+    activeSessions,
+    isConnected,
+    sessionsLoading,
+    refreshActiveSessions
+  } = useAgentRealTimeData();
 
   const handleRefresh = () => {
-    mutate();
+    refreshActiveSessions();
   };
 
   const handleCompleteSession = async (sessionId: number) => {
@@ -46,11 +47,12 @@ export default function MyActiveSession() {
       });
 
       message.success("Session completed successfully");
-      mutate(); // Refresh the list
-    } catch (error: any) {
-      message.error(
-        error?.response?.data?.error || "Failed to complete session"
-      );
+      refreshActiveSessions(); // Refresh the list
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error 
+        ? error.message 
+        : 'Failed to complete session';
+      message.error(errorMessage);
     } finally {
       setCompletingSession(null);
     }
@@ -74,6 +76,12 @@ export default function MyActiveSession() {
         <div className="flex items-center gap-3">
           <IoChatbubbles size={20} />
           <p className="text-lg font-bold">My Active Sessions</p>
+          {/* WebSocket connection indicator */}
+          <span className={`text-xs px-2 py-1 rounded ${
+            isConnected ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+          }`}>
+            {isConnected ? '🟢 Live' : '🔴 Offline'}
+          </span>
         </div>
         <Badge
           count={activeSessions?.length || 0}
@@ -87,15 +95,15 @@ export default function MyActiveSession() {
             type="primary"
             className="!bg-yellow"
             onClick={handleRefresh}
-            loading={isLoading}
+            loading={sessionsLoading}
           >
-            Refresh
+            {isConnected ? 'Refresh' : 'Manual Refresh'}
           </Button>
         </Badge>
       </div>
 
       <div className="max-h-80 overflow-y-auto space-y-3">
-        {isLoading ? (
+        {sessionsLoading ? (
           <div className="space-y-3">
             {[1, 2].map((i) => (
               <div key={i} className="bg-gray-100 rounded-md p-3 animate-pulse">
@@ -105,7 +113,7 @@ export default function MyActiveSession() {
             ))}
           </div>
         ) : activeSessions && activeSessions.length > 0 ? (
-          activeSessions.map((session) => (
+          activeSessions?.map((session: ActiveSessionData) => (
             <div
               key={session.id}
               className="w-full border border-gray-200 rounded-md bg-gray-50 p-3"

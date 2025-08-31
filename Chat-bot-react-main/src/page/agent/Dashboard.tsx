@@ -1,8 +1,7 @@
 import MyActiveSession from "../../components/agent/MyActiveSession";
 import PendingSession from "../../components/agent/PendingSession";
 import Card from "../../components/dashboard/Card";
-import { useState, useEffect } from "react";
-import useSWR from "swr";
+import { useAgentRealTimeData } from "../../hooks/useAgentWebSocket";
 
 interface AgentDashboardStats {
   pending_sessions: number;
@@ -13,11 +12,9 @@ interface AgentDashboardStats {
 }
 
 export default function Dashboard() {
-  const { data: stats, isLoading } = useSWR<AgentDashboardStats>(
-    "/agent-dashboard/stats/"
-  );
+  const { stats, isConnected, statsLoading } = useAgentRealTimeData();
 
-  if (isLoading) {
+  if (statsLoading) {
     return (
       <div className="pt-4 space-y-5">
         <h2 className="font-bold text-2xl">Agent Dashboard</h2>
@@ -53,7 +50,7 @@ export default function Dashboard() {
     <div className="pt-4 space-y-5">
       <div className="flex justify-between items-center">
         <h2 className="font-bold text-2xl">Agent Dashboard</h2>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <span className="text-sm text-gray-600">Status:</span>
           <span
             className={`font-semibold ${getStatusColor(
@@ -61,6 +58,12 @@ export default function Dashboard() {
             )}`}
           >
             {stats?.agent_status || "OFFLINE"}
+          </span>
+          {/* WebSocket connection indicator */}
+          <span className={`text-xs px-2 py-1 rounded ${
+            isConnected ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+          }`}>
+            {isConnected ? '🟢 Live Updates' : '🔴 No Live Updates'}
           </span>
         </div>
       </div>
