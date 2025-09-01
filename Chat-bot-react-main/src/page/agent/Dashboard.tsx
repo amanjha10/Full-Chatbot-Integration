@@ -60,10 +60,14 @@ export default function Dashboard() {
             {stats?.agent_status || "OFFLINE"}
           </span>
           {/* WebSocket connection indicator */}
-          <span className={`text-xs px-2 py-1 rounded ${
-            isConnected ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-          }`}>
-            {isConnected ? '🟢 Live Updates' : '🔴 No Live Updates'}
+          <span
+            className={`text-xs px-2 py-1 rounded ${
+              isConnected
+                ? "bg-green-100 text-green-800"
+                : "bg-red-100 text-red-800"
+            }`}
+          >
+            {isConnected ? "🟢 Live Updates" : "🔴 No Live Updates"}
           </span>
         </div>
       </div>

@@ -32,7 +32,7 @@ export default function MyActiveSession() {
     activeSessions,
     isConnected,
     sessionsLoading,
-    refreshActiveSessions
+    refreshActiveSessions,
   } = useAgentRealTimeData();
 
   const handleRefresh = () => {
@@ -49,9 +49,8 @@ export default function MyActiveSession() {
       message.success("Session completed successfully");
       refreshActiveSessions(); // Refresh the list
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error 
-        ? error.message 
-        : 'Failed to complete session';
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to complete session";
       message.error(errorMessage);
     } finally {
       setCompletingSession(null);
@@ -77,10 +76,14 @@ export default function MyActiveSession() {
           <IoChatbubbles size={20} />
           <p className="text-lg font-bold">My Active Sessions</p>
           {/* WebSocket connection indicator */}
-          <span className={`text-xs px-2 py-1 rounded ${
-            isConnected ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-          }`}>
-            {isConnected ? '🟢 Live' : '🔴 Offline'}
+          <span
+            className={`text-xs px-2 py-1 rounded ${
+              isConnected
+                ? "bg-green-100 text-green-800"
+                : "bg-red-100 text-red-800"
+            }`}
+          >
+            {isConnected ? "🟢 Live" : "🔴 Offline"}
           </span>
         </div>
         <Badge
@@ -97,7 +100,7 @@ export default function MyActiveSession() {
             onClick={handleRefresh}
             loading={sessionsLoading}
           >
-            {isConnected ? 'Refresh' : 'Manual Refresh'}
+            {isConnected ? "Refresh" : "Manual Refresh"}
           </Button>
         </Badge>
       </div>

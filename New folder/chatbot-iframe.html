@@ -680,20 +680,33 @@
                 const fileResult = await fileResponse.json();
                 fileUrl = fileResult.file_url;
                 fileName = fileResult.file_name;
+                console.log(
+                  "DEBUG: File uploaded, will send via WebSocket:",
+                  fileName
+                );
               }
             } catch (error) {
               console.error("File upload error:", error);
             }
           }
 
-          // WebSocket is only for escalated sessions with human agents
-          // For now, always use DRF API for chatbot messages
-          sentViaWebSocket = false;
+          // Try to send via WebSocket for escalated sessions
+          if (message && message.trim()) {
+            sentViaWebSocket = sendWebSocketMessage(message, fileUrl, fileName);
+            console.log("DEBUG: WebSocket send attempted:", sentViaWebSocket);
+          } else if (fileUrl && fileName) {
+            // Send file-only message via WebSocket
+            sentViaWebSocket = sendWebSocketMessage("", fileUrl, fileName);
+            console.log(
+              "DEBUG: File-only WebSocket send attempted:",
+              sentViaWebSocket
+            );
+          }
         }
 
         // Always use DRF API for regular chatbot messages
         console.log("DEBUG: Using DRF API for chatbot message");
-        
+
         // Only send chat message if there's actually a message to send
         if (message && message.trim()) {
           // Always use DRF API
@@ -705,20 +718,18 @@
             // Prepare JSON data
             const requestData = {
               company_id: chatConfig.companyId,
-              message: message
+              message: message,
             };
-            
-            if (chatConfig.sessionId) requestData.session_id = chatConfig.sessionId;
+
+            if (chatConfig.sessionId)
+              requestData.session_id = chatConfig.sessionId;
 
             // Send to API
             console.log(
               "DEBUG: Sending to API:",
               `${chatConfig.apiBaseUrl}/chatbot/chat/`
             );
-            console.log(
-              "DEBUG: Request data:",
-              requestData
-            );
+            console.log("DEBUG: Request data:", requestData);
             const response = await fetch(
               `${chatConfig.apiBaseUrl}/chatbot/chat/`,
               {
@@ -799,17 +810,11 @@
               console.log("DEBUG: File uploaded successfully:", fileResult);
             } else {
               console.error("File upload failed:", fileResponse.status);
-              addMessage(
-                "Sorry, file upload failed. Please try again.",
-                "bot"
-              );
+              addMessage("Sorry, file upload failed. Please try again.", "bot");
             }
           } catch (error) {
             console.error("File upload error:", error);
-            addMessage(
-              "Sorry, file upload failed. Please try again.",
-              "bot"
-            );
+            addMessage("Sorry, file upload failed. Please try again.", "bot");
           }
         }
 
@@ -960,11 +965,14 @@
         switch (data.type) {
           case "chat_message":
             if (data.sender_type === "agent") {
-              console.log("DEBUG: Received bot message:", data.message);
+              console.log(
+                "DEBUG: Received agent message (FIXED):",
+                data.message
+              );
               console.log("DEBUG: Suggestions:", data.suggestions);
-              addMessage(data.message, "bot", data.suggestions);
+              addMessage(data.message, "agent", data.suggestions);
               if (data.file_url) {
-                addFileMessage("bot", data.file_url, data.file_name);
+                addFileMessage("agent", data.file_url, data.file_name);
               }
             }
             break;

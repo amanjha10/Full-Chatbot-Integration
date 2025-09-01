@@ -2345,9 +2345,22 @@
           container.style.left = "auto";
           container.style.right = "auto";
 
+          // Calculate navbar height for top positioning
+          let topOffset = "20px";
+          if (vertical === "top") {
+            const navbar = document.querySelector(".navbar");
+            if (navbar) {
+              const navbarHeight = navbar.offsetHeight;
+              topOffset = `${navbarHeight + 20}px`; // navbar height + 20px margin
+            } else {
+              topOffset = "100px"; // fallback if navbar not found
+            }
+          }
+
           // Apply new position
           if (vertical === "top") {
-            container.style.top = "20px";
+            // Position below navbar
+            container.style.top = topOffset;
           } else {
             container.style.bottom = "140px";
           }
@@ -2366,7 +2379,8 @@
           icon.style.right = "auto";
 
           if (vertical === "top") {
-            icon.style.top = "20px";
+            // Position below navbar
+            icon.style.top = topOffset;
           } else {
             icon.style.bottom = "70px";
           }
@@ -2388,6 +2402,9 @@
             (config.iframeHeight || config.iframe_height) + "px";
         }
       }
+
+      // Make applyChatbotConfig available globally for iframe access
+      window.applyChatbotConfig = applyChatbotConfig;
 
       // Initialize chatbot on page load
       document.addEventListener("DOMContentLoaded", function () {

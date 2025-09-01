@@ -1,353 +1,417 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Real-Time Chat System Test</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            height: 600px;
-        }
-        .chat-section {
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-        }
-        .chat-messages {
-            flex: 1;
-            border: 1px solid #eee;
-            padding: 10px;
-            margin: 10px 0;
-            overflow-y: auto;
-            background: #f9f9f9;
-            border-radius: 4px;
-        }
-        .message {
-            margin: 5px 0;
-            padding: 8px;
-            border-radius: 4px;
-        }
-        .user-message {
-            background: #e3f2fd;
-            margin-left: 20px;
-        }
-        .agent-message {
-            background: #f3e5f5;
-            margin-right: 20px;
-        }
-        .system-message {
-            background: #fff3e0;
-            font-style: italic;
-            text-align: center;
-        }
-        .input-area {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        input[type="text"] {
-            flex: 1;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            padding: 8px 16px;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background: #0056b3;
-        }
-        .status {
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-        .connected {
-            background: #d4edda;
-            color: #155724;
-        }
-        .disconnected {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        .file-upload {
-            margin: 10px 0;
-        }
-        .test-results {
-            grid-column: 1 / -1;
-            margin-top: 20px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 8px;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        height: 600px;
+      }
+      .chat-section {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+      }
+      .chat-messages {
+        flex: 1;
+        border: 1px solid #eee;
+        padding: 10px;
+        margin: 10px 0;
+        overflow-y: auto;
+        background: #f9f9f9;
+        border-radius: 4px;
+      }
+      .message {
+        margin: 5px 0;
+        padding: 8px;
+        border-radius: 4px;
+      }
+      .user-message {
+        background: #e3f2fd;
+        margin-left: 20px;
+      }
+      .agent-message {
+        background: #f3e5f5;
+        margin-right: 20px;
+      }
+      .system-message {
+        background: #fff3e0;
+        font-style: italic;
+        text-align: center;
+      }
+      .input-area {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      input[type="text"] {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      button {
+        padding: 8px 16px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #0056b3;
+      }
+      .status {
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 4px;
+        font-weight: bold;
+      }
+      .connected {
+        background: #d4edda;
+        color: #155724;
+      }
+      .disconnected {
+        background: #f8d7da;
+        color: #721c24;
+      }
+      .file-upload {
+        margin: 10px 0;
+      }
+      .test-results {
+        grid-column: 1 / -1;
+        margin-top: 20px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 8px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Real-Time Chat System Integration Test</h1>
-    
-    <div class="container">
-        <!-- User Chat Section -->
-        <div class="chat-section">
-            <h3>User Chat (WebSocket to Agent)</h3>
-            <div id="userStatus" class="status disconnected">Disconnected</div>
-            <div id="userMessages" class="chat-messages"></div>
-            <div class="file-upload">
-                <input type="file" id="userFileInput">
-                <button onclick="uploadUserFile()">Upload File</button>
-            </div>
-            <div class="input-area">
-                <input type="text" id="userMessageInput" placeholder="Type user message..." onkeypress="if(event.key==='Enter') sendUserMessage()">
-                <button onclick="sendUserMessage()">Send</button>
-            </div>
-        </div>
 
-        <!-- Agent Chat Section -->
-        <div class="chat-section">
-            <h3>Agent Chat (API + WebSocket to User)</h3>
-            <div id="agentStatus" class="status disconnected">Not Logged In</div>
-            <div id="agentMessages" class="chat-messages"></div>
-            <div class="file-upload">
-                <input type="file" id="agentFileInput">
-                <button onclick="uploadAgentFile()">Upload File</button>
-            </div>
-            <div class="input-area">
-                <input type="text" id="agentMessageInput" placeholder="Type agent message..." onkeypress="if(event.key==='Enter') sendAgentMessage()">
-                <button onclick="sendAgentMessage()">Send</button>
-            </div>
+    <div class="container">
+      <!-- User Chat Section -->
+      <div class="chat-section">
+        <h3>User Chat (WebSocket to Agent)</h3>
+        <div id="userStatus" class="status disconnected">Disconnected</div>
+        <div id="userMessages" class="chat-messages"></div>
+        <div class="file-upload">
+          <input type="file" id="userFileInput" />
+          <button onclick="uploadUserFile()">Upload File</button>
         </div>
+        <div class="input-area">
+          <input
+            type="text"
+            id="userMessageInput"
+            placeholder="Type user message..."
+            onkeypress="if(event.key==='Enter') sendUserMessage()"
+          />
+          <button onclick="sendUserMessage()">Send</button>
+        </div>
+      </div>
+
+      <!-- Agent Chat Section -->
+      <div class="chat-section">
+        <h3>Agent Chat (API + WebSocket to User)</h3>
+        <div id="agentStatus" class="status disconnected">Not Logged In</div>
+        <div id="agentMessages" class="chat-messages"></div>
+        <div class="file-upload">
+          <input type="file" id="agentFileInput" />
+          <button onclick="uploadAgentFile()">Upload File</button>
+        </div>
+        <div class="input-area">
+          <input
+            type="text"
+            id="agentMessageInput"
+            placeholder="Type agent message..."
+            onkeypress="if(event.key==='Enter') sendAgentMessage()"
+          />
+          <button onclick="sendAgentMessage()">Send</button>
+        </div>
+      </div>
     </div>
 
     <div class="test-results">
-        <h3>Test Results</h3>
-        <div id="testResults">
-            <p>📋 <strong>Real-Time Chat System Status:</strong></p>
-            <ul>
-                <li>✅ Django DRF API Server (Port 8001): Active</li>
-                <li>✅ WebSocket Server (Port 8000): Active</li>
-                <li>✅ React Frontend (Port 5174): Active</li>
-                <li>✅ Database Sessions: 6 active sessions found</li>
-                <li>✅ File Upload System: Both user and agent uploads working</li>
-                <li>✅ WebSocket Broadcasting: Bidirectional communication established</li>
-            </ul>
-            <p><strong>Session ID:</strong> 491ad41e-0951-4217-b7a0-1e946be49823</p>
-            <p><strong>Company ID:</strong> TEST001</p>
-            <p><strong>Assigned Agent:</strong> aman jha</p>
-        </div>
+      <h3>Test Results</h3>
+      <div id="testResults">
+        <p>📋 <strong>Real-Time Chat System Status:</strong></p>
+        <ul>
+          <li>✅ Django DRF API Server (Port 8001): Active</li>
+          <li>✅ WebSocket Server (Port 8000): Active</li>
+          <li>✅ React Frontend (Port 5174): Active</li>
+          <li>✅ Database Sessions: 6 active sessions found</li>
+          <li>✅ File Upload System: Both user and agent uploads working</li>
+          <li>
+            ✅ WebSocket Broadcasting: Bidirectional communication established
+          </li>
+        </ul>
+        <p><strong>Session ID:</strong> 491ad41e-0951-4217-b7a0-1e946be49823</p>
+        <p><strong>Company ID:</strong> TEST001</p>
+        <p><strong>Assigned Agent:</strong> aman jha</p>
+      </div>
     </div>
 
     <script>
-        const sessionId = '491ad41e-0951-4217-b7a0-1e946be49823';
-        const companyId = 'TEST001';
-        const agentToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU2NzIzMzM2LCJpYXQiOjE3NTY2MzY5MzYsImp0aSI6IjE1MmY0YjJlMjg4MTQ5OTBiOWQxNTE0Nzk3OTJlMDY0IiwidXNlcl9pZCI6NDZ9.YOiPGkph4uQ_Mwm7l6WfamifzwwyJ18b6cRVokzN_W0';
-        
-        let userWs = null;
-        let agentWs = null;
+      const sessionId = "491ad41e-0951-4217-b7a0-1e946be49823";
+      const companyId = "TEST001";
+      const agentToken =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU2NzIzMzM2LCJpYXQiOjE3NTY2MzY5MzYsImp0aSI6IjE1MmY0YjJlMjg4MTQ5OTBiOWQxNTE0Nzk3OTJlMDY0IiwidXNlcl9pZCI6NDZ9.YOiPGkph4uQ_Mwm7l6WfamifzwwyJ18b6cRVokzN_W0";
 
-        // Initialize WebSocket connections
-        function connectUserWebSocket() {
-            try {
-                userWs = new WebSocket(`ws://localhost:8000/ws/chat/${companyId}/${sessionId}/`);
-                
-                userWs.onopen = function(event) {
-                    document.getElementById('userStatus').textContent = 'Connected to WebSocket';
-                    document.getElementById('userStatus').className = 'status connected';
-                    addMessage('userMessages', 'system', 'Connected to chat system');
-                };
-                
-                userWs.onmessage = function(event) {
-                    const data = JSON.parse(event.data);
-                    console.log('User WebSocket received:', data);
-                    
-                    if (data.type === 'chat_message') {
-                        addMessage('userMessages', data.sender_type, data.message, data.sender_name, data.file_url, data.file_name);
-                    }
-                };
-                
-                userWs.onclose = function(event) {
-                    document.getElementById('userStatus').textContent = 'Disconnected';
-                    document.getElementById('userStatus').className = 'status disconnected';
-                    addMessage('userMessages', 'system', 'Disconnected from chat system');
-                };
-                
-                userWs.onerror = function(error) {
-                    console.error('User WebSocket error:', error);
-                    addMessage('userMessages', 'system', 'WebSocket connection error');
-                };
-            } catch (error) {
-                console.error('Failed to connect user WebSocket:', error);
+      let userWs = null;
+      let agentWs = null;
+
+      // Initialize WebSocket connections
+      function connectUserWebSocket() {
+        try {
+          userWs = new WebSocket(
+            `ws://localhost:8000/ws/chat/${companyId}/${sessionId}/`
+          );
+
+          userWs.onopen = function (event) {
+            document.getElementById("userStatus").textContent =
+              "Connected to WebSocket";
+            document.getElementById("userStatus").className =
+              "status connected";
+            addMessage("userMessages", "system", "Connected to chat system");
+          };
+
+          userWs.onmessage = function (event) {
+            const data = JSON.parse(event.data);
+            console.log("User WebSocket received:", data);
+
+            if (data.type === "chat_message") {
+              addMessage(
+                "userMessages",
+                data.sender_type,
+                data.message,
+                data.sender_name,
+                data.file_url,
+                data.file_name
+              );
             }
+          };
+
+          userWs.onclose = function (event) {
+            document.getElementById("userStatus").textContent = "Disconnected";
+            document.getElementById("userStatus").className =
+              "status disconnected";
+            addMessage(
+              "userMessages",
+              "system",
+              "Disconnected from chat system"
+            );
+          };
+
+          userWs.onerror = function (error) {
+            console.error("User WebSocket error:", error);
+            addMessage("userMessages", "system", "WebSocket connection error");
+          };
+        } catch (error) {
+          console.error("Failed to connect user WebSocket:", error);
+        }
+      }
+
+      // Send user message via WebSocket
+      function sendUserMessage() {
+        const input = document.getElementById("userMessageInput");
+        const message = input.value.trim();
+
+        if (!message) return;
+
+        if (userWs && userWs.readyState === WebSocket.OPEN) {
+          userWs.send(
+            JSON.stringify({
+              type: "chat_message",
+              message: message,
+              sender_type: "user",
+              sender_name: "Test User",
+            })
+          );
+
+          addMessage("userMessages", "user", message, "Test User");
+          input.value = "";
+        } else {
+          alert("WebSocket not connected");
+        }
+      }
+
+      // Send agent message via API
+      async function sendAgentMessage() {
+        const input = document.getElementById("agentMessageInput");
+        const message = input.value.trim();
+
+        if (!message) return;
+
+        try {
+          const response = await fetch(
+            "http://127.0.0.1:8001/api/human-handoff/agent/send-message/",
+            {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${agentToken}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                session_id: sessionId,
+                message: message,
+              }),
+            }
+          );
+
+          if (response.ok) {
+            const data = await response.json();
+            addMessage("agentMessages", "agent", message, "Test Agent");
+            input.value = "";
+            document.getElementById("agentStatus").textContent =
+              "Message sent successfully";
+            document.getElementById("agentStatus").className =
+              "status connected";
+          } else {
+            throw new Error("Failed to send message");
+          }
+        } catch (error) {
+          console.error("Error sending agent message:", error);
+          alert("Failed to send agent message");
+        }
+      }
+
+      // Upload user file
+      async function uploadUserFile() {
+        const fileInput = document.getElementById("userFileInput");
+        const file = fileInput.files[0];
+
+        if (!file) {
+          alert("Please select a file first");
+          return;
         }
 
-        // Send user message via WebSocket
-        function sendUserMessage() {
-            const input = document.getElementById('userMessageInput');
-            const message = input.value.trim();
-            
-            if (!message) return;
-            
-            if (userWs && userWs.readyState === WebSocket.OPEN) {
-                userWs.send(JSON.stringify({
-                    type: 'chat_message',
-                    message: message,
-                    sender_type: 'user',
-                    sender_name: 'Test User'
-                }));
-                
-                addMessage('userMessages', 'user', message, 'Test User');
-                input.value = '';
-            } else {
-                alert('WebSocket not connected');
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("session_id", sessionId);
+        formData.append("company_id", companyId);
+
+        try {
+          const response = await fetch(
+            "http://127.0.0.1:8001/api/chatbot/upload/",
+            {
+              method: "POST",
+              body: formData,
             }
+          );
+
+          if (response.ok) {
+            const data = await response.json();
+            addMessage(
+              "userMessages",
+              "user",
+              `📎 Uploaded: ${data.original_name}`,
+              "Test User",
+              data.file_url,
+              data.original_name
+            );
+            fileInput.value = "";
+          } else {
+            throw new Error("Upload failed");
+          }
+        } catch (error) {
+          console.error("Error uploading user file:", error);
+          alert("Failed to upload file");
+        }
+      }
+
+      // Upload agent file
+      async function uploadAgentFile() {
+        const fileInput = document.getElementById("agentFileInput");
+        const file = fileInput.files[0];
+
+        if (!file) {
+          alert("Please select a file first");
+          return;
         }
 
-        // Send agent message via API
-        async function sendAgentMessage() {
-            const input = document.getElementById('agentMessageInput');
-            const message = input.value.trim();
-            
-            if (!message) return;
-            
-            try {
-                const response = await fetch('http://127.0.0.1:8001/api/human-handoff/agent/send-message/', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${agentToken}`,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        session_id: sessionId,
-                        message: message
-                    }),
-                });
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    addMessage('agentMessages', 'agent', message, 'Test Agent');
-                    input.value = '';
-                    document.getElementById('agentStatus').textContent = 'Message sent successfully';
-                    document.getElementById('agentStatus').className = 'status connected';
-                } else {
-                    throw new Error('Failed to send message');
-                }
-            } catch (error) {
-                console.error('Error sending agent message:', error);
-                alert('Failed to send agent message');
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("session_id", sessionId);
+
+        try {
+          const response = await fetch(
+            "http://127.0.0.1:8001/api/human-handoff/agent/upload/",
+            {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${agentToken}`,
+              },
+              body: formData,
             }
+          );
+
+          if (response.ok) {
+            const data = await response.json();
+            addMessage(
+              "agentMessages",
+              "agent",
+              `📎 Uploaded: ${data.original_name}`,
+              "Test Agent",
+              data.file_url,
+              data.original_name
+            );
+            fileInput.value = "";
+          } else {
+            throw new Error("Upload failed");
+          }
+        } catch (error) {
+          console.error("Error uploading agent file:", error);
+          alert("Failed to upload file");
+        }
+      }
+
+      // Add message to chat
+      function addMessage(
+        containerId,
+        type,
+        content,
+        senderName = "",
+        fileUrl = "",
+        fileName = ""
+      ) {
+        const container = document.getElementById(containerId);
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `message ${type}-message`;
+
+        let messageContent = content;
+        if (senderName) {
+          messageContent = `<strong>${senderName}:</strong> ${content}`;
         }
 
-        // Upload user file
-        async function uploadUserFile() {
-            const fileInput = document.getElementById('userFileInput');
-            const file = fileInput.files[0];
-            
-            if (!file) {
-                alert('Please select a file first');
-                return;
-            }
-            
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('session_id', sessionId);
-            formData.append('company_id', companyId);
-            
-            try {
-                const response = await fetch('http://127.0.0.1:8001/api/chatbot/upload/', {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    addMessage('userMessages', 'user', `📎 Uploaded: ${data.original_name}`, 'Test User', data.file_url, data.original_name);
-                    fileInput.value = '';
-                } else {
-                    throw new Error('Upload failed');
-                }
-            } catch (error) {
-                console.error('Error uploading user file:', error);
-                alert('Failed to upload file');
-            }
+        if (fileUrl && fileName) {
+          messageContent += `<br><a href="http://127.0.0.1:8001${fileUrl}" target="_blank">📎 ${fileName}</a>`;
         }
 
-        // Upload agent file
-        async function uploadAgentFile() {
-            const fileInput = document.getElementById('agentFileInput');
-            const file = fileInput.files[0];
-            
-            if (!file) {
-                alert('Please select a file first');
-                return;
-            }
-            
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('session_id', sessionId);
-            
-            try {
-                const response = await fetch('http://127.0.0.1:8001/api/human-handoff/agent/upload/', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${agentToken}`,
-                    },
-                    body: formData
-                });
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    addMessage('agentMessages', 'agent', `📎 Uploaded: ${data.original_name}`, 'Test Agent', data.file_url, data.original_name);
-                    fileInput.value = '';
-                } else {
-                    throw new Error('Upload failed');
-                }
-            } catch (error) {
-                console.error('Error uploading agent file:', error);
-                alert('Failed to upload file');
-            }
-        }
+        messageDiv.innerHTML = `<span style="font-size: 0.8em; color: #666;">[${new Date().toLocaleTimeString()}]</span><br>${messageContent}`;
+        container.appendChild(messageDiv);
+        container.scrollTop = container.scrollHeight;
+      }
 
-        // Add message to chat
-        function addMessage(containerId, type, content, senderName = '', fileUrl = '', fileName = '') {
-            const container = document.getElementById(containerId);
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${type}-message`;
-            
-            let messageContent = content;
-            if (senderName) {
-                messageContent = `<strong>${senderName}:</strong> ${content}`;
-            }
-            
-            if (fileUrl && fileName) {
-                messageContent += `<br><a href="http://127.0.0.1:8001${fileUrl}" target="_blank">📎 ${fileName}</a>`;
-            }
-            
-            messageDiv.innerHTML = `<span style="font-size: 0.8em; color: #666;">[${new Date().toLocaleTimeString()}]</span><br>${messageContent}`;
-            container.appendChild(messageDiv);
-            container.scrollTop = container.scrollHeight;
-        }
-
-        // Initialize on page load
-        window.onload = function() {
-            connectUserWebSocket();
-            document.getElementById('agentStatus').textContent = 'Agent Token Ready';
-            document.getElementById('agentStatus').className = 'status connected';
-        };
+      // Initialize on page load
+      window.onload = function () {
+        connectUserWebSocket();
+        document.getElementById("agentStatus").textContent =
+          "Agent Token Ready";
+        document.getElementById("agentStatus").className = "status connected";
+      };
     </script>
-</body>
+  </body>
 </html>

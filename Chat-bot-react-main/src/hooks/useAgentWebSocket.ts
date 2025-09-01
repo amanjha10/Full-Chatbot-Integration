@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
-import useSWR from 'swr';
+import { useEffect, useRef, useState, useCallback } from "react";
+import useSWR from "swr";
 
 interface AgentProfile {
   id: number;
@@ -22,24 +22,36 @@ interface UseAgentWebSocketOptions {
   onSessionUpdate?: (data: WebSocketEventData) => void;
 }
 
-export function useAgentWebSocket(agentId: number | null, options: UseAgentWebSocketOptions = {}) {
+export function useAgentWebSocket(
+  agentId: number | null,
+  options: UseAgentWebSocketOptions = {}
+) {
   const [isConnected, setIsConnected] = useState(false);
   const wsRef = useRef<WebSocket | null>(null);
-  
+
   // Memoize callbacks to prevent useEffect re-runs
   const { onSessionAssigned, onChatMessage, onSessionUpdate } = options;
-  
-  const handleSessionAssigned = useCallback((data: WebSocketEventData) => {
-    onSessionAssigned?.(data);
-  }, [onSessionAssigned]);
-  
-  const handleChatMessage = useCallback((data: WebSocketEventData) => {
-    onChatMessage?.(data);
-  }, [onChatMessage]);
-  
-  const handleSessionUpdate = useCallback((data: WebSocketEventData) => {
-    onSessionUpdate?.(data);
-  }, [onSessionUpdate]);
+
+  const handleSessionAssigned = useCallback(
+    (data: WebSocketEventData) => {
+      onSessionAssigned?.(data);
+    },
+    [onSessionAssigned]
+  );
+
+  const handleChatMessage = useCallback(
+    (data: WebSocketEventData) => {
+      onChatMessage?.(data);
+    },
+    [onChatMessage]
+  );
+
+  const handleSessionUpdate = useCallback(
+    (data: WebSocketEventData) => {
+      onSessionUpdate?.(data);
+    },
+    [onSessionUpdate]
+  );
 
   useEffect(() => {
     if (!agentId) return;
@@ -55,27 +67,27 @@ export function useAgentWebSocket(agentId: number | null, options: UseAgentWebSo
 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      console.log('Agent WebSocket message:', data);
-      
+      console.log("Agent WebSocket message:", data);
+
       switch (data.type) {
-        case 'session_assigned':
+        case "session_assigned":
           handleSessionAssigned(data.data);
           break;
-          
-        case 'chat_message':
+
+        case "chat_message":
           handleChatMessage(data.data);
           break;
-          
-        case 'session_update':
+
+        case "session_update":
           handleSessionUpdate(data.data);
           break;
-          
-        case 'connection_established':
-          console.log('Agent dashboard connection established:', data.message);
+
+        case "connection_established":
+          console.log("Agent dashboard connection established:", data.message);
           break;
-          
+
         default:
-          console.log('Unknown WebSocket message type:', data.type);
+          console.log("Unknown WebSocket message type:", data.type);
       }
     };
 
@@ -85,7 +97,7 @@ export function useAgentWebSocket(agentId: number | null, options: UseAgentWebSo
     };
 
     ws.onerror = (error) => {
-      console.error('Agent WebSocket error:', error);
+      console.error("Agent WebSocket error:", error);
       setIsConnected(false);
     };
 
@@ -99,23 +111,25 @@ export function useAgentWebSocket(agentId: number | null, options: UseAgentWebSo
 
 export function useAgentRealTimeData() {
   const [agentProfile, setAgentProfile] = useState<AgentProfile | null>(null);
-  
+
   // Fetch agent profile to get agent ID
-  const { data: profileData } = useSWR<AgentProfile>('/agent-dashboard/profile/');
-  
+  const { data: profileData } = useSWR<AgentProfile>(
+    "/agent-dashboard/profile/"
+  );
+
   // Fetch active sessions with auto-refresh
-  const { 
-    data: activeSessions, 
+  const {
+    data: activeSessions,
     mutate: refreshActiveSessions,
-    isLoading: sessionsLoading 
-  } = useSWR('/agent-dashboard/active-sessions/');
+    isLoading: sessionsLoading,
+  } = useSWR("/agent-dashboard/active-sessions/");
 
   // Fetch stats with auto-refresh
-  const { 
-    data: stats, 
+  const {
+    data: stats,
     mutate: refreshStats,
-    isLoading: statsLoading 
-  } = useSWR('/agent-dashboard/stats/');
+    isLoading: statsLoading,
+  } = useSWR("/agent-dashboard/stats/");
 
   // Set agent profile when data is available
   useEffect(() => {
@@ -126,18 +140,18 @@ export function useAgentRealTimeData() {
 
   // WebSocket callbacks
   const handleSessionAssigned = useCallback(() => {
-    console.log('New session assigned - refreshing data');
+    console.log("New session assigned - refreshing data");
     refreshStats();
     refreshActiveSessions();
   }, [refreshStats, refreshActiveSessions]);
 
   const handleChatMessage = useCallback(() => {
-    console.log('New chat message - refreshing active sessions');
+    console.log("New chat message - refreshing active sessions");
     refreshActiveSessions();
   }, [refreshActiveSessions]);
 
   const handleSessionUpdate = useCallback(() => {
-    console.log('Session update - refreshing data');
+    console.log("Session update - refreshing data");
     refreshStats();
     refreshActiveSessions();
   }, [refreshStats, refreshActiveSessions]);
@@ -146,7 +160,7 @@ export function useAgentRealTimeData() {
   const { isConnected } = useAgentWebSocket(agentProfile?.id || null, {
     onSessionAssigned: handleSessionAssigned,
     onChatMessage: handleChatMessage,
-    onSessionUpdate: handleSessionUpdate
+    onSessionUpdate: handleSessionUpdate,
   });
 
   return {
@@ -157,6 +171,6 @@ export function useAgentRealTimeData() {
     sessionsLoading,
     statsLoading,
     refreshActiveSessions,
-    refreshStats
+    refreshStats,
   };
 }
