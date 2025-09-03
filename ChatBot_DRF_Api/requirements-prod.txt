@@ -1,0 +1,26 @@
+# Production requirements
+# Install with: pip install -r requirements-prod.txt
+
+# Include base requirements
+-r requirements.txt
+
+# Production web server
+gunicorn==21.2.0
+
+# Database (uncomment as needed)
+psycopg2-binary==2.9.7  # For PostgreSQL
+
+# Caching
+redis==5.0.1
+
+# Monitoring and logging
+sentry-sdk==1.32.0
+
+# Security
+django-security==0.17.0
+
+# Static files serving
+whitenoise==6.6.0
+
+# Environment
+python-dotenv==1.0.0
