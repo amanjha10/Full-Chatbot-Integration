@@ -2283,7 +2283,7 @@
         try {
           // Get company ID from URL parameter or use default
           const urlParams = new URLSearchParams(window.location.search);
-          const companyId = urlParams.get("company_id") || "TEST001";
+          const companyId = urlParams.get("company_id") || "ZIL001";
 
           const response = await fetch(
             `http://localhost:8001/api/chatbot/configuration/?company_id=${companyId}`
@@ -2317,7 +2317,7 @@
         // Return default configuration
         chatbotConfig = {
           apiBaseUrl: "http://localhost:8001/api",
-          companyId: "TEST001",
+          companyId: "ZIL001",
           primaryColor: "#f7941d",
           secondaryColor: "#652d90",
           position: "bottom-right",

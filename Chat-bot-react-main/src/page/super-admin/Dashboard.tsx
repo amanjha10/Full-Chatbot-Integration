@@ -1,6 +1,5 @@
 import Card from "../../components/dashboard/Card";
-import { useState, useEffect } from "react";
-import { axiosClient } from "../../config/axiosConfig";
+import PlanUpgradeRequests from "../../components/super-admin/PlanUpgradeRequests";
 import useSWR from "swr";
 
 interface SuperAdminStats {
@@ -49,10 +48,12 @@ export default function Dashboard() {
         <Card title="Active Sessions" count={stats?.active_sessions || 0} />
         <Card title="Pending Sessions" count={stats?.pending_sessions || 0} />
         <Card title="Total Users" count={stats?.total_users || 0} />
-        <Card
-          title="Monthly Revenue"
-          count={`$${stats?.monthly_revenue || 0}`}
-        />
+        <Card title="Monthly Revenue" count={stats?.monthly_revenue || 0} />
+      </div>
+
+      {/* Plan Upgrade Requests Section */}
+      <div className="mt-8">
+        <PlanUpgradeRequests />
       </div>
     </div>
   );

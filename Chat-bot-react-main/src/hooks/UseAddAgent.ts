@@ -31,7 +31,7 @@ export const useAddAgent = ({
     setLoading(true);
     createAgent(data)
       .then((response) => {
-        const { email, password, agent } = response.data;
+        const { email, password } = response.data;
         messageApi.success(
           `Agent created successfully!
             Email: ${email}
@@ -43,9 +43,23 @@ export const useAddAgent = ({
         mutate();
       })
       .catch((err) => {
-        messageApi.error(
-          err?.response?.data?.error || err?.message || "Failed to create agent"
-        );
+        // Handle plan limit errors specially
+        if (
+          err?.response?.status === 403 &&
+          err?.response?.data?.upgrade_needed
+        ) {
+          const errorData = err.response.data;
+          messageApi.error({
+            content: `🚫 ${errorData.error}\n💡 ${errorData.suggestion}\nCurrent usage: ${errorData.current_count}/${errorData.max_allowed} agents\nCurrent plan: ${errorData.current_plan}`,
+            duration: 8,
+          });
+        } else {
+          messageApi.error(
+            err?.response?.data?.error ||
+              err?.message ||
+              "Failed to create agent"
+          );
+        }
         setLoading(false);
       });
   };

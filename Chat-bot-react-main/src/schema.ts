@@ -33,6 +33,8 @@ export const schemaOfAddPlan = z.object({
     .nonempty("Please enter the name"),
   max_agents: z.coerce.number().min(1, "Please enter the user"),
   price: z.coerce.number().min(1, "Please enter the price"),
+  company_name: z.string().min(1, "Please enter the company name"),
+  expiry_date: z.string().min(1, "Please enter the expiry date"),
 });
 
 export const schemaOfAddCompany = z.object({
@@ -46,6 +48,9 @@ export const schemaOfAddCompany = z.object({
   phone_number: z
     .string()
     .regex(/^[0-9]{10}$/, "Phone number must be exactly 10 digits"),
-  plan_id: z.number().min(1, "Please Select Plan"),
+  plan_id: z.string().min(1, "Please select a plan type"),
+  expiry_date: z.string().min(1, "Please select expiry date"),
+  custom_max_agents: z.coerce.number().optional(),
+  custom_price: z.coerce.number().optional(),
   generated_password: z.string().optional(),
 });
