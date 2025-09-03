@@ -1,0 +1,67 @@
+# Python Virtual Environment
+venv/
+
+# # Test Files and Documentation
+# tests/
+# docs/
+
+# # Database
+# *.sqlite3
+# db.sqlite3
+
+# # Python Cache
+# __pycache__/
+# *.pyc
+# *.pyo
+# *.pyd
+# .Python
+
+# # Environment Variables
+# .env
+# .env.local
+# .env.development
+# .env.test
+# .env.production
+
+# # IDE Files
+# .vscode/
+# .idea/
+# *.swp
+# *.swo
+# *~
+
+# # OS Files
+# .DS_Store
+# .DS_Store?
+# ._*
+# .Spotlight-V100
+# .Trashes
+# ehthumbs.db
+# Thumbs.db
+
+# # Logs
+# *.log
+# logs/
+
+# # Django Static Files (for production)
+# staticfiles/
+# static_root/
+
+# # Media Files (for production)
+# media_root/
+
+# # Backup Files
+# *.bak
+# *.backup
+
+# # Coverage Reports
+# htmlcov/
+# .coverage
+# .coverage.*
+# coverage.xml
+
+# # Pytest
+# .pytest_cache/
+
+# # Legacy entries
+# Postman_Collection_Admin_API.json/

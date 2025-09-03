@@ -1,0 +1,6 @@
+Organization Routes:
+Organization
+Event Management -> Event(name, category, start_date, end_date), Season(name), Round(name), Event Setup(season, round, year, fiscal_year)
+Contestant Management -> contestant(new entry_type), contestant_upgrade
+Voting Setup
+Finance -> Voting Payment, Payment Request

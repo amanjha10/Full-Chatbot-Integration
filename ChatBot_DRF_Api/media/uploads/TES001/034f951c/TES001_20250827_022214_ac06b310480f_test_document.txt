@@ -1,0 +1,3 @@
+This is a test document for file upload functionality.
+It contains sample content to demonstrate file uploads in chat messages.
+File upload test - 138db29dc9cc2b6c
