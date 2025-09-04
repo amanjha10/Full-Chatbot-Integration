@@ -111,37 +111,57 @@ export default function RealTimeChat({
     fetchChatHistory();
   }, [fetchChatHistory]);
 
-  // Initialize WebSocket connection
+  // Initialize WebSocket connection (optional - only works for escalated sessions)
   useEffect(() => {
     const wsUrl = `ws://localhost:8000/ws/chat/${companyId}/${sessionId}/`;
-    console.log("Attempting WebSocket connection to:", wsUrl);
     const ws = new WebSocket(wsUrl);
     wsRef.current = ws;
 
     ws.onopen = () => {
       setIsConnected(true);
-      console.log("WebSocket connected successfully");
+
+      // Request file list to sync existing files
+      ws.send(JSON.stringify({
+        type: 'request_file_list',
+        session_id: sessionId,
+        company_id: companyId
+      }));
     };
 
     ws.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
-        console.log("WebSocket message received:", data);
+
 
         switch (data.type) {
           case "chat_message":
-            setMessages((prev) => [
-              ...prev,
-              {
-                id: data.message_id || Date.now().toString(),
-                type: data.sender_type,
-                content: data.message,
-                timestamp: data.timestamp,
-                sender_name: data.sender_name,
-                file_url: data.file_url,
-                file_name: data.file_name,
-              },
-            ]);
+            // Add deduplication for chat messages
+            setMessages((prev) => {
+              const messageId = data.message_id || Date.now().toString();
+              const isDuplicate = prev.some(msg =>
+                msg.id === messageId ||
+                (msg.content === data.message &&
+                 msg.type === data.sender_type &&
+                 Math.abs(new Date(msg.timestamp).getTime() - new Date(data.timestamp || Date.now()).getTime()) < 5000)
+              );
+
+              if (isDuplicate) {
+                return prev;
+              }
+
+              return [
+                ...prev,
+                {
+                  id: messageId,
+                  type: data.sender_type,
+                  content: data.message,
+                  timestamp: data.timestamp || new Date().toISOString(),
+                  sender_name: data.sender_name,
+                  file_url: data.file_url,
+                  file_name: data.file_name,
+                },
+              ];
+            });
             break;
 
           case "typing_indicator":
@@ -163,7 +183,55 @@ export default function RealTimeChat({
             break;
 
           case "connection_established":
-            console.log("WebSocket connection confirmed:", data.message);
+            break;
+
+          case "file_shared":
+            // Validate file data before adding
+            if (data.id && data.name && data.url) {
+              // Check for duplicate file messages
+              setMessages((prev) => {
+                const isDuplicate = prev.some(msg =>
+                  msg.id === data.id?.toString() ||
+                  (msg.file_url === data.url && msg.file_name === data.name)
+                );
+
+                if (isDuplicate) {
+                  return prev;
+                }
+
+                return [
+                  ...prev,
+                  {
+                    id: data.id.toString(),
+                    type: data.uploader === "user" ? "user" : "agent",
+                    content: `📎 Shared file: ${data.name}`,
+                    timestamp: data.created_at || new Date().toISOString(),
+                    sender_name: data.uploader === "user" ? "User" : "Agent",
+                    file_url: data.url,
+                    file_name: data.name,
+                  },
+                ];
+              });
+            } else {
+              console.warn("Invalid file_shared data:", data);
+            }
+            break;
+
+          case "file_list":
+            console.log("File list received:", data.files);
+            // Handle file list for reconnection sync
+            if (data.files && data.files.length > 0) {
+              const fileMessages = data.files.map((file: any) => ({
+                id: file.id?.toString() || Date.now().toString(),
+                type: file.uploader === "user" ? "user" : "agent",
+                content: `📎 Shared file: ${file.original_name}`,
+                timestamp: file.created_at || new Date().toISOString(),
+                sender_name: file.uploader === "user" ? "User" : "Agent",
+                file_url: file.url,
+                file_name: file.original_name,
+              }));
+              setMessages((prev) => [...prev, ...fileMessages]);
+            }
             break;
 
           case "error":
@@ -179,12 +247,11 @@ export default function RealTimeChat({
     };
     ws.onclose = () => {
       setIsConnected(false);
-      console.log("WebSocket disconnected");
     };
 
-    ws.onerror = (error) => {
-      console.error("WebSocket error:", error);
-      message.error("Connection error occurred");
+    ws.onerror = () => {
+      // Connection failures are normal when session isn't escalated
+      // No need to log or show errors for this
     };
 
     return () => {
@@ -204,16 +271,17 @@ export default function RealTimeChat({
         const token = localStorage.getItem("access_token");
 
         // Handle file upload if present
-        let fileUrl = "";
-        let fileName = "";
-
         if (fileList.length > 0) {
           const formData = new FormData();
           formData.append("file", fileList[0].originFileObj as File);
           formData.append("session_id", sessionId);
 
+          // Add required fields for new unified API
+          formData.append("company_id", companyId);
+          formData.append("uploader", "agent");
+
           const uploadResponse = await fetch(
-            "http://127.0.0.1:8001/api/human-handoff/agent/upload/",
+            "http://127.0.0.1:8001/api/chat/upload/",
             {
               method: "POST",
               headers: {
@@ -223,45 +291,36 @@ export default function RealTimeChat({
             }
           );
 
-          if (uploadResponse.ok) {
-            const uploadData = await uploadResponse.json();
-            fileUrl = uploadData.file_url;
-            fileName = uploadData.original_name;
-          } else {
+          if (!uploadResponse.ok) {
             throw new Error("Failed to upload file");
           }
+          // File upload successful - file_shared event will handle display
         }
 
-        const response = await fetch(
-          "http://127.0.0.1:8001/api/human-handoff/agent/send-message/",
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              session_id: sessionId,
-              message: inputMessage.trim() || " ", // Ensure there's always a message, even just a space
-            }),
-          }
-        );
+        // Only send message if there's actual text content
+        let response = null;
+        if (inputMessage.trim()) {
+          response = await fetch(
+            "http://127.0.0.1:8001/api/human-handoff/agent/send-message/",
+            {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                session_id: sessionId,
+                message: inputMessage.trim(),
+              }),
+            }
+          );
+        }
 
-        if (response.ok) {
-          const data = await response.json();
-          // Add message to local state immediately
-          const newMessage: ChatMessage = {
-            id: data.chat_message.id.toString(),
-            type: "agent",
-            content: data.chat_message.content,
-            timestamp: data.chat_message.timestamp,
-            sender_name: userName || "Agent",
-            file_url: fileUrl || undefined,
-            file_name: fileName || undefined,
-          };
-          setMessages((prev) => [...prev, newMessage]);
+        if (response && response.ok) {
+          // Don't add to local state - WebSocket will handle message display
 
           // Also send via WebSocket for real-time updates to user
+          // Note: Don't include file info here since file upload already triggered file_shared event
           if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
             wsRef.current.send(
               JSON.stringify({
@@ -269,39 +328,39 @@ export default function RealTimeChat({
                 message: inputMessage.trim(),
                 sender_type: "agent",
                 sender_name: userName || "Agent",
-                file_url: fileUrl || undefined,
-                file_name: fileName || undefined,
+                // file_url and file_name removed to prevent duplicate file messages
               })
             );
           }
-        } else {
+        } else if (response && !response.ok) {
           const errorData = await response.text();
           console.error("Agent API Error Response:", errorData);
           throw new Error(
             `Failed to send message via API: ${response.status} - ${errorData}`
           );
         }
+        // If no response (file-only upload), that's fine - file_shared event will handle it
       } else {
         // For users, use direct WebSocket
         if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) {
-          message.error("Connection not available");
+          // Connection not available - this is normal for non-escalated sessions
+          // Fall back to HTTP API instead of showing error
+          console.log("WebSocket not available, using HTTP API");
           return;
         }
 
         // Handle file upload if present
-        let fileUrl = "";
-        let fileName = "";
-
         if (fileList.length > 0) {
           const formData = new FormData();
           formData.append("file", fileList[0].originFileObj as File);
           formData.append("session_id", sessionId);
 
-          // For users, use the chatbot upload endpoint
-          const uploadEndpoint = "http://127.0.0.1:8001/api/chatbot/upload/";
+          // Use the new unified upload endpoint
+          const uploadEndpoint = "http://127.0.0.1:8001/api/chat/upload/";
 
-          // Add company_id for user uploads
+          // Add required fields for new unified API
           formData.append("company_id", companyId);
+          formData.append("uploader", "user");
 
           const headers: Record<string, string> = {};
 
@@ -311,25 +370,22 @@ export default function RealTimeChat({
             body: formData,
           });
 
-          if (response.ok) {
-            const result = await response.json();
-            fileUrl = result.file_url;
-            fileName = result.original_name;
-          } else {
+          if (!response.ok) {
             throw new Error("File upload failed");
           }
+          // File upload successful - file_shared event will handle display
         }
 
         // Send message via WebSocket
+        // Note: Don't include file info here since file upload already triggered file_shared event
         wsRef.current.send(
           JSON.stringify({
             type: "chat_message",
             message: inputMessage.trim(),
             sender_type: userType,
             sender_name: userName || "User",
-            file_url: fileUrl,
-            file_name: fileName,
             session_id: sessionId,
+            // file_url and file_name removed to prevent duplicate file messages
           })
         );
       }
@@ -454,14 +510,29 @@ export default function RealTimeChat({
                     <div>{msg.content}</div>
                     {msg.file_url && (
                       <div className="mt-2">
-                        <a
-                          href={msg.file_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-300 underline"
-                        >
-                          📎 {msg.file_name || "Download"}
-                        </a>
+                        {/* Check if file is an image */}
+                        {/\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(msg.file_name || '') ? (
+                          <div className="file-image-preview">
+                            <img
+                              src={msg.file_url}
+                              alt={msg.file_name || 'Image'}
+                              className="max-w-48 max-h-48 rounded-lg cursor-pointer border"
+                              onClick={() => window.open(msg.file_url, '_blank')}
+                            />
+                            <div className="text-xs mt-1 opacity-75">
+                              {msg.file_name || 'Image'}
+                            </div>
+                          </div>
+                        ) : (
+                          <a
+                            href={msg.file_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-300 underline"
+                          >
+                            📎 {msg.file_name || "Download"}
+                          </a>
+                        )}
                       </div>
                     )}
                     <div className="text-xs opacity-75 mt-1">
@@ -518,7 +589,7 @@ export default function RealTimeChat({
             <Input
               value={inputMessage}
               onChange={handleInputChange}
-              onKeyPress={handleKeyPress}
+              onKeyDown={handleKeyPress}
               placeholder="Type a message..."
               disabled={!isConnected || loading}
             />

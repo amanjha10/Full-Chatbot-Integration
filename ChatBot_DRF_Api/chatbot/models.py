@@ -98,6 +98,53 @@ class UploadedFile(models.Model):
     def __str__(self):
         return f"{self.original_name} - {self.file_type}"
 
+def chat_upload_path(instance, filename):
+    """Generate upload path for chat files"""
+    from .utils.storage import generate_secure_filename
+
+    # Use secure filename generation
+    return generate_secure_filename(filename, instance.company_id, instance.session_id)
+
+
+class ChatFile(models.Model):
+    """Model for file sharing between chatbot and agent"""
+    UPLOADER_CHOICES = [
+        ('user', 'User'),
+        ('agent', 'Agent'),
+    ]
+
+    company_id = models.CharField(max_length=64, db_index=True)
+    session_id = models.CharField(max_length=64, db_index=True)
+    uploader = models.CharField(max_length=16, choices=UPLOADER_CHOICES, default='user')
+    file = models.FileField(upload_to=chat_upload_path)
+    original_name = models.CharField(max_length=255)
+    mime_type = models.CharField(max_length=127)
+    size = models.BigIntegerField()
+    thumbnail = models.URLField(blank=True, null=True)  # Optional for images
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    # Optional fields for additional context
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True, blank=True)
+    chat_session = models.ForeignKey(ChatSession, on_delete=models.CASCADE, null=True, blank=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['company_id', 'session_id']),
+            models.Index(fields=['created_at']),
+        ]
+
+    def get_file_url(self):
+        """Get the URL to access the uploaded file"""
+        from django.conf import settings
+        if self.file:
+            return f"{settings.MEDIA_URL}{self.file.name}"
+        return None
+
+    def __str__(self):
+        return f"{self.original_name} ({self.uploader}) - {self.session_id[:8]}"
+
+
 class RAGDocument(models.Model):
     """Model to store RAG documents and FAQ data"""
     chunk_id = models.CharField(max_length=100, unique=True)

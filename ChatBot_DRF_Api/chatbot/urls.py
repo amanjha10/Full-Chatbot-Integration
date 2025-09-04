@@ -5,7 +5,8 @@ from . import views
 urlpatterns = [
     # Chat endpoints
     path('chat/', views.chat_message_view, name='chat_message'),
-    path('upload/', views.file_upload_view, name='file_upload'),
+    path('upload/', views.file_upload_view, name='file_upload'),  # Legacy endpoint
+    path('files/', views.file_list_view, name='file_list'),  # New file list endpoint
     path('session-status/', views.session_status_view, name='session_status'),
     
     # Profile management

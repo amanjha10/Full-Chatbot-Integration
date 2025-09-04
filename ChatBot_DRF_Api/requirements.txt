@@ -21,6 +21,10 @@ python-dotenv==1.0.0
 # File handling and uploads (optional but commonly used)
 Pillow==10.0.1
 
+# Storage backends
+django-storages==1.14.2
+boto3==1.34.0  # For S3 storage
+
 # Database (if upgrading from SQLite)
 # psycopg2-binary==2.9.7  # For PostgreSQL
 # mysqlclient==2.2.0      # For MySQL

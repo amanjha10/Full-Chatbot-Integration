@@ -1,6 +1,6 @@
 # chatbot/serializers.py
 from rest_framework import serializers
-from .models import ChatSession, UserProfile, ChatMessage, UploadedFile, RAGDocument, ChatbotConfiguration
+from .models import ChatSession, UserProfile, ChatMessage, UploadedFile, RAGDocument, ChatbotConfiguration, ChatFile
 
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -168,3 +168,67 @@ class ChatbotConfigurationUpdateSerializer(serializers.ModelSerializer):
         if value and (value < 400 or value > 1000):
             raise serializers.ValidationError("Height must be between 400 and 1000 pixels")
         return value
+
+
+# ChatFile Serializers for new file sharing system
+class ChatFileSerializer(serializers.ModelSerializer):
+    """Serializer for ChatFile model"""
+    file_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ChatFile
+        fields = [
+            'id', 'company_id', 'session_id', 'uploader', 'file', 'original_name',
+            'mime_type', 'size', 'thumbnail', 'created_at', 'file_url'
+        ]
+        read_only_fields = ['id', 'created_at', 'file_url']
+
+    def get_file_url(self, obj):
+        return obj.get_file_url()
+
+
+class ChatFileUploadRequestSerializer(serializers.Serializer):
+    """Serializer for file upload requests"""
+    file = serializers.FileField()
+    company_id = serializers.CharField(max_length=64)
+    session_id = serializers.CharField(max_length=64)
+    uploader = serializers.ChoiceField(choices=['user', 'agent'], default='user')
+    original_name = serializers.CharField(max_length=255, required=False)
+    mime_type = serializers.CharField(max_length=127, required=False)
+    size = serializers.IntegerField(required=False)
+
+    def validate_file(self, value):
+        """Validate file size and type"""
+        # Max file size: 25MB
+        max_size = 25 * 1024 * 1024  # 25MB in bytes
+        if value.size > max_size:
+            raise serializers.ValidationError(f"File too large. Maximum size is 25MB.")
+
+        # MIME type whitelist
+        allowed_types = [
+            'image/jpeg', 'image/png', 'image/gif', 'image/webp',
+            'application/pdf', 'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'application/vnd.ms-excel',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'text/plain', 'text/csv'
+        ]
+
+        if value.content_type not in allowed_types:
+            raise serializers.ValidationError(f"File type '{value.content_type}' not allowed.")
+
+        return value
+
+
+class ChatFileUploadResponseSerializer(serializers.Serializer):
+    """Serializer for file upload responses"""
+    id = serializers.IntegerField()
+    company_id = serializers.CharField()
+    session_id = serializers.CharField()
+    uploader = serializers.CharField()
+    url = serializers.CharField()
+    name = serializers.CharField()
+    mime_type = serializers.CharField()
+    size = serializers.IntegerField()
+    thumbnail = serializers.CharField(allow_null=True)
+    created_at = serializers.DateTimeField()

@@ -24,6 +24,7 @@ from .serializers import (
 from .utils.phone_validator import validate_phone_number, validate_name, validate_email, validate_nepali_phone
 from .utils.rag_system import rag_system
 from .utils.file_handler import FileUploadHandler
+from .utils.security import rate_limit, FileValidator, WebSocketAuth
 from authentication.models import User
 from admin_dashboard.models import Agent
 
@@ -1067,78 +1068,124 @@ def load_rag_documents_view(request):
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
+@rate_limit(action='upload', limit=10)
 def file_upload_view(request):
     """
-    Handle file uploads for chat messages
-    POST /api/chatbot/upload/
-    
-    Request:
+    Unified file upload endpoint for both chatbot iframe and agent dashboard
+    POST /api/chat/upload/
+
+    Request (multipart/form-data):
     {
         "file": <file_object>,
+        "company_id": "COMP_123",
         "session_id": "session_uuid",
-        "company_id": "COMP_123",  // Optional, extracted from JWT if available
-        "message_context": "Optional context about the file"
+        "uploader": "user" | "agent",  // Optional, default "user"
+        "original_name": "filename.pdf",  // Optional, defaults to file.name
+        "mime_type": "application/pdf",  // Optional, defaults to file.content_type
+        "size": 12345  // Optional, defaults to file.size
     }
-    
+
     Response:
     {
-        "file_id": 123,
-        "file_url": "/media/uploads/COMP_123/2024/08/file_123_document.pdf",
-        "original_name": "document.pdf",
-        "file_size": 1024000,
-        "file_type": "document",
-        "message": "File uploaded successfully"
+        "id": 123,
+        "company_id": "COMP_1",
+        "session_id": "S_456",
+        "uploader": "user",
+        "url": "https://cdn.example.com/media/chat/COMP_1/S_456/photo.jpg",
+        "name": "photo.jpg",
+        "mime_type": "image/jpeg",
+        "size": 34567,
+        "thumbnail": null,
+        "created_at": "2025-09-04T12:34:56Z"
     }
     """
-    serializer = FileUploadRequestSerializer(data=request.data)
+    from .serializers import ChatFileUploadRequestSerializer, ChatFileUploadResponseSerializer
+    from .models import ChatFile
+    from channels.layers import get_channel_layer
+    from asgiref.sync import async_to_sync
+    import mimetypes
+
+    # Validate request data
+    serializer = ChatFileUploadRequestSerializer(data=request.data)
     if not serializer.is_valid():
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
     uploaded_file = serializer.validated_data['file']
+    company_id = serializer.validated_data['company_id']
     session_id = serializer.validated_data['session_id']
-    message_context = serializer.validated_data.get('message_context', '')
-    
-    # Extract company_id from request
-    company_id = get_company_id_from_request(request)
-    if not company_id:
-        return Response({
-            'error': 'company_id is required. Please provide company_id in request data or authenticate with valid JWT token.'
-        }, status=status.HTTP_400_BAD_REQUEST)
-    
+    uploader = serializer.validated_data.get('uploader', 'user')
+    original_name = serializer.validated_data.get('original_name', uploaded_file.name)
+    mime_type = serializer.validated_data.get('mime_type', uploaded_file.content_type or mimetypes.guess_type(uploaded_file.name)[0])
+    size = serializer.validated_data.get('size', uploaded_file.size)
+
     try:
-        # Get the chat session
+        # Validate session exists and belongs to company
         chat_session = ChatSession.objects.get(session_id=session_id, company_id=company_id)
-        
-        # Initialize file handler
-        file_handler = FileUploadHandler()
-        
-        # Validate and save the file
-        file_info = file_handler.save_file(uploaded_file, company_id, session_id)
-        
-        # Create UploadedFile record
-        uploaded_file_obj = UploadedFile.objects.create(
-            session=chat_session,
-            user_profile=chat_session.user_profile,
+
+        # Use new storage manager for secure file handling
+        from .utils.storage import FileUploadManager
+        storage_manager = FileUploadManager()
+
+        # Save file with security checks
+        file_info = storage_manager.save_chat_file(uploaded_file, company_id, session_id)
+
+        # Create ChatFile record
+        chat_file = ChatFile.objects.create(
             company_id=company_id,
+            session_id=session_id,
+            uploader=uploader,
+            file=file_info['stored_name'],  # Use stored path
             original_name=file_info['original_name'],
-            filename=file_info['filename'],
-            filepath=file_info['filepath'],
-            file_size=file_info['file_size'],
-            file_type=file_info['file_type'],
-            message_context=message_context
+            mime_type=file_info['mime_type'],
+            size=file_info['file_size'],
+            user_profile=chat_session.user_profile,
+            chat_session=chat_session
         )
-        
+
+        # Prepare response data with absolute URLs
+        file_url = file_info['url']
+        if not file_url.startswith('http'):
+            # Convert relative URL to absolute URL with consistent localhost
+            file_url = request.build_absolute_uri(file_url)
+            # Ensure consistent localhost format (not 127.0.0.1)
+            file_url = file_url.replace('127.0.0.1', 'localhost')
+
         response_data = {
-            'file_id': uploaded_file_obj.id,
-            'file_url': uploaded_file_obj.get_file_url(),
-            'original_name': uploaded_file_obj.original_name,
-            'file_size': uploaded_file_obj.file_size,
-            'file_type': uploaded_file_obj.file_type,
-            'message': 'File uploaded successfully'
+            'id': chat_file.id,
+            'company_id': chat_file.company_id,
+            'session_id': chat_file.session_id,
+            'uploader': chat_file.uploader,
+            'url': file_url,  # Use absolute URL
+            'name': chat_file.original_name,
+            'mime_type': chat_file.mime_type,
+            'size': chat_file.size,
+            'thumbnail': chat_file.thumbnail,
+            'created_at': chat_file.created_at.isoformat()
         }
-        
+
+        # Broadcast file_shared event to WebSocket room
+        try:
+            channel_layer = get_channel_layer()
+            room_group_name = f'chat_{company_id}_{session_id}'
+
+            print(f"DEBUG: Broadcasting file_shared to room: {room_group_name}")
+            print(f"DEBUG: Channel layer: {channel_layer}")
+
+            async_to_sync(channel_layer.group_send)(
+                room_group_name,
+                {
+                    'type': 'file_shared',
+                    'payload': response_data
+                }
+            )
+            print(f"DEBUG: file_shared event broadcasted successfully")
+        except Exception as e:
+            print(f"ERROR: Failed to broadcast file_shared event: {e}")
+            import traceback
+            traceback.print_exc()
+
         return Response(response_data, status=status.HTTP_201_CREATED)
-        
+
     except ChatSession.DoesNotExist:
         return Response({
             'error': 'Chat session not found or access denied'
@@ -1146,6 +1193,71 @@ def file_upload_view(request):
     except Exception as e:
         return Response({
             'error': f'File upload failed: {str(e)}'
+        }, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def file_list_view(request):
+    """
+    Get list of files for a session
+    GET /api/chat/files/?session_id=...&company_id=...
+
+    Response:
+    {
+        "files": [
+            {
+                "id": 123,
+                "company_id": "COMP_1",
+                "session_id": "S_456",
+                "uploader": "user",
+                "url": "https://cdn.example.com/media/chat/COMP_1/S_456/photo.jpg",
+                "name": "photo.jpg",
+                "mime_type": "image/jpeg",
+                "size": 34567,
+                "thumbnail": null,
+                "created_at": "2025-09-04T12:34:56Z"
+            }
+        ],
+        "count": 1
+    }
+    """
+    from .serializers import ChatFileSerializer
+    from .models import ChatFile
+
+    session_id = request.GET.get('session_id')
+    company_id = request.GET.get('company_id')
+
+    if not session_id or not company_id:
+        return Response({
+            'error': 'session_id and company_id are required'
+        }, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        # Validate session exists
+        chat_session = ChatSession.objects.get(session_id=session_id, company_id=company_id)
+
+        # Get files for this session
+        files = ChatFile.objects.filter(
+            company_id=company_id,
+            session_id=session_id
+        ).order_by('-created_at')
+
+        # Serialize files
+        serializer = ChatFileSerializer(files, many=True)
+
+        return Response({
+            'files': serializer.data,
+            'count': files.count()
+        }, status=status.HTTP_200_OK)
+
+    except ChatSession.DoesNotExist:
+        return Response({
+            'error': 'Chat session not found or access denied'
+        }, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({
+            'error': f'Failed to retrieve files: {str(e)}'
         }, status=status.HTTP_400_BAD_REQUEST)
 
 

@@ -2,6 +2,7 @@
 Django settings for auth_system project.
 """
 
+import os
 from pathlib import Path
 from datetime import timedelta
 from decouple import config
@@ -185,9 +186,62 @@ CORS_ALLOW_ALL_ORIGINS = True
 # Django Channels Configuration
 ASGI_APPLICATION = "auth_system.asgi.application"
 
-# Channel Layers (In-memory for development, use Redis for production)
+# Channel Layers (Redis for cross-process communication)
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
     },
 }
+
+# For single-process development, use InMemory:
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels.layers.InMemoryChannelLayer"
+#     },
+# }
+
+# File Upload Security Settings
+FILE_UPLOAD_MAX_MEMORY_SIZE = 25 * 1024 * 1024  # 25MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 25 * 1024 * 1024  # 25MB
+FILE_UPLOAD_PERMISSIONS = 0o644
+
+# Allowed file types for chat uploads
+CHAT_ALLOWED_FILE_TYPES = [
+    'image/jpeg', 'image/png', 'image/gif', 'image/webp',
+    'application/pdf', 'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/vnd.ms-excel',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'text/plain', 'text/csv'
+]
+
+# Rate limiting settings
+CHAT_UPLOAD_RATE_LIMIT = 10  # uploads per minute per user
+
+# Storage Backend Configuration
+USE_S3_STORAGE = os.environ.get('USE_S3_STORAGE', 'False').lower() == 'true'
+
+if USE_S3_STORAGE:
+    # S3 Storage Settings
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', '')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', '')
+    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', 'chatbot-files')
+    AWS_S3_REGION_NAME = os.environ.get('AWS_S3_REGION_NAME', 'us-east-1')
+    AWS_S3_CUSTOM_DOMAIN = os.environ.get('AWS_S3_CUSTOM_DOMAIN', None)
+    AWS_QUERYSTRING_EXPIRE = int(os.environ.get('AWS_QUERYSTRING_EXPIRE', '3600'))
+
+    # MinIO Configuration (S3-compatible)
+    # Set these environment variables for MinIO:
+    # AWS_S3_ENDPOINT_URL = 'http://localhost:9000'
+    # AWS_S3_USE_SSL = False
+    AWS_S3_ENDPOINT_URL = os.environ.get('AWS_S3_ENDPOINT_URL', None)
+    AWS_S3_USE_SSL = os.environ.get('AWS_S3_USE_SSL', 'True').lower() == 'true'
+
+    # Default file storage for chat files
+    DEFAULT_FILE_STORAGE = 'chatbot.utils.storage.S3ChatFileStorage'
+else:
+    # Local file storage (development)
+    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'

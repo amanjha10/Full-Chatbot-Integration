@@ -192,7 +192,7 @@
 
       .input-container {
         display: flex;
-        align-items: flex-end;
+        align-items: center;
         gap: 0.75rem;
         background: #f9fafb;
         border: 1px solid #e5e7eb;
@@ -232,6 +232,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        width: 40px;
+        height: 40px;
+        flex-shrink: 0;
       }
 
       .file-btn:hover,
@@ -375,6 +378,70 @@
         );
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+      }
+
+      /* File message styles */
+      .file-message {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 12px;
+        margin: 4px 0;
+      }
+
+      .file-attachment {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .file-icon {
+        font-size: 24px;
+        color: #6c757d;
+      }
+
+      .file-info {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .file-name {
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 4px;
+        word-break: break-word;
+      }
+
+      .file-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .file-download {
+        color: var(--primary-color, #f7941d);
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        padding: 4px 8px;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+      }
+
+      .file-download:hover {
+        background-color: rgba(247, 148, 29, 0.1);
+        text-decoration: underline;
+      }
+
+      /* User file messages */
+      .message.user .file-message {
+        background: #e3f2fd;
+        border-color: #bbdefb;
+      }
+
+      /* Agent file messages */
+      .message.agent .file-message {
+        background: #f3e5f5;
+        border-color: #e1bee7;
       }
     </style>
   </head>
@@ -628,13 +695,10 @@
 
       // Send message
       async function sendMessage() {
-        console.log("DEBUG: sendMessage called");
         const messageInput = document.getElementById("messageInput");
         const message = messageInput.value.trim();
-        console.log("DEBUG: Message:", message);
 
         if (!message && !selectedFile) {
-          console.log("DEBUG: No message or file, returning");
           return;
         }
 
@@ -649,68 +713,54 @@
 
         // Try to send via WebSocket first (for escalated sessions)
         let sentViaWebSocket = false;
-        console.log(
-          "DEBUG: isConnected:",
-          isConnected,
-          "sessionId:",
-          chatConfig.sessionId
-        );
-        if (isConnected && chatConfig.sessionId) {
-          console.log("DEBUG: Trying WebSocket");
-          // Handle file upload for WebSocket
-          let fileUrl = null;
-          let fileName = null;
+        // Handle file upload first (if any)
+        let fileUrl = null;
+        let fileName = null;
+        let fileUploaded = false;
 
-          if (selectedFile) {
-            try {
-              const formData = new FormData();
-              formData.append("file", selectedFile);
-              formData.append("session_id", chatConfig.sessionId);
-              formData.append("company_id", chatConfig.companyId);
+        if (selectedFile) {
+          try {
+            const formData = new FormData();
+            formData.append("file", selectedFile);
+            formData.append("session_id", chatConfig.sessionId || "");
+            formData.append("company_id", chatConfig.companyId);
+            formData.append("uploader", "user");
 
-              const fileResponse = await fetch(
-                `${chatConfig.apiBaseUrl}/chatbot/upload/`,
-                {
-                  method: "POST",
-                  body: formData,
-                }
-              );
-
-              if (fileResponse.ok) {
-                const fileResult = await fileResponse.json();
-                fileUrl = fileResult.file_url;
-                fileName = fileResult.file_name;
-                console.log(
-                  "DEBUG: File uploaded, will send via WebSocket:",
-                  fileName
-                );
+            const fileResponse = await fetch(
+              `${chatConfig.apiBaseUrl}/chat/upload/`,
+              {
+                method: "POST",
+                body: formData,
               }
-            } catch (error) {
-              console.error("File upload error:", error);
-            }
-          }
-
-          // Try to send via WebSocket for escalated sessions
-          if (message && message.trim()) {
-            sentViaWebSocket = sendWebSocketMessage(message, fileUrl, fileName);
-            console.log("DEBUG: WebSocket send attempted:", sentViaWebSocket);
-          } else if (fileUrl && fileName) {
-            // Send file-only message via WebSocket
-            sentViaWebSocket = sendWebSocketMessage("", fileUrl, fileName);
-            console.log(
-              "DEBUG: File-only WebSocket send attempted:",
-              sentViaWebSocket
             );
+
+            if (fileResponse.ok) {
+              const fileResult = await fileResponse.json();
+              fileUrl = fileResult.url;
+              fileName = fileResult.name;
+              fileUploaded = true;
+            } else {
+              console.error("File upload failed:", fileResponse.status, await fileResponse.text());
+              addMessage("Sorry, file upload failed. Please try again.", "bot");
+            }
+          } catch (error) {
+            console.error("File upload error:", error);
+            addMessage("Sorry, file upload failed. Please try again.", "bot");
           }
         }
 
-        // Always use DRF API for regular chatbot messages
-        console.log("DEBUG: Using DRF API for chatbot message");
+        if (isConnected && chatConfig.sessionId) {
+          // Try to send via WebSocket for escalated sessions
+          if (message && message.trim()) {
+            sentViaWebSocket = sendWebSocketMessage(message, fileUrl, fileName);
+          } else if (fileUrl && fileName) {
+            // Send file-only message via WebSocket
+            sentViaWebSocket = sendWebSocketMessage("", fileUrl, fileName);
+          }
+        }
 
         // Only send chat message if there's actually a message to send
         if (message && message.trim()) {
-          // Always use DRF API
-          console.log("DEBUG: Using HTTP API");
           // Show typing indicator for HTTP requests
           showTypingIndicator();
 
@@ -725,11 +775,6 @@
               requestData.session_id = chatConfig.sessionId;
 
             // Send to API
-            console.log(
-              "DEBUG: Sending to API:",
-              `${chatConfig.apiBaseUrl}/chatbot/chat/`
-            );
-            console.log("DEBUG: Request data:", requestData);
             const response = await fetch(
               `${chatConfig.apiBaseUrl}/chatbot/chat/`,
               {
@@ -740,7 +785,6 @@
                 body: JSON.stringify(requestData),
               }
             );
-            console.log("DEBUG: Response status:", response.status);
 
             const data = await response.json();
 
@@ -783,40 +827,8 @@
           } finally {
             hideTypingIndicator();
           }
-        } else if (selectedFile) {
-          // Handle file-only upload (no message)
-          console.log("DEBUG: File-only upload");
-          try {
-            const formData = new FormData();
-            formData.append("file", selectedFile);
-            formData.append("session_id", chatConfig.sessionId || "");
-            formData.append("company_id", chatConfig.companyId);
-
-            const fileResponse = await fetch(
-              `${chatConfig.apiBaseUrl}/chatbot/upload/`,
-              {
-                method: "POST",
-                body: formData,
-              }
-            );
-
-            if (fileResponse.ok) {
-              const fileResult = await fileResponse.json();
-              // Show file upload success in chat
-              addMessage(
-                `📎 File uploaded: ${fileResult.original_name}`,
-                "user"
-              );
-              console.log("DEBUG: File uploaded successfully:", fileResult);
-            } else {
-              console.error("File upload failed:", fileResponse.status);
-              addMessage("Sorry, file upload failed. Please try again.", "bot");
-            }
-          } catch (error) {
-            console.error("File upload error:", error);
-            addMessage("Sorry, file upload failed. Please try again.", "bot");
-          }
         }
+        // File upload is handled at the beginning of sendMessage function
 
         // Always clear file after sending (whether WebSocket or HTTP)
         removeFile();
@@ -824,11 +836,16 @@
 
       // Add message to chat
       function addMessage(content, sender, suggestions = null) {
-        console.log("DEBUG: addMessage called with:", {
-          content,
-          sender,
-          suggestions,
-        });
+        // Check for duplicate messages (same content and sender within 1 second)
+        const messageKey = `${content}|${sender}`;
+        const now = Date.now();
+        const lastMessageTime = displayedMessages.get(messageKey);
+
+        if (lastMessageTime && (now - lastMessageTime) < 1000) {
+          return;
+        }
+        displayedMessages.set(messageKey, now);
+
         const messagesContainer = document.getElementById("chatMessages");
         const welcomeMessage = document.getElementById("welcomeMessage");
 
@@ -886,6 +903,85 @@
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
       }
 
+      // Track displayed files and messages to prevent duplicates
+      const displayedFiles = new Set();
+      const displayedMessages = new Map();
+
+      // Add file message to chat
+      function addFileMessage(sender, fileUrl, fileName) {
+        // Ensure file URL is absolute and points to the correct server
+        let absoluteFileUrl = fileUrl;
+        if (!fileUrl.startsWith('http')) {
+          // If relative URL, prepend Django server URL
+          absoluteFileUrl = `http://localhost:8001${fileUrl}`;
+        } else if (fileUrl.includes('localhost:5173') || fileUrl.includes('127.0.0.1:5173')) {
+          // If URL points to React dev server, redirect to Django server
+          absoluteFileUrl = fileUrl.replace(/https?:\/\/(localhost|127\.0\.0\.1):5173/, 'http://localhost:8001');
+        }
+
+        // Check for duplicate files (same URL and filename)
+        const fileKey = `${absoluteFileUrl}|${fileName}|${sender}`;
+        if (displayedFiles.has(fileKey)) {
+          return;
+        }
+        displayedFiles.add(fileKey);
+
+        const messagesContainer = document.getElementById("chatMessages");
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `message ${sender}`;
+
+        const avatar = document.createElement("div");
+        avatar.className = "message-avatar";
+        avatar.textContent = sender === "user" ? "U" : sender === "agent" ? "👤" : "🤖";
+
+        const messageContent = document.createElement("div");
+        messageContent.className = "message-content file-message";
+
+        // Create file display with image preview
+        const fileDiv = document.createElement("div");
+        fileDiv.className = "file-attachment";
+
+        // Check if file is an image
+        const isImage = /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(fileName);
+
+        if (isImage) {
+          fileDiv.innerHTML = `
+            <div class="file-image-preview">
+              <img src="${absoluteFileUrl}" alt="${fileName}" style="max-width: 200px; max-height: 200px; border-radius: 8px; cursor: pointer;" onclick="window.open('${absoluteFileUrl}', '_blank')">
+              <div class="file-name" style="margin-top: 8px; font-size: 12px; color: #666;">${fileName}</div>
+            </div>
+          `;
+        } else {
+          fileDiv.innerHTML = `
+            <div class="file-icon">📎</div>
+            <div class="file-info">
+              <div class="file-name">${fileName}</div>
+              <div class="file-actions">
+                <a href="${absoluteFileUrl}" target="_blank" class="file-download">Download</a>
+              </div>
+            </div>
+          `;
+        }
+
+        messageContent.appendChild(fileDiv);
+
+        const messageTime = document.createElement("div");
+        messageTime.className = "message-time";
+        messageTime.textContent = new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+
+        messageDiv.appendChild(avatar);
+        const contentWrapper = document.createElement("div");
+        contentWrapper.appendChild(messageContent);
+        contentWrapper.appendChild(messageTime);
+        messageDiv.appendChild(contentWrapper);
+
+        messagesContainer.appendChild(messageDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+
       // Show typing indicator
       function showTypingIndicator() {
         if (!isTyping) {
@@ -934,6 +1030,15 @@
           console.log("WebSocket connected");
           isConnected = true;
           updateConnectionStatus(true);
+
+          // Request file list to sync existing files
+          if (chatConfig.sessionId && chatConfig.companyId) {
+            websocket.send(JSON.stringify({
+              type: 'request_file_list',
+              session_id: chatConfig.sessionId,
+              company_id: chatConfig.companyId
+            }));
+          }
         };
 
         websocket.onmessage = function (event) {
@@ -965,11 +1070,6 @@
         switch (data.type) {
           case "chat_message":
             if (data.sender_type === "agent") {
-              console.log(
-                "DEBUG: Received agent message (FIXED):",
-                data.message
-              );
-              console.log("DEBUG: Suggestions:", data.suggestions);
               addMessage(data.message, "agent", data.suggestions);
               if (data.file_url) {
                 addFileMessage("agent", data.file_url, data.file_name);
@@ -1006,7 +1106,10 @@
             break;
 
           case "error":
-            console.error("WebSocket error:", data.message);
+            // Only log unexpected errors, not session state messages
+            if (!data.message.includes("Session not escalated")) {
+              console.error("WebSocket error:", data.message);
+            }
             break;
 
           case "config_update":
@@ -1019,6 +1122,22 @@
 
           case "connection_established":
             console.log("WebSocket connection established:", data.message);
+            break;
+
+          case "file_shared":
+            // Show file message in chat
+            const senderType = data.uploader === "user" ? "user" : "agent";
+            addFileMessage(senderType, data.url, data.name);
+            break;
+
+          case "file_list":
+            // Handle file list for reconnection sync
+            if (data.files && data.files.length > 0) {
+              data.files.forEach(file => {
+                const senderType = file.uploader === "user" ? "user" : "agent";
+                addFileMessage(senderType, file.url, file.original_name);
+              });
+            }
             break;
 
           default:

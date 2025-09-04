@@ -74,6 +74,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     'timestamp': text_data_json.get('timestamp')
                 }))
 
+            elif message_type == 'request_file_list':
+                # Handle file list request for reconnection
+                await self.handle_file_list_request(text_data_json)
+
             elif message_type == 'escalate_to_human':
                 # Handle escalation request
                 await self.handle_escalation(text_data_json)
@@ -112,8 +116,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'type': 'chat_message',
             'message': event['message'],
             'sender_type': event['sender_type'],
-            'session_id': event['session_id'],
+            'session_id': event.get('session_id', self.session_id),  # Use self.session_id as fallback
             'timestamp': event.get('timestamp')
+        }))
+
+    async def file_shared(self, event):
+        """Send file_shared event to WebSocket"""
+        await self.send(text_data=json.dumps({
+            'type': 'file_shared',
+            **event['payload']
         }))
 
     async def handle_escalation(self, data):
@@ -180,6 +191,48 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'type': 'error',
                 'message': 'Failed to send message'
             }))
+
+    async def handle_file_list_request(self, data):
+        """Handle request for file list (for reconnection)"""
+        try:
+            files = await self.get_session_files()
+            await self.send(text_data=json.dumps({
+                'type': 'file_list',
+                'files': files,
+                'session_id': self.session_id,
+                'company_id': self.company_id
+            }))
+        except Exception as e:
+            logger.error(f"Error handling file list request: {str(e)}")
+            await self.send(text_data=json.dumps({
+                'type': 'error',
+                'message': 'Failed to retrieve file list'
+            }))
+
+    @database_sync_to_async
+    def get_session_files(self):
+        """Get files for current session"""
+        from .models import ChatFile
+        files = ChatFile.objects.filter(
+            company_id=self.company_id,
+            session_id=self.session_id
+        ).order_by('-created_at')
+
+        return [
+            {
+                'id': f.id,
+                'company_id': f.company_id,
+                'session_id': f.session_id,
+                'uploader': f.uploader,
+                'url': f.get_file_url(),
+                'name': f.original_name,
+                'mime_type': f.mime_type,
+                'size': f.size,
+                'thumbnail': f.thumbnail,
+                'created_at': f.created_at.isoformat()
+            }
+            for f in files
+        ]
 
     @database_sync_to_async
     def get_chat_session(self):
