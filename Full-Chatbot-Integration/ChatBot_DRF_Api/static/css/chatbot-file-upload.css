@@ -1,0 +1,325 @@
+/* Chatbot File Upload Styles */
+
+.chatbot-upload-btn {
+    background: #007bff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    color: white;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.chatbot-upload-btn:hover {
+    background: #0056b3;
+}
+
+.chatbot-upload-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* Drag and drop styles */
+.chat-container.drag-over {
+    border: 2px dashed #007bff;
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+/* Upload progress styles */
+.upload-message {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 8px 0;
+}
+
+.upload-progress {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.file-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.file-name {
+    font-weight: 500;
+    color: #333;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.file-size {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background-color: #e9ecef;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: #007bff;
+    transition: width 0.3s ease;
+    border-radius: 3px;
+}
+
+.upload-status {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.upload-complete .progress-fill {
+    background-color: #28a745;
+}
+
+.upload-complete .upload-status {
+    color: #28a745;
+}
+
+.upload-failed .progress-fill {
+    background-color: #dc3545;
+}
+
+.upload-failed .upload-status {
+    color: #dc3545;
+}
+
+/* File message styles */
+.file-message {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    margin: 8px 0;
+    max-width: 400px;
+}
+
+.user-message .file-message {
+    background: #e3f2fd;
+    border-color: #bbdefb;
+    margin-left: auto;
+}
+
+.agent-message .file-message {
+    background: #f3e5f5;
+    border-color: #e1bee7;
+}
+
+.file-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.file-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.file-name {
+    font-weight: 500;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 4px;
+}
+
+.file-meta {
+    font-size: 0.85em;
+    color: #666;
+}
+
+.file-actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.download-btn, .preview-btn {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.download-btn:hover, .preview-btn:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.download-btn {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.preview-btn {
+    color: #28a745;
+}
+
+/* Image preview modal */
+.image-preview-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.modal-backdrop img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .file-message {
+        max-width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .file-actions {
+        align-self: flex-end;
+    }
+    
+    .chatbot-upload-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+    }
+}
+
+/* Animation for new file messages */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.user-message .file-message {
+    animation: slideInRight 0.3s ease-out;
+}
+
+.agent-message .file-message {
+    animation: slideInLeft 0.3s ease-out;
+}
+
+/* Error message styles */
+.file-upload-error {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin: 8px 0;
+    font-size: 0.9em;
+}
+
+/* Loading spinner for uploads */
+.upload-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 8px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* File type specific icons and colors */
+.file-message[data-type="image"] .file-icon {
+    color: #28a745;
+}
+
+.file-message[data-type="pdf"] .file-icon {
+    color: #dc3545;
+}
+
+.file-message[data-type="document"] .file-icon {
+    color: #007bff;
+}
+
+.file-message[data-type="spreadsheet"] .file-icon {
+    color: #28a745;
+}
+
+/* Accessibility improvements */
+.chatbot-upload-btn:focus,
+.download-btn:focus,
+.preview-btn:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .file-message {
+        border-width: 2px;
+    }
+    
+    .progress-bar {
+        border: 1px solid #000;
+    }
+}

@@ -1,0 +1,527 @@
+/**
+ * Dynamic Chatbot Embed Script - Simple Working Version
+ */
+
+(function() {
+    'use strict';
+    
+    // Get the current script tag to read data attributes
+    const currentScript = document.currentScript ||
+        (function() {
+            const scripts = document.getElementsByTagName('script');
+            return scripts[scripts.length - 1];
+        })();
+
+    // Extract company ID from data attribute
+    const companyId = currentScript.getAttribute('data-company');
+
+    if (!companyId) {
+        console.error('Chatbot Error: data-company attribute is required');
+        return;
+    }
+
+    console.log('Initializing chatbot for company:', companyId);
+
+    // Prevent multiple initializations for the same company
+    const initKey = `chatbotInitialized_${companyId}`;
+    if (window[initKey]) {
+        console.log(`Chatbot already initialized for company ${companyId}`);
+        return;
+    }
+    window[initKey] = true;
+
+    // Determine API base URL based on script source
+    const scriptSrc = currentScript.src;
+    let apiBaseUrl;
+
+    if (scriptSrc.includes('localhost') || scriptSrc.includes('127.0.0.1')) {
+        // Development environment
+        const url = new URL(scriptSrc);
+        apiBaseUrl = `${url.protocol}//${url.host}/api`;
+        console.log('Development mode detected, API base URL:', apiBaseUrl);
+    } else {
+        // Production environment
+        apiBaseUrl = 'https://chat.yourdomain.com/api';
+        console.log('Production mode detected, API base URL:', apiBaseUrl);
+    }
+
+    // Check for existing chatbot functionality
+    console.log('Checking if website already has chatbot functionality...');
+    
+    const existingChatbots = [
+        '[id*="chat"]', '[class*="chat"]',
+        '[id*="support"]', '[class*="support"]',
+        '[id*="help"]', '[class*="help"]',
+        '[id*="messenger"]', '[class*="messenger"]',
+        '[id*="widget"]', '[class*="widget"]',
+        '#intercom-frame', '.intercom-launcher',
+        '#zendesk-chat', '.zopim',
+        '#drift-widget', '.drift-frame',
+        '#crisp-chatbox', '.crisp-client',
+        '#tawk-chat', '.tawk-min-container'
+    ];
+
+    let hasExistingChatbot = false;
+    for (const selector of existingChatbots) {
+        if (document.querySelector(selector)) {
+            hasExistingChatbot = true;
+            console.warn(`EXISTING CHATBOT DETECTED: Found element matching "${selector}"`);
+            break;
+        }
+    }
+
+    // Send detection report to API
+    function sendChatbotDetectionReport(companyId, hasExisting) {
+        const reportData = {
+            company_id: companyId,
+            has_existing_chatbot: hasExisting,
+            detected_at: new Date().toISOString(),
+            page_url: window.location.href
+        };
+        
+        fetch(`${apiBaseUrl}/chatbot/detection-report/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(reportData)
+        }).catch(err => {
+            console.log('Detection report failed to send:', err);
+        });
+    }
+
+    // Send detection report
+    sendChatbotDetectionReport(companyId, hasExistingChatbot);
+
+    if (hasExistingChatbot) {
+        console.warn('Existing chatbot detected - our chatbot will not be injected to avoid conflicts');
+        return;
+    }
+
+    console.log('No existing chatbot detected - safe to inject our chatbot');
+
+    // Chatbot state
+    let chatbotConfig = null;
+    let isOpen = false;
+
+    // Company-specific IDs to avoid conflicts
+    const containerID = `mychatbot-container-${companyId}`;
+    const buttonID = `mychatbot-btn-${companyId}`;
+    const iframeID = `mychatbot-iframe-${companyId}`;
+
+    console.log('Proceeding with chatbot injection for company:', companyId);
+
+    // Create chatbot container with position from config
+    function createChatbotContainer(config) {
+        let container = document.getElementById(containerID);
+        if (container) {
+            console.log(`🔄 SINGLETON: Reusing existing container for ${companyId}`);
+            return container;
+        }
+
+        container = document.createElement('div');
+        container.id = containerID;
+        container.className = 'mychatbot-container';
+        container.style.cssText = `
+            position: fixed;
+            z-index: 999999;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        `;
+
+        // Apply initial position from config
+        const position = config.position || 'bottom-right';
+        const [vertical, horizontal] = position.split('-');
+
+        if (vertical === 'top') {
+            // Calculate navbar height to avoid overlap
+            const navbar = document.querySelector('nav, .navbar, .nav, header, .header');
+            let navbarHeight = 0;
+            if (navbar) {
+                navbarHeight = navbar.offsetHeight;
+                console.log(`📏 Found navbar with height: ${navbarHeight}px`);
+            }
+
+            // Position container below navbar + margin
+            const topPosition = Math.max(navbarHeight + 20, 20);
+            container.style.top = topPosition + 'px';
+            container.style.bottom = 'auto';
+            console.log(`🎨 Container positioned at top: ${topPosition}px`);
+        } else {
+            container.style.bottom = '20px';
+            container.style.top = 'auto';
+        }
+
+        if (horizontal === 'left') {
+            container.style.left = '20px';
+            container.style.right = 'auto';
+        } else {
+            container.style.right = '20px';
+            container.style.left = 'auto';
+        }
+
+        document.body.appendChild(container);
+        console.log(`🆕 Created new chatbot container for ${companyId} at position: ${position}`);
+        return container;
+    }
+
+    // Create chatbot button
+    function createChatbotButton(config) {
+        let button = document.getElementById(buttonID);
+        if (button) {
+            console.log(`🔄 SINGLETON: Reusing existing button for ${companyId}`);
+            return button;
+        }
+
+        button = document.createElement('button');
+        button.id = buttonID;
+        button.className = 'mychatbot-btn';
+        
+        const primaryColor = config.primaryColor || config.primary_color || '#007bff';
+        
+        button.style.cssText = `
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            background: ${primaryColor};
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: scale(1);
+        `;
+
+        // Add chat icon
+        button.innerHTML = `
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.48 2 2 6.48 2 12C2 13.54 2.36 14.99 3.01 16.28L2 22L7.72 20.99C9.01 21.64 10.46 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C10.74 20 9.54 19.75 8.47 19.3L8.19 19.15L4.55 20.05L5.45 16.41L5.3 16.13C4.75 15.06 4.5 13.86 4.5 12.6C4.5 7.86 8.36 4 13.1 4C17.84 4 21.7 7.86 21.7 12.6C21.7 17.34 17.84 21.2 13.1 21.2H12V20Z" fill="white"/>
+            </svg>
+        `;
+
+        // Add hover effects
+        button.addEventListener('mouseenter', () => {
+            button.style.transform = 'scale(1.1)';
+            button.style.boxShadow = '0 6px 20px rgba(0,0,0,0.25)';
+        });
+
+        button.addEventListener('mouseleave', () => {
+            button.style.transform = 'scale(1)';
+            button.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+        });
+
+        // Add click handler
+        button.addEventListener('click', toggleChatbot);
+
+        console.log(`🆕 Created new chatbot button for ${companyId}`);
+        return button;
+    }
+
+    // Create chatbot iframe
+    function createChatbotIframe(config) {
+        let iframe = document.getElementById(iframeID);
+        if (iframe) {
+            console.log(`🔄 SINGLETON: Reusing existing iframe for ${companyId}`);
+            return iframe;
+        }
+
+        console.log('✅ SINGLETON: Creating new iframe for', companyId);
+
+        iframe = document.createElement('iframe');
+        iframe.id = iframeID;
+        iframe.className = 'mychatbot-iframe';
+
+        // Build iframe URL with all necessary parameters
+        const iframeUrl = new URL(`${apiBaseUrl.replace('/api', '')}/static/chatbot-iframe.html`);
+        iframeUrl.searchParams.set('company', companyId);
+        iframeUrl.searchParams.set('apiUrl', apiBaseUrl); // Don't double-encode
+        iframeUrl.searchParams.set('primaryColor', config.primaryColor || config.primary_color || '#007bff');
+        iframeUrl.searchParams.set('secondaryColor', config.secondaryColor || config.secondary_color || '#6c757d');
+        iframeUrl.searchParams.set('welcomeMessage', config.welcomeMessage || config.welcome_message || 'Hello! How can I help you today?');
+        iframeUrl.searchParams.set('title', config.title || `Company ${companyId} Support`);
+        iframeUrl.searchParams.set('v', Date.now());
+
+        console.log('🔍 DEBUG: Creating iframe for company:', config.companyId);
+        console.log('🔍 DEBUG: Iframe URL:', iframeUrl.toString());
+        
+        iframe.src = iframeUrl.toString();
+        iframe.style.cssText = `
+            width: 350px;
+            height: 500px;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            background: white;
+            position: fixed;
+            z-index: 999999;
+            transform: translateY(20px) scale(0.95);
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        `;
+
+        // Position iframe at viewport edges, not relative to button
+        const position = config.position || 'bottom-right';
+        const [vertical, horizontal] = position.split('-');
+
+        // Position iframe at viewport edges with proper spacing
+        if (vertical === 'top') {
+            // For top positions: iframe opens from just below navbar
+            const navbar = document.querySelector('nav, .navbar, .nav, header, .header');
+            let navbarHeight = 0;
+            if (navbar) {
+                navbarHeight = navbar.offsetHeight;
+            }
+            iframe.style.top = `${navbarHeight + 20}px`; // Below navbar + 20px margin
+            iframe.style.bottom = 'auto';
+        } else {
+            // For bottom positions: iframe opens from bottom of viewport
+            iframe.style.bottom = '20px'; // 20px from bottom of viewport
+            iframe.style.top = 'auto';
+        }
+
+        // Horizontal alignment at viewport edges
+        if (horizontal === 'left') {
+            iframe.style.left = '20px'; // 20px from left edge of viewport
+            iframe.style.right = 'auto';
+        } else {
+            iframe.style.right = '20px'; // 20px from right edge of viewport
+            iframe.style.left = 'auto';
+        }
+        
+        // Mobile responsive
+        if (window.innerWidth <= 480) {
+            iframe.style.width = '100vw';
+            iframe.style.height = '100vh';
+            iframe.style.position = 'fixed';
+            iframe.style.top = '0';
+            iframe.style.left = '0';
+            iframe.style.right = 'auto';
+            iframe.style.bottom = 'auto';
+            iframe.style.borderRadius = '0';
+            iframe.style.transform = 'translateY(100%)';
+        }
+
+        console.log(`Created new chatbot iframe for ${companyId}`);
+        return iframe;
+    }
+
+    // Toggle chatbot visibility
+    function toggleChatbot() {
+        const iframe = document.getElementById(iframeID);
+        const button = document.getElementById(buttonID);
+        
+        if (!iframe || !button) {
+            console.error('Chatbot elements not found');
+            return;
+        }
+        
+        isOpen = !isOpen;
+        
+        if (isOpen) {
+            // Hide the button when iframe opens
+            button.style.opacity = '0';
+            button.style.transform = 'scale(0.8)';
+            button.style.pointerEvents = 'none';
+
+            // Show chatbot iframe
+            iframe.style.pointerEvents = 'auto';
+            iframe.style.opacity = '1';
+
+            if (window.innerWidth <= 480) {
+                iframe.style.transform = 'translateY(0)';
+            } else {
+                iframe.style.transform = 'translateY(0) scale(1)';
+            }
+
+            console.log('Opened iframe and hidden button');
+        } else {
+            // Show the button when iframe closes
+            button.style.opacity = '1';
+            button.style.transform = 'scale(1)';
+            button.style.pointerEvents = 'auto';
+
+            // Hide chatbot iframe
+            iframe.style.pointerEvents = 'none';
+            iframe.style.opacity = '0';
+
+            if (window.innerWidth <= 480) {
+                iframe.style.transform = 'translateY(100%)';
+            } else {
+                iframe.style.transform = 'translateY(20px) scale(0.95)';
+            }
+
+            console.log('Closed iframe and shown button');
+        }
+    }
+
+    // Fetch company configuration
+    async function fetchCompanyConfig() {
+        try {
+            const response = await fetch(`${apiBaseUrl}/chatbot/company-config/${companyId}/`);
+            const data = await response.json();
+
+            if (data.success) {
+                chatbotConfig = data.config;
+                console.log('✅ Company configuration loaded:', chatbotConfig);
+                return chatbotConfig;
+            } else {
+                throw new Error(data.error || 'Failed to load configuration');
+            }
+        } catch (error) {
+            console.error('❌ Failed to load company configuration:', error);
+
+            // Return default configuration
+            return {
+                companyId: companyId,
+                primaryColor: '#007bff',
+                secondaryColor: '#6c757d',
+                position: 'bottom-right',
+                welcomeMessage: 'Hello! How can I help you today?',
+                title: `Company ${companyId} Support`
+            };
+        }
+    }
+
+    // Initialize chatbot
+    async function initializeChatbot() {
+        try {
+            // Fetch configuration
+            const config = await fetchCompanyConfig();
+
+            // Create elements with config
+            const container = createChatbotContainer(config);
+            const button = createChatbotButton(config);
+            const iframe = createChatbotIframe(config);
+
+            // Add button to container, iframe to body (since it's fixed positioned)
+            container.appendChild(button);
+            document.body.appendChild(iframe);
+
+            console.log('Chatbot initialized for company:', companyId);
+        } catch (error) {
+            console.error('Failed to initialize chatbot:', error);
+        }
+    }
+
+    // Listen for messages from iframe (cross-origin communication)
+    function setupMessageListener() {
+        window.addEventListener('message', function(event) {
+            // Security check - only accept messages from our iframe domain
+            // Accept messages from localhost:8001 (Django server) and localhost:8002 (if used)
+            if (!event.origin.includes('localhost:8001') &&
+                !event.origin.includes('localhost:8002') &&
+                !event.origin.includes('chat.yourdomain.com')) {
+                return;
+            }
+
+            const message = event.data;
+
+            if (message.type === 'CLOSE_CHATBOT' && message.companyId === companyId) {
+                // Only close if currently open
+                if (isOpen) {
+                    toggleChatbot(); // This will close the chatbot
+                }
+            } else if (message.type === 'UPDATE_CHATBOT_CONFIG' && message.companyId === companyId) {
+                applyChatbotConfig(message.config);
+            }
+        });
+    }
+
+    // Apply chatbot configuration changes (called via postMessage from iframe)
+    function applyChatbotConfig(config) {
+        console.log('🎨 Applying chatbot configuration:', config);
+
+        const container = document.getElementById(containerID);
+        const button = document.getElementById(buttonID);
+        const iframe = document.getElementById(iframeID);
+
+        if (!container || !button || !iframe) {
+            console.warn('Chatbot elements not found for configuration update');
+            return;
+        }
+
+        // Update button color if primary color changed
+        if (config.primary_color || config.primaryColor) {
+            const newColor = config.primary_color || config.primaryColor;
+            button.style.background = newColor;
+            console.log(`🎨 Updated button color to: ${newColor}`);
+        }
+
+        // Update position if changed
+        if (config.position) {
+            updateChatbotPosition(container, iframe, config.position);
+        }
+    }
+
+    // Update chatbot position with navbar awareness
+    function updateChatbotPosition(container, iframe, position) {
+        console.log(`🎨 Updating chatbot position to: ${position}`);
+
+        const [vertical, horizontal] = position.split('-');
+
+        // Reset container position
+        container.style.top = 'auto';
+        container.style.bottom = 'auto';
+        container.style.left = 'auto';
+        container.style.right = 'auto';
+
+        // Apply container position with navbar awareness
+        if (vertical === 'top') {
+            // Calculate navbar height to avoid overlap
+            const navbar = document.querySelector('nav, .navbar, .nav, header, .header');
+            let navbarHeight = 0;
+            if (navbar) {
+                navbarHeight = navbar.offsetHeight;
+                console.log(`📏 Found navbar with height: ${navbarHeight}px`);
+            }
+
+            // Position container below navbar + margin
+            const topPosition = Math.max(navbarHeight + 20, 20);
+            container.style.top = topPosition + 'px';
+            console.log(`🎨 Container positioned at top: ${topPosition}px`);
+        } else {
+            container.style.bottom = '20px';
+        }
+
+        if (horizontal === 'left') {
+            container.style.left = '20px';
+        } else {
+            container.style.right = '20px';
+        }
+
+        // Update iframe position at viewport edges
+        iframe.style.top = 'auto';
+        iframe.style.bottom = 'auto';
+        iframe.style.left = 'auto';
+        iframe.style.right = 'auto';
+
+        if (vertical === 'top') {
+            // For top positions: iframe opens from just below navbar
+            const navbar = document.querySelector('nav, .navbar, .nav, header, .header');
+            let navbarHeight = 0;
+            if (navbar) {
+                navbarHeight = navbar.offsetHeight;
+            }
+            iframe.style.top = `${navbarHeight + 20}px`; // Below navbar + 20px margin
+        } else {
+            // For bottom positions: iframe opens from bottom of viewport
+            iframe.style.bottom = '20px'; // 20px from bottom of viewport
+        }
+
+        if (horizontal === 'left') {
+            iframe.style.left = '20px'; // 20px from left edge of viewport
+        } else {
+            iframe.style.right = '20px'; // 20px from right edge of viewport
+        }
+
+        console.log(`🎨 Updated chatbot position to: ${position}`);
+    }
+
+    // Setup message listener and start initialization
+    setupMessageListener();
+    initializeChatbot();
+
+})();

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Chatbot Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 Simple Chatbot Test</h1>
+        <p>This page tests the basic chatbot embed functionality.</p>
+        
+        <div id="status" class="status info">Loading chatbot...</div>
+        
+        <h3>Debug Information:</h3>
+        <ul id="debug-info">
+            <li>Loading script...</li>
+        </ul>
+        
+        <h3>Expected Behavior:</h3>
+        <ul>
+            <li>A chat button should appear in the bottom-right corner</li>
+            <li>The button should be green (#0bdf1d) for ZIL001</li>
+            <li>Clicking it should open a chat interface</li>
+        </ul>
+    </div>
+
+    <script>
+        const debugInfo = document.getElementById('debug-info');
+        const statusDiv = document.getElementById('status');
+        
+        function addDebugInfo(message) {
+            const li = document.createElement('li');
+            li.textContent = `${new Date().toLocaleTimeString()}: ${message}`;
+            debugInfo.appendChild(li);
+            console.log(message);
+        }
+        
+        function updateStatus(message, type = 'info') {
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+        }
+        
+        // Monitor for chatbot initialization
+        let checkCount = 0;
+        const maxChecks = 20; // 10 seconds
+        
+        function checkChatbotStatus() {
+            checkCount++;
+            
+            if (window.chatbotInitialized) {
+                addDebugInfo('✅ Chatbot initialized successfully');
+                updateStatus('Chatbot loaded successfully!', 'success');
+                
+                if (window.chatbotConfig) {
+                    addDebugInfo(`Company: ${window.chatbotConfig.companyName}`);
+                    addDebugInfo(`Primary Color: ${window.chatbotConfig.primaryColor}`);
+                    addDebugInfo(`API URL: ${window.chatbotConfig.apiBaseUrl}`);
+                }
+                
+                // Check if button exists
+                const button = document.getElementById('chatbot-toggle-btn');
+                if (button) {
+                    addDebugInfo('✅ Chat button found in DOM');
+                } else {
+                    addDebugInfo('❌ Chat button not found in DOM');
+                }
+                
+                return;
+            }
+            
+            if (checkCount >= maxChecks) {
+                addDebugInfo('❌ Chatbot failed to initialize within 10 seconds');
+                updateStatus('Failed to load chatbot', 'error');
+                return;
+            }
+            
+            addDebugInfo(`Checking chatbot status... (${checkCount}/${maxChecks})`);
+            setTimeout(checkChatbotStatus, 500);
+        }
+        
+        // Start checking after a short delay
+        setTimeout(checkChatbotStatus, 1000);
+        
+        // Log any JavaScript errors
+        window.addEventListener('error', function(e) {
+            addDebugInfo(`❌ JavaScript Error: ${e.message}`);
+            updateStatus('JavaScript error occurred', 'error');
+        });
+        
+        // Test API endpoint directly
+        addDebugInfo('Testing API endpoint...');
+        fetch('http://localhost:8002/api/chatbot/company-config/ZIL001/')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    addDebugInfo('✅ API endpoint working');
+                    addDebugInfo(`Company: ${data.config.companyName}`);
+                } else {
+                    addDebugInfo(`❌ API error: ${data.error}`);
+                }
+            })
+            .catch(error => {
+                addDebugInfo(`❌ API fetch error: ${error.message}`);
+            });
+    </script>
+
+    <!-- Load the chatbot script -->
+    <script src="http://localhost:8002/static/chatbot.js" data-company="ZIL001"></script>
+</body>
+</html>

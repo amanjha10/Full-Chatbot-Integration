@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Company Chatbot Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .company-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .company-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .company-card h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        
+        .company-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: left;
+        }
+        
+        .company-info strong {
+            color: #495057;
+        }
+        
+        .color-preview {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+            margin-left: 10px;
+            vertical-align: middle;
+            border: 1px solid #ddd;
+        }
+        
+        .demo-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            transition: transform 0.2s;
+        }
+        
+        .demo-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .instructions {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .embed-code {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-active { background: #28a745; }
+        .status-inactive { background: #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏢 Multi-Company Chatbot Demo</h1>
+            <p>This page demonstrates how different companies get their own unique chatbot configurations</p>
+            <p><strong>Company Isolation:</strong> Each company has their own colors, position, welcome message, and data</p>
+        </div>
+
+        <div class="instructions">
+            <h2>🎯 How Company Isolation Works</h2>
+            <ol>
+                <li><strong>Unique Company IDs:</strong> Each company gets a unique ID (ZIL001, SPE002, KIK001, etc.)</li>
+                <li><strong>Custom Configurations:</strong> Each company can set their own colors, position, and welcome message</li>
+                <li><strong>Data Isolation:</strong> Each company only sees their own agents, chats, and user profiles</li>
+                <li><strong>Dynamic Embed Code:</strong> One line of code automatically loads the right configuration</li>
+            </ol>
+            
+            <h3>📋 Embed Code Format:</h3>
+            <div class="embed-code">
+&lt;script src="http://localhost:8002/static/chatbot.js" data-company="COMPANY_ID"&gt;&lt;/script&gt;
+            </div>
+        </div>
+
+        <div class="company-grid">
+            <!-- ZIL001 - Zillion Technologies -->
+            <div class="company-card">
+                <h3>🚀 Zillion Technologies</h3>
+                <div class="company-info">
+                    <strong>Company ID:</strong> ZIL001<br>
+                    <strong>Primary Color:</strong> #0bdf1d <span class="color-preview" style="background: #0bdf1d;"></span><br>
+                    <strong>Secondary Color:</strong> #8804ed <span class="color-preview" style="background: #8804ed;"></span><br>
+                    <strong>Position:</strong> bottom-right<br>
+                    <strong>Welcome:</strong> "Welcome to Zillion Technologies!"<br>
+                    <strong>Status:</strong> <span class="status-indicator status-active"></span> Active
+                </div>
+                <button class="demo-button" onclick="openCompanyDemo('ZIL001')">
+                    View ZIL001 Demo
+                </button>
+            </div>
+
+            <!-- SPE002 - Spell Innovation -->
+            <div class="company-card">
+                <h3>✨ Spell Innovation</h3>
+                <div class="company-info">
+                    <strong>Company ID:</strong> SPE002<br>
+                    <strong>Primary Color:</strong> #ff4444 <span class="color-preview" style="background: #ff4444;"></span><br>
+                    <strong>Secondary Color:</strong> #4444ff <span class="color-preview" style="background: #4444ff;"></span><br>
+                    <strong>Position:</strong> top-left<br>
+                    <strong>Welcome:</strong> "Hello from Spell Innovation!"<br>
+                    <strong>Status:</strong> <span class="status-indicator status-active"></span> Active
+                </div>
+                <button class="demo-button" onclick="openCompanyDemo('SPE002')">
+                    View SPE002 Demo
+                </button>
+            </div>
+
+            <!-- KIK001 - Kiki -->
+            <div class="company-card">
+                <h3>🎨 Kiki Company</h3>
+                <div class="company-info">
+                    <strong>Company ID:</strong> KIK001<br>
+                    <strong>Primary Color:</strong> #f7941d <span class="color-preview" style="background: #f7941d;"></span><br>
+                    <strong>Secondary Color:</strong> #652d90 <span class="color-preview" style="background: #652d90;"></span><br>
+                    <strong>Position:</strong> bottom-right<br>
+                    <strong>Welcome:</strong> "Hello! How can I help you today?"<br>
+                    <strong>Status:</strong> <span class="status-indicator status-active"></span> Active
+                </div>
+                <button class="demo-button" onclick="openCompanyDemo('KIK001')">
+                    View KIK001 Demo
+                </button>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h2>🔍 What to Look For</h2>
+            <ul>
+                <li><strong>Different Colors:</strong> Each company's chat button uses their brand colors</li>
+                <li><strong>Different Positions:</strong> SPE002 appears in top-left, others in bottom-right</li>
+                <li><strong>Custom Messages:</strong> Each company has their own welcome message</li>
+                <li><strong>Company Branding:</strong> Chat interface shows company-specific titles</li>
+                <li><strong>Data Isolation:</strong> Each company only accesses their own data</li>
+            </ul>
+            
+            <h3>🛠️ For Developers:</h3>
+            <p>The same chatbot system serves multiple companies with complete isolation:</p>
+            <ul>
+                <li>✅ <strong>Authentication:</strong> Company-specific user management</li>
+                <li>✅ <strong>Agents:</strong> Each company has their own agents</li>
+                <li>✅ <strong>Chat Sessions:</strong> Company-isolated conversations</li>
+                <li>✅ <strong>User Profiles:</strong> Separate customer databases</li>
+                <li>✅ <strong>Plan Management:</strong> Individual subscription plans</li>
+                <li>✅ <strong>Customization:</strong> Company-specific branding and settings</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function openCompanyDemo(companyId) {
+            const demoUrl = `http://localhost:8002/static/demo-website.html?company=${companyId}`;
+            window.open(demoUrl, '_blank', 'width=1200,height=800');
+        }
+        
+        // Test API endpoints and show real-time status
+        async function checkCompanyStatus() {
+            const companies = ['ZIL001', 'SPE002', 'KIK001'];
+            
+            for (const companyId of companies) {
+                try {
+                    const response = await fetch(`http://localhost:8002/api/chatbot/company-config/${companyId}/`);
+                    const data = await response.json();
+                    
+                    console.log(`${companyId} Config:`, data.config);
+                } catch (error) {
+                    console.error(`Failed to load config for ${companyId}:`, error);
+                }
+            }
+        }
+        
+        // Check status when page loads
+        checkCompanyStatus();
+    </script>
+</body>
+</html>
