@@ -1,0 +1,1261 @@
+{
+    "general_queries": {
+        "study_abroad_basics": [
+            {
+                "question": "What is the general process of studying abroad?",
+                "answer": "The process typically involves: 1) Choosing a country and program 2) Meeting language requirements 3) Preparing and submitting applications 4) Securing funding/scholarships 5) Obtaining a student visa 6) Planning accommodation",
+                "section": "Getting Started",
+                "page": 1,
+                "document": "Study Abroad Guide 2025",
+                "chunk_id": "gen_001"
+            },
+            {
+                "question": "How much does studying abroad typically cost?",
+                "answer": "Costs vary significantly by country and program. Average annual expenses including tuition and living costs: US/UK: $35,000-70,000, Germany: €10,000-20,000, Canada: CAD 30,000-50,000, Australia: AUD 30,000-45,000",
+                "section": "Financial Planning",
+                "page": 3,
+                "document": "Study Abroad Guide 2025",
+                "chunk_id": "gen_002"
+            },
+            {
+                "question": "what is headphone",
+                "answer": "A headphone is a device you wear over or in your ears to listen to audio privately, without disturbing others.",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "6a4fc34b-9f2d-42c2-bfaf-cacf5932f280"
+            }
+        ],
+        "visa_information": [
+            {
+                "question": "What are the common student visa requirements?",
+                "answer": "Common requirements include: 1) Acceptance letter from university 2) Proof of sufficient funds 3) Valid passport 4) Language proficiency test scores 5) Health insurance 6) Clean background check",
+                "section": "Visa Guidelines",
+                "page": 5,
+                "document": "International Student Handbook",
+                "chunk_id": "visa_001"
+            },
+            {
+                "question": "how to get nepali citizenship",
+                "answer": "You can go to cdo office and get it",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "e9c0351a-9bb5-4a70-8da7-92da2626eab5"
+            }
+        ],
+        "accommodation": [
+            {
+                "question": "What are the housing options for international students?",
+                "answer": "Common options include: 1) University dormitories 2) Private student housing 3) Shared apartments 4) Homestays. On-campus housing typically ranges from $5,000-15,000 per academic year.",
+                "section": "Student Housing",
+                "page": 7,
+                "document": "Student Life Guide",
+                "chunk_id": "acc_001"
+            }
+        ],
+        "custom_entries": [
+            {
+                "question": "Why study Abroad ?",
+                "answer": "Studying abroad opens doors to global opportunities, diverse cultures, world-class education, and personal growth — all while building an international network for your future career.",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "a5ec28fa-9e4d-42f2-9d76-9b71b46f73bc"
+            },
+            {
+                "question": "What are phones",
+                "answer": "phone is a device",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "3daf1325-75f8-465f-bdab-b3edbd0be780"
+            },
+            {
+                "question": "what is mouse ",
+                "answer": "mouse is a device",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "0b29242d-a3b2-485e-a79d-67c4adab4b4b"
+            },
+            {
+                "question": "his is stand ",
+                "answer": "what is stand",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "923b2160-2ef7-463b-a28a-51da2a05085d"
+            },
+            {
+                "question": "What is the best time to apply for study abroad programs?",
+                "answer": "The best time to apply is typically 12-18 months before your intended start date. This allows time for application processing, visa applications, and preparation. For fall intake, apply by December-January of the previous year.",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "cdbf3e98-f447-4831-9b8f-09c4a0fc1972"
+            },
+            {
+                "question": "Are there scholarships for undergraduate international students?",
+                "answer": "Yes, many scholarships are available for undergraduate international students including merit-based scholarships, need-based aid, and country-specific programs. Popular options include university scholarships, government scholarships, and private foundation grants.",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "7b713d16-63d9-4dc3-8f52-b59a800eb9ab"
+            },
+            {
+                "question": "Test FAQ added at 08:33:49",
+                "answer": "This is a test FAQ to verify real-time embedding generation works correctly.",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "5cf1f40c-5556-4c2e-8e06-02434719c228"
+            },
+            {
+                "question": "Test FAQ added at 08:36:00",
+                "answer": "This is a test FAQ to verify real-time embedding generation works correctly.",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "ca62bc7c-cdb8-4688-99e6-69554f0609bc"
+            },
+            {
+                "question": "Test FAQ at 08:59:19",
+                "answer": "This is a test FAQ to verify the system is working.",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "92b8e289-8784-4146-8963-082fab355193"
+            },
+            {
+                "question": "Final test FAQ 09:02:52",
+                "answer": "This is a final test FAQ.",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "8227b67f-accc-4993-b9c3-d29961c29d95"
+            },
+            {
+                "question": "Verification test FAQ 09:12:45",
+                "answer": "This is a verification test before super admin implementation.",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "64bd1ec0-29b8-4e6d-8059-cc6b8ec745ed"
+            },
+            {
+                "question": "Final system test FAQ 09:25:08",
+                "answer": "This FAQ confirms the complete system is working.",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "c8183424-7ea5-4dda-a6f7-2ab879619d12"
+            },
+            {
+                "question": "System test FAQ 15:24:49",
+                "answer": "This is a system test to verify integration is working.",
+                "section": "System Test",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "75001d39-2350-4594-a6cd-6ae5ca45688a"
+            },
+            {
+                "question": "I dont know anything",
+                "answer": "okay",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "40c5fe40-6aa0-4853-b748-67e8f1cd7c30"
+            },
+            {
+                "question": "Who is aman",
+                "answer": "aman is a person",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "dd41fdb6-c76d-4613-872e-e49fdd7e8df6"
+            },
+            {
+                "question": "shambhu",
+                "answer": "hero is shamabhu",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "12f82f5b-6d8e-42a0-9e14-c0464946c8c8"
+            },
+            {
+                "question": "What is auto refresh test",
+                "answer": "This is an auto refresh test to verify vector database updates automatically",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "662a6904-bd30-4b8b-bc9c-a99dd3f9b537"
+            },
+            {
+                "question": "what is spell ",
+                "answer": "Spell is an organisation in mid-baneshwor",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "816b8691-ecab-4ab4-a6c8-0fbb723a700a"
+            }
+        ]
+    },
+    "language_requirements": {
+        "english_speaking_countries": [
+            {
+                "question": "What are the English language requirements?",
+                "answer": "IELTS: Usually 6.0-7.0 for undergraduate, 6.5-7.5 for postgraduate. TOEFL: 80-100 for undergraduate, 90-110 for postgraduate. Some universities may accept Duolingo English Test.",
+                "section": "Language Requirements",
+                "page": 4,
+                "document": "Admission Requirements Guide",
+                "chunk_id": "lang_001"
+            }
+        ],
+        "non_english_countries": [
+            {
+                "question": "Do I need to know the local language?",
+                "answer": "Germany: German B1/B2 for German-taught programs. France: DELF B2 for French programs. Many countries offer English-taught programs requiring no local language proficiency.",
+                "section": "Language Guidelines",
+                "page": 6,
+                "document": "International Programs Guide",
+                "chunk_id": "lang_002"
+            }
+        ]
+    },
+    "scholarships": {
+        "global_opportunities": [
+            {
+                "question": "What are the major international scholarships available?",
+                "answer": "Major scholarships include: Fulbright Scholarships, Chevening Scholarships (UK), DAAD Scholarships (Germany), Erasmus Mundus Scholarships (EU), Commonwealth Scholarships",
+                "section": "Financial Aid",
+                "page": 8,
+                "document": "Scholarship Guide 2025",
+                "chunk_id": "sch_001"
+            }
+        ],
+        "country_specific": [
+            {
+                "question": "What country-specific scholarships are available?",
+                "answer": "US: Fulbright, EducationUSA. UK: British Council Scholarships. Germany: DAAD. Canada: Vanier CGS. Australia: Australia Awards. Each typically covers tuition and living expenses.",
+                "section": "Country Scholarships",
+                "page": 9,
+                "document": "Scholarship Guide 2025",
+                "chunk_id": "sch_002"
+            }
+        ]
+    },
+    "career_prospects": {
+        "post_study_work": [
+            {
+                "question": "What are the post-study work opportunities?",
+                "answer": "US: OPT up to 3 years. UK: Graduate Route 2 years. Canada: PGWP up to 3 years. Australia: Post-study work visa 2-4 years. Germany: 18 months job-seeker visa.",
+                "section": "Career Planning",
+                "page": 12,
+                "document": "Career Guide 2025",
+                "chunk_id": "career_001"
+            }
+        ],
+        "job_markets": [
+            {
+                "question": "Which fields have the best job prospects?",
+                "answer": "High-demand fields: IT/Computer Science, Data Science, Healthcare, Engineering, Business Analytics, Renewable Energy, Artificial Intelligence. Average starting salaries vary by country and field.",
+                "section": "Job Markets",
+                "page": 14,
+                "document": "Career Guide 2025",
+                "chunk_id": "career_002"
+            }
+        ]
+    },
+    "firecrawl_integrated": {
+        "web_scraped_global_opportunities": [
+            {
+                "question": "Can Growth wings help with finding a program that aligns well with my career goals?",
+                "answer": "Yes, testimonials suggest Growth wings helps students find programs that align with their career aspirations, as evidenced by students successfully securing positions in fields related to their studies (e.g., IT & S Project Manager in a Global Pharmaceutical Company).",
+                "section": "Career Alignment",
+                "page": 7,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "6dbc920d-7a50-4614-9d59-10230a0a90d4",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "career_prospects.global_opportunities"
+            },
+            {
+                "question": "What is one key benefit of studying in Australia according to Expert Education Nepal?",
+                "answer": "Studying in Australia allows students to broaden their career prospects by attending top globally ranked universities.",
+                "section": "Benefits of Studying in Australia",
+                "page": 0,
+                "document": "Expert Education Nepal – Rely on Experts",
+                "chunk_id": "b7734d2f-90ad-4226-b48b-6ee22a5f4403",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "career_prospects.global_opportunities"
+            }
+        ],
+        "web_scraped_custom_entries": [
+            {
+                "question": "Can I see examples of universities Growth wings works with?",
+                "answer": "Yes, the website showcases several universities including (but not limited to) Cambridge University, University of Lille, University of Toronto, John Hopkins University, and several Australian universities.",
+                "section": "Partner University Examples",
+                "page": 2,
+                "document": "Your Path to International Studies Starts at Growth wings",
+                "chunk_id": "e32bd43c-8dc5-4bae-ab6a-a15ec7b837f8",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "Which universities in the UK does Growth wings partner with for study abroad programs?",
+                "answer": "Growth wings partners with several UK universities, including Cambridge University, De Montfort University, LSBU (London South Bank University), and Ulster University.  The image gallery shows several others, but specific partnerships require further investigation on Growth wings's website.",
+                "section": "Partner Universities (UK)",
+                "page": 3,
+                "document": "Your Path to International Studies Starts at Growth wings",
+                "chunk_id": "323aeb53-e2dd-4e80-ad41-53d35b8cf18a",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "What types of institutions does Growth wings represent besides universities?",
+                "answer": "Besides universities, Growth wings also represents colleges and institutes such as  Chisholm Institute (Australia), and SAE Institute (likely specializing in creative fields, requiring further confirmation).",
+                "section": "Institution Types",
+                "page": 3,
+                "document": "Your Path to International Studies Starts at Growth wings",
+                "chunk_id": "0f7451aa-046f-4bca-a986-fa5d55a14155",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "Are there any US universities listed as partners through Growth wings?",
+                "answer": "Based on the provided images, no US universities are explicitly listed as Growth wings partners.",
+                "section": "Partner Universities (US)",
+                "page": 3,
+                "document": "Your Path to International Studies Starts at Growth wings",
+                "chunk_id": "a2595ea9-57fb-404b-8685-9c4d8e5bb6c7",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "What is the level of personal support offered by Growth wings staff?",
+                "answer": "Growth wings staff are described as supportive, helpful, dedicated, and professional.  Multiple testimonials specifically thank individual staff members by name, suggesting a personalized approach to student support.",
+                "section": "Staff Support and Personalization",
+                "page": 4,
+                "document": "Your Path to International Studies Starts at Growth wings",
+                "chunk_id": "15baa3e7-5451-4507-a59a-4a70209c93be",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "What kind of post-study support does Growth wings provide?",
+                "answer": "Growth wings offers post-study counseling, though the specifics of this support are not detailed on the provided website excerpt.",
+                "section": "Post-Study Support",
+                "page": 5,
+                "document": "Your Path to International Studies Starts at Growth wings",
+                "chunk_id": "ede6015c-0530-4be8-a5bf-3aced7444e75",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "Where can I find more detailed information about specific study abroad programs offered through Growth wings?",
+                "answer": "The provided text does not offer links or details to specific study abroad programs. Further exploration of the Growth wings website is recommended.",
+                "section": "Program Information",
+                "page": 5,
+                "document": "Your Path to International Studies Starts at Growth wings",
+                "chunk_id": "b98bfd50-ab59-46a7-ac64-c0afa9e61cfa",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "How many students has Growth wings assisted with studying abroad?",
+                "answer": "Growth wings claims to have assisted 250,000 students in their study abroad journeys.",
+                "section": "Growth wings Success Metrics",
+                "page": 6,
+                "document": "Your Path to International Studies Starts at Growth wings",
+                "chunk_id": "e1efe04f-e483-4b89-9023-c954a2386868",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "Does Growth wings provide post-study counseling?",
+                "answer": "Yes, Growth wings offers post-study counseling services to support students after they complete their studies abroad.",
+                "section": "Post-Study Support",
+                "page": 6,
+                "document": "Your Path to International Studies Starts at Growth wings",
+                "chunk_id": "2620965a-91c6-4a69-87c7-16e7bb027efc",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "Where are Growth wings's offices located in Nepal?",
+                "answer": "Growth wings has offices in Dang, Butwal, Pokhara, Baglung, Chitwan, Birtamode, Kathmandu (KTM), Lalitpur, Itahari, Biratnagar, Nepalgunj, Dhangadhi, and Hetauda.",
+                "section": "Growth wings Office Locations",
+                "page": 6,
+                "document": "Your Path to International Studies Starts at Growth wings",
+                "chunk_id": "160e9a8c-884e-48af-8e88-c6bc5467a357",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "What types of universities does Growth wings help students find?",
+                "answer": "They assist students in finding universities ranging from liberal arts colleges to top-tier research universities.",
+                "section": "University Types",
+                "page": 0,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "90090cc4-8801-41c2-832f-49bdbf8ac15a",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "What kind of practical insights does Growth wings provide?",
+                "answer": "They offer practical insights into CPT, OPT, Co-op, and STEM programs.",
+                "section": "Practical Information",
+                "page": 0,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "67e03695-1d08-4f33-be28-cf68bda8b333",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "What free resources are available through Growth wings?",
+                "answer": "They provide free access to universities’ guides, publications, public information sessions, and university fairs.",
+                "section": "Free Resources",
+                "page": 0,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "0b1f04de-2733-4afb-ae7a-eed7eb023ae4",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "How many successful placements has Growth wings achieved?",
+                "answer": "Growth wings reports over 7,000 success stories.",
+                "section": "Success Rate",
+                "page": 0,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "d8bd83cb-b38f-40ea-8d6a-a196c8c98225",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "What certifications do Growth wings counselors hold?",
+                "answer": "Growth wings counselors possess professional certifications with USATC, CCEA, QEAC, and The British Council.",
+                "section": "Counselor Credentials",
+                "page": 1,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "bbf595db-30da-4c75-b9c9-2d287aa9b1c1",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "What free resources does Growth wings offer prospective students?",
+                "answer": "They offer free access to public information sessions, fairs, and publications.",
+                "section": "Free Resources",
+                "page": 1,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "d42c73c8-fb46-4cb4-b512-ea95cf208878",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "Where can I find information on the best business schools in the UK for Nepalese students?",
+                "answer": "Growth wings has a guide specifically listing the best business schools in the UK for Nepalese students, available on their website.",
+                "section": "UK Business School Information",
+                "page": 1,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "2a6448d1-753a-4d21-ba71-f204c09f5d0c",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "What are some of the best cities in the UK for Nepalese students?",
+                "answer": "The provided text doesn't list specific cities, but it directs to a page ([https://growthwings.com/best-cities-to-study-in-the-uk-for-nepalese-students/](https://growthwings.com/best-cities-to-study-in-the-uk-for-nepalese-students/))  that likely contains this information.",
+                "section": "UK Study Destinations",
+                "page": 2,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "0b5f175b-509d-42cb-aabe-0c79bbcf509a",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "Which UK universities are recommended for studying Computer Science?",
+                "answer": "The text links to a page ([https://growthwings.com/best-universities-to-study-computer-science-in-the-uk/](https://growthwings.com/best-universities-to-study-computer-science-in-the-uk/))  detailing the best universities for Computer Science in the UK.  Specific universities are not listed in the provided snippet.",
+                "section": "UK University Recommendations",
+                "page": 2,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "54f362dd-171c-4995-b764-402ed9f05ddb",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "What is Growth wings claim regarding its instructors' expertise?",
+                "answer": "Growth wings claims its instructors are highly experienced and are real test takers with expert knowledge, aiming to help students achieve better test scores.",
+                "section": "Instructor Expertise",
+                "page": 2,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "78a097c2-3a16-4f5a-bb06-145989bad2d0",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "How many students are currently enrolled in Growth wings GRE, GMAT, and SAT courses?",
+                "answer": "28 students are enrolled in each course.",
+                "section": "Course Enrollment",
+                "page": 3,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "0bc28b41-a7b9-428a-9866-caeead2d0ba3",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "Where can I find more information about Growth wings test preparation courses?",
+                "answer": "Click the 'Read More' links provided for each course (GRE, GMAT, SAT).",
+                "section": "Further Information",
+                "page": 3,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "3c5ef493-606f-4638-894a-77636955be93",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "What is the overall student experience like working with Growth wings?",
+                "answer": "Students describe the experience as an investment in self-growth, with a supportive and hospitable working environment and dedicated advisors committed to student success.",
+                "section": "Student Experience",
+                "page": 4,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "977b5aac-f06a-46bb-be74-b988042befab",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "What type of universities has Growth wings helped students get accepted into?",
+                "answer": "Growth wings has successfully placed students in a variety of US universities, including Old Dominion University, University of Cincinnati, Tennessee Tech University, Virginia Polytechnic Institute, University of New Mexico, Southeast Missouri State University, and the University of Bridgeport.",
+                "section": "University Placement Success",
+                "page": 6,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "1e9cd1de-519d-45c7-8768-ec5667a93fc0",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "What kind of universities has Growth wings successfully placed students in?",
+                "answer": "Growth wings has placed students in various US universities, including the University of Toledo, Grand Valley State University, Oberlin College, and Youngstown State University, across diverse fields like Biomedical Engineering, MBA, Computer Science, and Mathematics.",
+                "section": "University Placement Success",
+                "page": 7,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "c3429e97-e7ce-4529-9ea8-0b3ab08b916f",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "What is Growth wings track record of student success?",
+                "answer": "They boast over 7,000 success stories, as evidenced by student testimonials.",
+                "section": "Success Rate",
+                "page": 8,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "5c8b2a03-78f5-4d2e-8ade-d2a384757f98",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "Does Growth wings offer personalized counseling?",
+                "answer": "Yes, they provide one-on-one personalized counseling from initial consultation to departure and beyond.",
+                "section": "Counseling Services",
+                "page": 8,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "3f42a29b-4589-4ec6-a89b-0a78bfda6f4a",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "Which countries does Growth wings primarily assist students with studying in?",
+                "answer": "Growth wings focuses on supporting students seeking to study in the U.S., Canada, and other top destinations.",
+                "section": "Study Destinations",
+                "page": 8,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "71806645-3cce-4857-87b7-634bdffd9d85",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "Which US universities does Growth wings represent?",
+                "answer": "Based on the provided images, Growth wings appears to have partnerships with (but this is not conclusive without further information): University of Missouri, University of Nevada, Nipissing University, Northeastern University, NYU (New York University), University of Texas, La Trobe University, Golden Gate University, and potentially others not clearly visible.",
+                "section": "University Partnerships",
+                "page": 9,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "788121e9-35a0-48ca-97d0-c80f057244dc",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "What type of events does Growth wings organize?",
+                "answer": "Growth wings organizes information sessions, as evidenced by the listed events for Southern Illinois University Edwardsville and Arkansas State University in August 2020.  They also have sections for 'Happening', 'Upcoming', and 'Expired' events on their website, suggesting a range of events throughout the year.",
+                "section": "Event Information",
+                "page": 9,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "e273cc40-3a1d-43b6-998e-a2ab12e06308",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "What is the timeframe for the information sessions mentioned?",
+                "answer": "The listed information sessions for Southern Illinois University Edwardsville and Arkansas State University were both scheduled for 1:00 PM to 5:00 PM on August 10th and 13th, 2020, respectively.",
+                "section": "Event Details",
+                "page": 9,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "b2617974-7874-45e2-ae96-ba5b2daf7aef",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "Where are the information sessions for SIUE and ASU located?",
+                "answer": "The information session for Southern Illinois University Edwardsville (SIUE) was in Edwardsville, IL, and the session for Arkansas State University (ASU) was in Jonesboro, AR.",
+                "section": "Event Locations",
+                "page": 9,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "8bccc859-7cf9-4c76-82c1-3fd2bf2d82ff",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "What is the apparent status of the information sessions for SIUE and ASU?",
+                "answer": "Both information sessions for SIUE and ASU are listed as past events (2020), indicating they are now 'expired' events.",
+                "section": "Event Status",
+                "page": 9,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "65b9308c-c96d-43eb-ac23-29bb99175f55",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "Can I find information on current events hosted by Growth wings?",
+                "answer": "Yes, the website links to sections titled 'Happening' and 'Upcoming' events, which should contain details on current events.  However,  this information is not visible within the given content.",
+                "section": "Accessing Current Events",
+                "page": 9,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "bdd0a4a8-69b4-4721-bf0c-cf4d1b29a25c",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "When were information sessions held for Arkansas State University, University of South Dakota, and Valparaiso University?",
+                "answer": "Information sessions for Arkansas State University are not explicitly dated.  For the University of South Dakota and Valparaiso University, information sessions were held on August 16th and August 20th, 2020, respectively, from 1:00 PM to 5:00 PM.",
+                "section": "Information Session Dates and Times",
+                "page": 10,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "6f234dbf-6ad3-43ee-907a-0e20604e6ae2",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "When were information sessions held for Grand Valley State University, Clark University, and the University of New Haven?",
+                "answer": "Information sessions for Grand Valley State University, Clark University, and the University of New Haven were all held in 2019 on May 15th, April 25th, and April 25th respectively, from 1:00 PM to 5:00 PM.",
+                "section": "Information Session Dates and Times",
+                "page": 10,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "d2e21499-2586-48fc-ab62-e9644d175f72",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "What is the approximate student population at Valparaiso University?",
+                "answer": "Valparaiso University has approximately 4,500 students.",
+                "section": "University Size and Diversity",
+                "page": 10,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "1ca9f820-1f27-49d9-b1b4-e8fe949cc49e",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "What is known about the founding of the University of South Dakota?",
+                "answer": "The University of South Dakota was established by the Dakota Territory legislature in 1862.",
+                "section": "University History",
+                "page": 10,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "aa934996-9e44-4f01-9c6d-840a739b250e",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "Which countries does Expert Education Nepal offer study abroad services for?",
+                "answer": "Expert Education Nepal provides services for studying in Australia, Canada, the UK, and the US.",
+                "section": "Study Destinations",
+                "page": 0,
+                "document": "Expert Education Nepal – Rely on Experts",
+                "chunk_id": "1c9e2ba1-e23c-4a20-a2a5-9e79d2d9967e",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "How many universities are partnered with Expert Education Nepal?",
+                "answer": "Expert Education Nepal is partnered with over 400 education institutions across Australia, Canada, the UK, and the US.",
+                "section": "Partner Institutions",
+                "page": 0,
+                "document": "Expert Education Nepal – Rely on Experts",
+                "chunk_id": "1fc2c328-badc-46c9-9b9c-9d05fe0ee491",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "Where can I contact Expert Education Nepal to learn more about their services?",
+                "answer": "You can contact them through the link provided on their website for top education consultancy in Nepal.",
+                "section": "Contact Information",
+                "page": 1,
+                "document": "Expert Education Nepal – Rely on Experts",
+                "chunk_id": "289ff6e2-e7e3-4c0b-91cf-934a7a9c7430",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            },
+            {
+                "question": "Is Expert Education Nepal considered trustworthy and reliable by its clients?",
+                "answer": "Client testimonials overwhelmingly describe Expert Education as extremely reliable, trustworthy, and providing quality services.  They express high satisfaction and strong recommendations.",
+                "section": "Client Testimonials: Trust & Reliability",
+                "page": 2,
+                "document": "Expert Education Nepal – Rely on Experts",
+                "chunk_id": "58a12a34-9075-4f2e-b3e1-69810a74df06",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.custom_entries"
+            }
+        ],
+        "web_scraped_need_based": [
+            {
+                "question": "What Australian universities are represented in Growth wings's study abroad options?",
+                "answer": "Growth wings showcases partnerships with several Australian universities, including Chisholm Institute, Charles Sturt University, CSU (likely referring to another Australian university, clarification needed), University of Wollongong, Deakin University, ECU (Edith Cowan University, likely), La Trobe University, University of Canberra, and QUT (Queensland University of Technology).",
+                "section": "Partner Universities (Australia)",
+                "page": 3,
+                "document": "Your Path to International Studies Starts at Growth wings",
+                "chunk_id": "5ded4cf9-4571-418e-838c-1764c4dd9e01",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.need_based"
+            },
+            {
+                "question": "What support does Growth wings provide for students pursuing study abroad options?",
+                "answer": "The provided information does not specify the level of student support offered by Growth wings.  More details on this aspect are needed from their website or direct contact.",
+                "section": "Student Support Services",
+                "page": 3,
+                "document": "Your Path to International Studies Starts at Growth wings",
+                "chunk_id": "d7ceae22-6051-4a5d-839b-1f218db2c47a",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.need_based"
+            },
+            {
+                "question": "What types of institutions does Growth wings potentially partner with for study abroad opportunities?",
+                "answer": "Based on the image showing a 'British School Council' logo, Growth wings likely has connections with UK institutions.  Further information about the range of partner institutions is needed.",
+                "section": "Partner Institutions",
+                "page": 5,
+                "document": "Your Path to International Studies Starts at Growth wings",
+                "chunk_id": "5104da35-e4b9-4915-8790-b0bf76e0eebc",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.need_based"
+            },
+            {
+                "question": "What is Growth wings approach to university selection for students?",
+                "answer": "They utilize a 'right-match' philosophy, aiming to find the best-fitting university for each student based on their individual needs and goals.",
+                "section": "University Matching",
+                "page": 8,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "32b234b9-1438-4af2-b04a-358f6049ffb0",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.need_based"
+            },
+            {
+                "question": "What type of post-acceptance support does Growth wings offer?",
+                "answer": "Growth wings advisors maintain contact with students even after they have arrived at their study destination, providing ongoing assistance if needed.",
+                "section": "Post-Acceptance Support",
+                "page": 8,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "e7075a78-aa74-4ac9-a8c4-cfd57d325f61",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.need_based"
+            }
+        ],
+        "web_scraped_job_markets": [
+            {
+                "question": "Does Growth wings facilitate study abroad opportunities in France?",
+                "answer": "Yes, Growth wings lists the University of Lille among its partner institutions for study abroad programs.",
+                "section": "Partner Universities (France)",
+                "page": 3,
+                "document": "Your Path to International Studies Starts at Growth wings",
+                "chunk_id": "9a32519a-a1dd-4cc4-80b9-587739205e60",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.job_markets"
+            }
+        ],
+        "web_scraped_process_information": [
+            {
+                "question": "What services does Expert Education Nepal offer to students planning to study abroad?",
+                "answer": "Expert Education Nepal provides comprehensive services including admissions advice, guidance throughout the admissions process, assistance with finding suitable colleges and universities, and support with travel arrangements and accommodation.",
+                "section": "Services Offered",
+                "page": 1,
+                "document": "Expert Education Nepal – Rely on Experts",
+                "chunk_id": "b15d6ca8-2d34-40de-90d3-8b236c346f27",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "accommodation.process_information"
+            }
+        ],
+        "web_scraped_private_housing": [
+            {
+                "question": "What resources are available to help parents support their children's study abroad journey?",
+                "answer": "Growth wings offers a guide on how parents can support their children's study abroad journey, accessible on their website.",
+                "section": "Parental Support Resources",
+                "page": 1,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "88c90707-53ae-48b5-8f64-46267b44bf59",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.private_housing"
+            },
+            {
+                "question": "What type of universities are Arkansas State University, University of South Dakota, Valparaiso University, Mercy College, Grand Valley State University, Clark University, and the University of New Haven?",
+                "answer": "Arkansas State University and the University of South Dakota are public research universities. Valparaiso University and Mercy College are private universities; Valparaiso is Lutheran. Grand Valley State University is a public liberal arts university. Clark University is a private research university, and the University of New Haven is a private university.",
+                "section": "University Types and Characteristics",
+                "page": 10,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "49443f19-6f31-496d-8127-1ac16b9b2e19",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.private_housing"
+            }
+        ],
+        "web_scraped_country_specific": [
+            {
+                "question": "Does Growth wings offer country comparison information?",
+                "answer": "Yes, Growth wings provides an overall country comparison to help students make a better decision regarding their study abroad destination.",
+                "section": "Country Comparison",
+                "page": 1,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "d6a54231-c0c9-4c64-988f-5c9a6feebec3",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.country_specific"
+            }
+        ],
+        "web_scraped_merit_based": [
+            {
+                "question": "What kind of learning environment does Growth wings provide for test preparation?",
+                "answer": "They strive to create an optimal academic and social environment for students preparing for standardized tests, emphasizing accurate, ethical, and high-quality services.",
+                "section": "Test Preparation Environment",
+                "page": 8,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "0df64c25-91e9-49a3-9a3b-f19660cd5c4f",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.merit_based"
+            },
+            {
+                "question": "What does Expert Education Nepal emphasize as a key feature of studying in the USA?",
+                "answer": "The USA offers academic excellence and a world-leading technological infrastructure.",
+                "section": "Benefits of Studying in the USA",
+                "page": 0,
+                "document": "Expert Education Nepal – Rely on Experts",
+                "chunk_id": "0cb2777c-05e8-4f0b-8b5d-5b73db9d3a19",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "custom_entries.merit_based"
+            }
+        ],
+        "web_scraped_cost_information": [
+            {
+                "question": "What is the cost of Growth wings services, and is it considered worthwhile by past clients?",
+                "answer": "The testimonials describe the cost as 'very affordable and worth to pay', suggesting a positive return on investment in terms of successful university placement and visa acquisition.",
+                "section": "Cost and Value",
+                "page": 7,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "4ecd7c9a-c935-4d10-8098-689cb85f37d8",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "visa_information.cost_information"
+            },
+            {
+                "question": "How does Growth wings prepare students for visa interviews?",
+                "answer": "Growth wings provides practice sessions for visa interviews until students feel confident and well-prepared, significantly improving their chances of success.",
+                "section": "Visa Interview Preparation",
+                "page": 7,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "c7d924ce-fe75-454c-a2a4-a41f9f0fc73b",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "visa_information.cost_information"
+            }
+        ],
+        "web_scraped_university_housing": [
+            {
+                "question": "What assistance does Expert Education Nepal provide regarding accommodation for students studying abroad?",
+                "answer": "They help students find suitable accommodation options while they are studying abroad.",
+                "section": "Accommodation Assistance",
+                "page": 1,
+                "document": "Expert Education Nepal – Rely on Experts",
+                "chunk_id": "53cd7911-6182-4e67-afb5-0d8b7eadf453",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "accommodation.university_housing"
+            }
+        ],
+        "web_scraped_visa_requirements": [
+            {
+                "question": "Does Growth wings provide tutoring services?",
+                "answer": "At least one testimonial mentions access to tutors, suggesting Growth wings may offer additional academic support services beyond application and visa assistance.",
+                "section": "Additional Support Services",
+                "page": 6,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "dc88d490-db97-48bb-8285-447a2c2758e7",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "visa_information.visa_requirements"
+            },
+            {
+                "question": "Does Expert Education Nepal offer visa consulting services?",
+                "answer": "Yes, they provide professional visa consulting services to assist with all details and requirements specific to the student's goals.",
+                "section": "Visa Consulting",
+                "page": 1,
+                "document": "Expert Education Nepal – Rely on Experts",
+                "chunk_id": "27e0f9d6-4b6f-4220-93db-7ad045594168",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "visa_information.visa_requirements"
+            },
+            {
+                "question": "How does Expert Education Nepal support visa applications?",
+                "answer": "Expert Education provides full support, professionally preparing visa applications.  They offer insights and knowledge based on experience to strengthen applications.  Clients report successful visa approvals, including multiple visa applications.",
+                "section": "Visa Application Support",
+                "page": 2,
+                "document": "Expert Education Nepal – Rely on Experts",
+                "chunk_id": "7fe6da0b-033a-4876-88a6-638737861208",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "visa_information.visa_requirements"
+            },
+            {
+                "question": "What types of visa applications does Expert Education handle?",
+                "answer": "Based on client testimonials, Expert Education handles student visas (including multiple applications for the same client) and TR visas.  It's likely they handle other visa types as well, although not explicitly stated.",
+                "section": "Visa Types Handled",
+                "page": 2,
+                "document": "Expert Education Nepal – Rely on Experts",
+                "chunk_id": "7ef4fc42-5d29-4f68-9d67-64dec1e7920a",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "visa_information.visa_requirements"
+            },
+            {
+                "question": "What is the overall client experience at Expert Education Nepal?",
+                "answer": "Clients describe their experience as positive, highlighting the helpfulness of the staff, efficient service, and successful visa outcomes. The overall atmosphere is also mentioned as comfortable and welcoming.",
+                "section": "Overall Client Experience",
+                "page": 2,
+                "document": "Expert Education Nepal – Rely on Experts",
+                "chunk_id": "b1bc4657-c223-4914-9cfd-e7ef3ffbf0b5",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "visa_information.visa_requirements"
+            }
+        ],
+        "web_scraped_study_abroad_basics": [
+            {
+                "question": "What support does Growth wings offer for studying in Canada, Australia, and the UK?",
+                "answer": "Growth wings provides full-fledged support including free consultations on education systems, admission, scholarship and visa requirements, and work rights (including Post-Study Work permits). They offer expert advising from counselors graduated from universities in the US, UK, Australia, and Canada, and smart guidance on specific visa applications (GTE for Australia, Study Permits for Canada, and Tier 4 General Student Visas for the UK).",
+                "section": "Support Services",
+                "page": 1,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "cdb3c58c-81fa-4512-a1e6-13a66f8cafa2",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "visa_information.study_abroad_basics"
+            }
+        ],
+        "web_scraped_application_process": [
+            {
+                "question": "Does Growth wings provide assistance with university applications?",
+                "answer": "While not explicitly stated, the provision of student counseling and assistance with test preparation strongly suggests that Growth wings likely offers assistance with university applications;  further investigation on their website is advised.",
+                "section": "Application Assistance",
+                "page": 2,
+                "document": "Your Path to International Studies Starts at Growth wings",
+                "chunk_id": "22ca2324-d130-4821-b5a6-ae653c023814",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "application_process.application_process"
+            },
+            {
+                "question": "What types of programs does Growth wings support applications for?",
+                "answer": "Growth wings has assisted students with applications for nursing programs and graduate programs, demonstrating their capacity to support diverse academic pathways.",
+                "section": "Program Support",
+                "page": 4,
+                "document": "Your Path to International Studies Starts at Growth wings",
+                "chunk_id": "bb64df7b-771c-497d-bcf2-850007c99607",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "application_process.application_process"
+            },
+            {
+                "question": "What is the contact information for Growth wings to inquire about study abroad opportunities?",
+                "answer": "The provided text only offers an application form; direct contact information for Growth wings is missing from this excerpt.  You should look for contact information on their main website.",
+                "section": "Contact Information",
+                "page": 5,
+                "document": "Your Path to International Studies Starts at Growth wings",
+                "chunk_id": "76c3c830-e4d6-4f86-bade-5d3cf07786d9",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "application_process.application_process"
+            },
+            {
+                "question": "What countries does Growth wings assist students with applying to for higher education?",
+                "answer": "Growth wings helps students apply to universities in the United States, Canada, Australia, and the United Kingdom.",
+                "section": "Target Countries",
+                "page": 0,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "00195799-7098-4388-8112-ec0290264ea8",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "application_process.application_process"
+            },
+            {
+                "question": "What additional opportunities, beyond university admission, have Growth wings helped students with?",
+                "answer": "Students have secured internships while pursuing their university applications with Growth wings's support.",
+                "section": "Additional Opportunities",
+                "page": 4,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "c09478af-4803-4d86-a31d-00af09ba4ba4",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "application_process.application_process"
+            },
+            {
+                "question": "What extracurricular activities and achievements can enhance a US university application, as exemplified by Adity Dhungana's experience?",
+                "answer": "Strong extracurricular involvement, such as leading campus organizations, research experience (e.g., under mentorship of professors, winning research awards like P.U.R.S.U.E.), participation in competitions (e.g., Robotics), and holding student ambassador roles significantly strengthen applications.",
+                "section": "Enhancing US University Applications",
+                "page": 5,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "d8400093-dd92-44c7-88af-6f823953ffb7",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "application_process.application_process"
+            },
+            {
+                "question": "What kind of support does Growth wings provide regarding US universities?",
+                "answer": "Based on the website and the image of several universities, Growth wings likely provides guidance and support for students applying to and studying at various US universities. The exact scope of services is not fully detailed in the provided material.",
+                "section": "Services Offered",
+                "page": 9,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "21b97b15-d2f3-4086-a7e0-d9e4114cbc99",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "application_process.application_process"
+            }
+        ],
+        "web_scraped_admission_requirements": [
+            {
+                "question": "Does Growth wings assist with university admissions?",
+                "answer": "Yes, Growth wings assists with education admissions to universities in various countries, including Australia and the USA. They help students gain acceptance into their chosen programs.",
+                "section": "University Admissions Support",
+                "page": 4,
+                "document": "Your Path to International Studies Starts at Growth wings",
+                "chunk_id": "dfb1410a-09d4-4280-81eb-b6378a96ab57",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "application_process.admission_requirements"
+            },
+            {
+                "question": "What is the stated message upon successful admission?",
+                "answer": "The website displays a \"Congratulations Your admission Completed\" message after submission.",
+                "section": "Admission Confirmation",
+                "page": 6,
+                "document": "Your Path to International Studies Starts at Growth wings",
+                "chunk_id": "61ed5229-1550-4a21-ad4a-5b3ab3bf30a0",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "application_process.admission_requirements"
+            },
+            {
+                "question": "What types of universities have students successfully applied to with Growth wings's help?",
+                "answer": "Students have gained admission to universities in the US, including Southern Illinois University Edwardsville (MS Computer Science), Bentley University (MBA), and the University of Central Missouri (Master's).",
+                "section": "University Success Stories",
+                "page": 4,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "0e1f1105-1eb5-43ac-afdc-7565922d4226",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "application_process.admission_requirements"
+            },
+            {
+                "question": "What types of programs have students been accepted into with Growth wings's assistance?",
+                "answer": "Students have successfully gained admission into Master's programs in Computer Science and Business Administration (MBA), as well as other Master's programs.",
+                "section": "Program Placement",
+                "page": 4,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "d2e53c81-43b3-40e6-8e2d-2ad26d8e3feb",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "application_process.admission_requirements"
+            },
+            {
+                "question": "What are some examples of prestigious US universities that Growth wings helps students get into?",
+                "answer": "The testimonials mention successful placements at the University of New Orleans and the University of North Texas. This suggests Growth wings assists students in gaining admission to a range of US universities.",
+                "section": "University Placement Success",
+                "page": 5,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "ead2d014-a15e-4de2-9791-bf531b2c6f68",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "application_process.admission_requirements"
+            }
+        ],
+        "web_scraped_english_speaking_countries": [
+            {
+                "question": "What support services does Growth wings offer students interested in studying abroad?",
+                "answer": "Growth wings provides student counseling and assistance with test preparation, specifically mentioning IELTS preparation.",
+                "section": "Growth wings Support Services",
+                "page": 2,
+                "document": "Your Path to International Studies Starts at Growth wings",
+                "chunk_id": "2d8c443d-9374-4980-89a5-d0fb64829476",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "language_requirements.english_speaking_countries"
+            },
+            {
+                "question": "What specific test preparation does Growth wings offer?",
+                "answer": "The website specifically mentions IELTS preparation, but further investigation is recommended to determine the full scope of test preparation services offered.",
+                "section": "Test Preparation Services",
+                "page": 2,
+                "document": "Your Path to International Studies Starts at Growth wings",
+                "chunk_id": "d5f66042-f1eb-45c1-b8b5-d75c5949ce0b",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "language_requirements.english_speaking_countries"
+            },
+            {
+                "question": "What are the alternative English proficiency options if I don't have IELTS for studying in the UK?",
+                "answer": "Growth wings provides information on alternative English proficiency options for Nepalese students wishing to study in the UK without IELTS, detailing these options in a guide available on their website.",
+                "section": "Alternative English Proficiency",
+                "page": 1,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "bd16304c-01ed-4f46-8187-497ba7f02cc7",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "language_requirements.english_speaking_countries"
+            },
+            {
+                "question": "What test preparation courses does Growth wings offer?",
+                "answer": "Growth wings offers test preparation classes for TOEFL, IELTS, SAT, GRE, and GMAT.",
+                "section": "Test Preparation Courses",
+                "page": 2,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "5e6b8802-72c1-402d-871f-6c6c3bfdf9b1",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "language_requirements.english_speaking_countries"
+            },
+            {
+                "question": "Who are the instructors for the TOEFL and IELTS preparation courses?",
+                "answer": "The TOEFL course is taught by Madhav Basistha, and the IELTS course is taught by Shree Krishna Maharjan.",
+                "section": "Instructors",
+                "page": 2,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "a910e7bf-ab63-45b1-9cd4-835d10838129",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "language_requirements.english_speaking_countries"
+            },
+            {
+                "question": "How many students are currently enrolled in the TOEFL and IELTS classes?",
+                "answer": "Both the TOEFL and IELTS classes currently have 28 students enrolled.",
+                "section": "Course Enrollment",
+                "page": 2,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "57fc0355-65d6-417a-8141-b90104f2a4ee",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "language_requirements.english_speaking_countries"
+            },
+            {
+                "question": "Where can I find more information about Growth wings courses?",
+                "answer": "You can find more information on their website at [https://growthwings.com/blog/](https://growthwings.com/blog/) and through individual course links provided for TOEFL and IELTS.",
+                "section": "Additional Resources",
+                "page": 2,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "bdf704da-84f4-4111-b42c-a45fbe505a70",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "language_requirements.english_speaking_countries"
+            },
+            {
+                "question": "Does Growth wings offer test preparation services?",
+                "answer": "Yes, Growth wings offers SAT and TOEFL preparation classes described as engaging and effective by students.",
+                "section": "Test Preparation",
+                "page": 4,
+                "document": "Best Education Consultancy in Kathmandu Nepal: Growth wings",
+                "chunk_id": "e702ce66-6006-4f36-bfc0-c64d4d29263e",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "language_requirements.english_speaking_countries"
+            }
+        ],
+        "web_scraped_post_study_work": [
+            {
+                "question": "What types of programs does Growth wings help students with?",
+                "answer": "Growth wings assists students with education abroad, skilled career paths, and migration options.",
+                "section": "Program Support",
+                "page": 2,
+                "document": "Your Path to International Studies Starts at Growth wings",
+                "chunk_id": "44e3fa45-6c4a-4ff7-921a-f5c023dbd811",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "career_prospects.post_study_work"
+            },
+            {
+                "question": "What is the focus of Growth wings's vision for its students?",
+                "answer": "Growth wings aims to be a lifelong launchpad for students, helping them reach their highest potential through education abroad, skilled careers, or migration.",
+                "section": "Growth wings's Vision",
+                "page": 2,
+                "document": "Your Path to International Studies Starts at Growth wings",
+                "chunk_id": "ae9b3788-c503-4acc-bcbb-b8dcc07a1121",
+                "source": "firecrawl_web_scraping",
+                "integrated_at": "2025-07-30 15:23:38",
+                "original_category": "career_prospects.post_study_work"
+            }
+        ]
+    }
+}

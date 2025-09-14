@@ -1,0 +1,222 @@
+{
+    "general_queries": {
+        "study_abroad_basics": [
+            {
+                "question": "What is the general process of studying abroad?",
+                "answer": "The process typically involves: 1) Choosing a country and program 2) Meeting language requirements 3) Preparing and submitting applications 4) Securing funding/scholarships 5) Obtaining a student visa 6) Planning accommodation",
+                "section": "Getting Started",
+                "page": 1,
+                "document": "Study Abroad Guide 2025",
+                "chunk_id": "gen_001"
+            },
+            {
+                "question": "How much does studying abroad typically cost?",
+                "answer": "Costs vary significantly by country and program. Average annual expenses including tuition and living costs: US/UK: $35,000-70,000, Germany: \u20ac10,000-20,000, Canada: CAD 30,000-50,000, Australia: AUD 30,000-45,000",
+                "section": "Financial Planning",
+                "page": 3,
+                "document": "Study Abroad Guide 2025",
+                "chunk_id": "gen_002"
+            },
+            {
+                "question": "what is headphone",
+                "answer": "A headphone is a device you wear over or in your ears to listen to audio privately, without disturbing others.",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "6a4fc34b-9f2d-42c2-bfaf-cacf5932f280"
+            }
+        ],
+        "visa_information": [
+            {
+                "question": "What are the common student visa requirements?",
+                "answer": "Common requirements include: 1) Acceptance letter from university 2) Proof of sufficient funds 3) Valid passport 4) Language proficiency test scores 5) Health insurance 6) Clean background check",
+                "section": "Visa Guidelines",
+                "page": 5,
+                "document": "International Student Handbook",
+                "chunk_id": "visa_001"
+            },
+            {
+                "question": "how to get nepali citizenship",
+                "answer": "You can go to cdo office and get it",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "e9c0351a-9bb5-4a70-8da7-92da2626eab5"
+            }
+        ],
+        "accommodation": [
+            {
+                "question": "What are the housing options for international students?",
+                "answer": "Common options include: 1) University dormitories 2) Private student housing 3) Shared apartments 4) Homestays. On-campus housing typically ranges from $5,000-15,000 per academic year.",
+                "section": "Student Housing",
+                "page": 7,
+                "document": "Student Life Guide",
+                "chunk_id": "acc_001"
+            }
+        ],
+        "custom_entries": [
+            {
+                "question": "Why study Abroad ?",
+                "answer": "Studying abroad opens doors to global opportunities, diverse cultures, world-class education, and personal growth \u2014 all while building an international network for your future career.",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "a5ec28fa-9e4d-42f2-9d76-9b71b46f73bc"
+            },
+            {
+                "question": "What are phones",
+                "answer": "phone is a device",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "3daf1325-75f8-465f-bdab-b3edbd0be780"
+            },
+            {
+                "question": "what is mouse ",
+                "answer": "mouse is a device",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "0b29242d-a3b2-485e-a79d-67c4adab4b4b"
+            },
+            {
+                "question": "his is stand ",
+                "answer": "what is stand",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "923b2160-2ef7-463b-a28a-51da2a05085d"
+            },
+            {
+                "question": "What is the best time to apply for study abroad programs?",
+                "answer": "The best time to apply is typically 12-18 months before your intended start date. This allows time for application processing, visa applications, and preparation. For fall intake, apply by December-January of the previous year.",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "cdbf3e98-f447-4831-9b8f-09c4a0fc1972"
+            },
+            {
+                "question": "Are there scholarships for undergraduate international students?",
+                "answer": "Yes, many scholarships are available for undergraduate international students including merit-based scholarships, need-based aid, and country-specific programs. Popular options include university scholarships, government scholarships, and private foundation grants.",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "7b713d16-63d9-4dc3-8f52-b59a800eb9ab"
+            },
+            {
+                "question": "Test FAQ added at 08:33:49",
+                "answer": "This is a test FAQ to verify real-time embedding generation works correctly.",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "5cf1f40c-5556-4c2e-8e06-02434719c228"
+            },
+            {
+                "question": "Test FAQ added at 08:36:00",
+                "answer": "This is a test FAQ to verify real-time embedding generation works correctly.",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "ca62bc7c-cdb8-4688-99e6-69554f0609bc"
+            },
+            {
+                "question": "Test FAQ at 08:59:19",
+                "answer": "This is a test FAQ to verify the system is working.",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "92b8e289-8784-4146-8963-082fab355193"
+            },
+            {
+                "question": "Final test FAQ 09:02:52",
+                "answer": "This is a final test FAQ.",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "8227b67f-accc-4993-b9c3-d29961c29d95"
+            },
+            {
+                "question": "Verification test FAQ 09:12:45",
+                "answer": "This is a verification test before super admin implementation.",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "64bd1ec0-29b8-4e6d-8059-cc6b8ec745ed"
+            },
+            {
+                "question": "Final system test FAQ 09:25:08",
+                "answer": "This FAQ confirms the complete system is working.",
+                "section": "Custom FAQ",
+                "page": 0,
+                "document": "Admin Added FAQ",
+                "chunk_id": "c8183424-7ea5-4dda-a6f7-2ab879619d12"
+            }
+        ]
+    },
+    "language_requirements": {
+        "english_speaking_countries": [
+            {
+                "question": "What are the English language requirements?",
+                "answer": "IELTS: Usually 6.0-7.0 for undergraduate, 6.5-7.5 for postgraduate. TOEFL: 80-100 for undergraduate, 90-110 for postgraduate. Some universities may accept Duolingo English Test.",
+                "section": "Language Requirements",
+                "page": 4,
+                "document": "Admission Requirements Guide",
+                "chunk_id": "lang_001"
+            }
+        ],
+        "non_english_countries": [
+            {
+                "question": "Do I need to know the local language?",
+                "answer": "Germany: German B1/B2 for German-taught programs. France: DELF B2 for French programs. Many countries offer English-taught programs requiring no local language proficiency.",
+                "section": "Language Guidelines",
+                "page": 6,
+                "document": "International Programs Guide",
+                "chunk_id": "lang_002"
+            }
+        ]
+    },
+    "scholarships": {
+        "global_opportunities": [
+            {
+                "question": "What are the major international scholarships available?",
+                "answer": "Major scholarships include: Fulbright Scholarships, Chevening Scholarships (UK), DAAD Scholarships (Germany), Erasmus Mundus Scholarships (EU), Commonwealth Scholarships",
+                "section": "Financial Aid",
+                "page": 8,
+                "document": "Scholarship Guide 2025",
+                "chunk_id": "sch_001"
+            }
+        ],
+        "country_specific": [
+            {
+                "question": "What country-specific scholarships are available?",
+                "answer": "US: Fulbright, EducationUSA. UK: British Council Scholarships. Germany: DAAD. Canada: Vanier CGS. Australia: Australia Awards. Each typically covers tuition and living expenses.",
+                "section": "Country Scholarships",
+                "page": 9,
+                "document": "Scholarship Guide 2025",
+                "chunk_id": "sch_002"
+            }
+        ]
+    },
+    "career_prospects": {
+        "post_study_work": [
+            {
+                "question": "What are the post-study work opportunities?",
+                "answer": "US: OPT up to 3 years. UK: Graduate Route 2 years. Canada: PGWP up to 3 years. Australia: Post-study work visa 2-4 years. Germany: 18 months job-seeker visa.",
+                "section": "Career Planning",
+                "page": 12,
+                "document": "Career Guide 2025",
+                "chunk_id": "career_001"
+            }
+        ],
+        "job_markets": [
+            {
+                "question": "Which fields have the best job prospects?",
+                "answer": "High-demand fields: IT/Computer Science, Data Science, Healthcare, Engineering, Business Analytics, Renewable Energy, Artificial Intelligence. Average starting salaries vary by country and field.",
+                "section": "Job Markets",
+                "page": 14,
+                "document": "Career Guide 2025",
+                "chunk_id": "career_002"
+            }
+        ]
+    }
+}

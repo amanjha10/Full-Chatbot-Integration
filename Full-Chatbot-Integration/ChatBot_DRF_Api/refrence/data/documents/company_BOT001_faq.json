@@ -1,0 +1,41 @@
+{
+  "company_info": {
+    "company_id": "BOT001",
+    "company_name": "botnet",
+    "created_at": "2025-09-08T08:40:26.183795+00:00",
+    "last_updated": "2025-09-08T11:04:54.350297+00:00"
+  },
+  "company_faqs": {
+    "General": [
+      {
+        "chunk_id": "company_BOT001_5fe8b957",
+        "question": "Who are you",
+        "answer": "I am AI-powered chatbot assistant for the BOTNET Company",
+        "section": "Company FAQ",
+        "document": "BOT001 Company FAQ",
+        "created_at": "2025-09-08T08:41:10.292358+00:00",
+        "updated_at": "2025-09-08T08:41:10.292367+00:00"
+      },
+      {
+        "chunk_id": "company_BOT001_9d6ec3d9",
+        "question": "What your organisation does ?",
+        "answer": "My organisation is generally working for the Consultancy company .",
+        "section": "Company FAQ",
+        "document": "BOT001 Company FAQ",
+        "created_at": "2025-09-08T08:44:50.058298+00:00",
+        "updated_at": "2025-09-08T08:44:50.058321+00:00"
+      }
+    ],
+    "Company Info": [
+      {
+        "chunk_id": "company_BOT001_2d0d97bf",
+        "question": "Where is your Location ?",
+        "answer": "our location is at mid-baneshwor , near pipal bot",
+        "section": "Company FAQ",
+        "document": "BOT001 Company FAQ",
+        "created_at": "2025-09-08T08:59:17.672023+00:00",
+        "updated_at": "2025-09-08T08:59:17.672033+00:00"
+      }
+    ]
+  }
+}
