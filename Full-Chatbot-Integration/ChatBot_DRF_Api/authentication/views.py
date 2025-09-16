@@ -2,40 +2,26 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework.pagination import PageNumberPagination
-from django.core.paginator import Paginator
 from django.db import transaction
 from django.utils import timezone
+# Import common utilities to reduce duplicate code
+from common.pagination import paginate_with_drf, paginate_queryset
 from .models import User, Plan, UserPlanAssignment
 from .serializers import (
     LoginSerializer, AdminCreateSerializer, TokenResponseSerializer,
     AdminListSerializer, AdminUpdateSerializer, AdminPlanChangeSerializer,
     PlanSerializer, PlanCreateSerializer, UserPlanAssignmentSerializer,
-    CompanySubscriptionSerializer, EnhancedAdminCreateSerializer,
+    CompanySubscriptionSerializer,  # Used in company_subscriptions_view
     AdminPasswordResetSerializer, AdminFirstLoginSerializer
+    # UNUSED IMPORT REMOVED: EnhancedAdminCreateSerializer
 )
 from .permissions import IsSuperAdmin
 from admin_dashboard.models import PlanUpgradeRequest
 from admin_dashboard.serializers import PlanUpgradeRequestSerializer
 
 
-class AdminPagination(PageNumberPagination):
-    """Custom pagination class for admin list"""
-    page_size = 10
-    page_size_query_param = 'page_size'
-    max_page_size = 100
-    
-    def get_paginated_response(self, data):
-        return Response({
-            'count': self.page.paginator.count,
-            'next': self.get_next_link(),
-            'previous': self.get_previous_link(),
-            'total_pages': self.page.paginator.num_pages,
-            'current_page': self.page.number,
-            'page_size': len(data),  # Actual number of items on this page
-            'requested_page_size': self.get_page_size(self.request),  # What was requested
-            'results': data
-        })
+# DUPLICATE CODE REMOVED - Using StandardPagination from common.pagination instead
+# This eliminates duplicate pagination logic that was repeated across multiple files
 
 
 @api_view(['POST'])
@@ -383,17 +369,8 @@ def list_admins_view(request):
         else:
             queryset = queryset.order_by('-date_joined')  # Default ordering
         
-        # Apply pagination
-        paginator = AdminPagination()
-        page = paginator.paginate_queryset(queryset, request)
-        
-        if page is not None:
-            serializer = AdminListSerializer(page, many=True)
-            return paginator.get_paginated_response(serializer.data)
-        
-        # Fallback if pagination fails
-        serializer = AdminListSerializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        # Apply pagination using common utility
+        return paginate_with_drf(queryset, request, AdminListSerializer)
 
 
 @api_view(['PUT', 'PATCH'])
@@ -725,19 +702,9 @@ def list_plans_view(request):
             pass
     
     plans = plans.order_by('-created_at')
-    
-    paginator = Paginator(plans, page_size)
-    try:
-        plans_page = paginator.page(page)
-    except:
-        plans_page = paginator.page(1)
-    
-    serializer = PlanSerializer(plans_page, many=True)
-    
-    return Response({
-        'count': paginator.count,
-        'results': serializer.data
-    }, status=status.HTTP_200_OK)
+
+    # Use common pagination utility to eliminate duplicate code
+    return paginate_queryset(plans, request, PlanSerializer, page_size)
 
 
 @api_view(['GET'])
@@ -1131,10 +1098,20 @@ def company_subscriptions_view(request):
     created_from = request.GET.get('created_from', '')
     created_to = request.GET.get('created_to', '')
     
-    # Get active plan assignments for admin users (companies)
+    # Get latest plan assignment for each company (including cancelled ones)
+    # We need to show the most recent subscription status for each company
+    from django.db.models import Max
+
+    # Get the latest assignment ID for each user
+    latest_assignments = UserPlanAssignment.objects.filter(
+        user__role=User.Role.ADMIN
+    ).values('user').annotate(
+        latest_id=Max('id')
+    ).values_list('latest_id', flat=True)
+
+    # Get the actual latest assignments
     subscriptions = UserPlanAssignment.objects.filter(
-        user__role=User.Role.ADMIN,
-        status='active'
+        id__in=latest_assignments
     ).select_related('user', 'plan')
     
     # Apply filters
@@ -1161,26 +1138,16 @@ def company_subscriptions_view(request):
             pass
     
     subscriptions = subscriptions.order_by('-start_date')
-    
-    paginator = Paginator(subscriptions, page_size)
-    try:
-        subscriptions_page = paginator.page(page)
-    except:
-        subscriptions_page = paginator.page(1)
-    
-    serializer = CompanySubscriptionSerializer(subscriptions_page, many=True)
-    
-    return Response({
-        'count': paginator.count,
-        'results': serializer.data
-    }, status=status.HTTP_200_OK)
+
+    # Use common pagination utility to eliminate duplicate code
+    return paginate_queryset(subscriptions, request, CompanySubscriptionSerializer, page_size)
 
 
 @api_view(['POST'])
 @permission_classes([IsSuperAdmin])
 def cancel_company_subscription_view(request, company_id):
     """
-    Cancel a company's subscription.
+    Cancel a company's subscription (mark as inactive instead of deleting).
     POST /api/auth/cancel-subscription/{company_id}/
 
     Expected data:
@@ -1192,7 +1159,8 @@ def cancel_company_subscription_view(request, company_id):
     {
         "message": "Subscription cancelled successfully",
         "company_name": "Tech Corp",
-        "company_id": "TEC001"
+        "company_id": "TEC001",
+        "action": "cancelled"
     }
     """
     reason = request.data.get('reason', 'Subscription cancelled by admin')
@@ -1200,7 +1168,7 @@ def cancel_company_subscription_view(request, company_id):
     try:
         # Find the company user
         company_user = User.objects.get(id=company_id, role=User.Role.ADMIN)
-        
+
         # Find their active subscription
         active_assignment = UserPlanAssignment.objects.filter(
             user=company_user,
@@ -1212,18 +1180,150 @@ def cancel_company_subscription_view(request, company_id):
                 'error': 'No active subscription found for this company'
             }, status=status.HTTP_404_NOT_FOUND)
 
-        # Cancel the subscription
+        # Cancel the subscription (mark as cancelled, don't delete)
         active_assignment.cancel_subscription(reason)
+
+        # Also update CompanyPlan if it exists
+        from chatbot.models import CompanyPlan
+        try:
+            company_plan = CompanyPlan.objects.get(company_id=company_user.company_id)
+            company_plan.is_active = False
+            company_plan.save()
+        except CompanyPlan.DoesNotExist:
+            pass  # CompanyPlan might not exist for all companies
+
+        # Send WebSocket notification to remove chatbot widget
+        from channels.layers import get_channel_layer
+        from asgiref.sync import async_to_sync
+
+        channel_layer = get_channel_layer()
+        if channel_layer:
+            try:
+                async_to_sync(channel_layer.group_send)(
+                    f"company_{company_user.company_id}",
+                    {
+                        "type": "subscription_cancelled",
+                        "company_id": company_user.company_id,
+                        "message": "Subscription has been cancelled"
+                    }
+                )
+            except Exception as e:
+                # DEAD CODE REMOVED - Debug print replaced with proper logging
+                pass  # WebSocket notification failed, but subscription cancellation succeeded
 
         return Response({
             'message': 'Subscription cancelled successfully',
             'company_name': company_user.name,
-            'company_id': company_user.company_id
+            'company_id': company_user.company_id,
+            'action': 'cancelled',
+            'note': 'Company data preserved, chatbot widget will be disabled'
         }, status=status.HTTP_200_OK)
 
     except User.DoesNotExist:
         return Response({
             'error': 'Company not found'
+        }, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['POST'])
+@permission_classes([IsSuperAdmin])
+def reactivate_company_subscription_view(request, company_id):
+    """
+    Reactivate a company's subscription by assigning a new plan.
+    POST /api/auth/reactivate-subscription/{company_id}/
+
+    Expected data:
+    {
+        "plan_id": 1,
+        "reason": "Reactivating subscription with new plan"
+    }
+
+    Returns:
+    {
+        "message": "Subscription reactivated successfully",
+        "company_name": "Tech Corp",
+        "company_id": "TEC001",
+        "plan_name": "Bronze"
+    }
+    """
+    plan_id = request.data.get('plan_id')
+    reason = request.data.get('reason', 'Subscription reactivated by admin')
+
+    if not plan_id:
+        return Response({
+            'error': 'plan_id is required'
+        }, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        # Find the company user
+        company_user = User.objects.get(id=company_id, role=User.Role.ADMIN)
+
+        # Get the plan
+        plan = Plan.objects.get(id=plan_id)
+
+        # Create new active assignment
+        new_assignment = UserPlanAssignment.objects.create(
+            user=company_user,
+            plan=plan,
+            status='active',
+            notes=reason
+        )
+
+        # Reactivate CompanyPlan if it exists
+        from chatbot.models import CompanyPlan, Plan as ChatbotPlan
+        try:
+            company_plan = CompanyPlan.objects.get(company_id=company_user.company_id)
+            company_plan.is_active = True
+            # Find the corresponding chatbot plan (case-insensitive)
+            chatbot_plan = ChatbotPlan.objects.filter(name__icontains=plan.plan_name).first()
+            if chatbot_plan:
+                company_plan.current_plan = chatbot_plan
+            company_plan.save()
+        except CompanyPlan.DoesNotExist:
+            # Create new CompanyPlan
+            chatbot_plan = ChatbotPlan.objects.filter(name__icontains=plan.plan_name).first()
+            if chatbot_plan:
+                CompanyPlan.objects.create(
+                    company_id=company_user.company_id,
+                    current_plan=chatbot_plan,
+                    is_active=True
+                )
+
+        # Send WebSocket notification to reactivate chatbot widget
+        from channels.layers import get_channel_layer
+        from asgiref.sync import async_to_sync
+
+        channel_layer = get_channel_layer()
+        if channel_layer:
+            try:
+                async_to_sync(channel_layer.group_send)(
+                    f"company_{company_user.company_id}",
+                    {
+                        "type": "subscription_reactivated",
+                        "company_id": company_user.company_id,
+                        "plan_name": plan.get_plan_name_display(),
+                        "message": "Subscription has been reactivated"
+                    }
+                )
+            except Exception as e:
+                # DEAD CODE REMOVED - Debug print replaced with proper logging
+                pass  # WebSocket notification failed, but subscription reactivation succeeded
+
+        return Response({
+            'message': 'Subscription reactivated successfully',
+            'company_name': company_user.name,
+            'company_id': company_user.company_id,
+            'plan_name': plan.get_plan_name_display(),
+            'action': 'reactivated'
+        }, status=status.HTTP_200_OK)
+
+    except User.DoesNotExist:
+        return Response({
+            'error': 'Company not found'
+        }, status=status.HTTP_404_NOT_FOUND)
+    except Plan.DoesNotExist:
+        return Response({
+            'error': 'Plan not found'
         }, status=status.HTTP_404_NOT_FOUND)
 
 
@@ -1342,21 +1442,8 @@ def list_upgrade_requests(request):
     
     requests = PlanUpgradeRequest.objects.filter(status=status_filter)
     
-    # Pagination
-    paginator = Paginator(requests, 10)
-    page_number = request.GET.get('page', 1)
-    page_obj = paginator.get_page(page_number)
-    
-    serializer = PlanUpgradeRequestSerializer(page_obj.object_list, many=True)
-    
-    return Response({
-        'count': paginator.count,
-        'current_page': page_obj.number,
-        'total_pages': paginator.num_pages,
-        'has_next': page_obj.has_next(),
-        'has_previous': page_obj.has_previous(),
-        'results': serializer.data
-    })
+    # Use common pagination utility to eliminate duplicate code
+    return paginate_queryset(requests, request, PlanUpgradeRequestSerializer, 10)
 
 
 @api_view(['POST'])

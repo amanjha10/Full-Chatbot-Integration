@@ -10,6 +10,8 @@ from django.contrib.auth import authenticate
 from django.utils import timezone
 from django.core.paginator import Paginator
 from django.db.models import Q
+# Import common utilities to reduce duplicate code
+from common.permissions import IsAdminOrSuperAdmin as CommonIsAdminOrSuperAdmin
 from authentication.models import User
 from authentication.permissions import IsSuperAdmin
 from .models import Agent, AgentSession, PlanUpgradeRequest
@@ -24,16 +26,9 @@ from chatbot.models import UserProfile, ChatSession
 from chatbot.serializers import UserProfileSerializer
 
 
-# Custom permission for Admin and SuperAdmin
-from rest_framework.permissions import BasePermission
-
-class IsAdminOrSuperAdmin(BasePermission):
-    def has_permission(self, request, view):
-        return (
-            request.user and
-            request.user.is_authenticated and
-            (request.user.role in [User.Role.ADMIN, User.Role.SUPERADMIN])
-        )
+# DUPLICATE CODE REMOVED - Using IsAdminOrSuperAdmin from common.permissions instead
+# This eliminates duplicate permission logic that was repeated across multiple files
+IsAdminOrSuperAdmin = CommonIsAdminOrSuperAdmin
 
 
 # ==================== USER MANAGEMENT APIs ====================
@@ -281,15 +276,9 @@ def user_profiles_stats_view(request):
     else:
         company_id = 'TEST001'  # Default for testing
 
-    # Debug: Check all profiles
-    all_profiles = UserProfile.objects.all()
-    print(f"DEBUG: Total profiles in database: {all_profiles.count()}")
-    for profile in all_profiles[:5]:  # Show first 5
-        print(f"  - {profile.name} (company: {profile.company_id})")
-
+    # DEAD CODE REMOVED - Debug prints removed for cleaner production code
     # Filter by company
     base_queryset = UserProfile.objects.filter(company_id=company_id)
-    print(f"DEBUG: Profiles for company {company_id}: {base_queryset.count()}")
 
     # 1. Total Users: count total number of users in the table
     total_users = base_queryset.count()
@@ -384,6 +373,7 @@ def check_agent_limit_view(request):
         # Get company subscription from chatbot app (primary source)
         from chatbot.models import CompanyPlan
         try:
+            # First check for active subscription
             company_plan = CompanyPlan.objects.get(company_id=request.user.company_id, is_active=True)
             plan = company_plan.current_plan
 
@@ -405,6 +395,21 @@ def check_agent_limit_view(request):
             }
 
         except CompanyPlan.DoesNotExist:
+            # Check if there's a cancelled subscription
+            cancelled_plan = CompanyPlan.objects.filter(company_id=request.user.company_id, is_active=False).first()
+            if cancelled_plan:
+                # Subscription was cancelled - show cancellation message
+                current_agent_count = Agent.objects.filter(company_id=request.user.company_id).count()
+                return Response({
+                    'can_create': False,
+                    'current_count': current_agent_count,
+                    'max_allowed': 0,
+                    'plan_name': 'Cancelled',
+                    'error': 'Your subscription was cancelled. Please upgrade your plan.',
+                    'suggestion': 'Contact support to reactivate your subscription with a new plan.',
+                    'upgrade_needed': True,
+                    'is_cancelled': True
+                })
             # Fallback to authentication plan if no chatbot subscription
             from authentication.models import UserPlanAssignment
             active_assignment = UserPlanAssignment.objects.filter(
@@ -532,6 +537,20 @@ def create_agent_view(request):
                 print(f"DEBUG: Using chatbot subscription - Plan: {plan_name}, Max agents: {max_agents}")
 
             except CompanyPlan.DoesNotExist:
+                # Check if there's a cancelled subscription
+                cancelled_plan = CompanyPlan.objects.filter(company_id=request.user.company_id, is_active=False).first()
+                if cancelled_plan:
+                    # Subscription was cancelled - block agent creation
+                    return Response({
+                        'error': 'Your subscription was cancelled. Please upgrade your plan.',
+                        'current_count': Agent.objects.filter(company_id=request.user.company_id).count(),
+                        'max_allowed': 0,
+                        'suggestion': 'Contact support to reactivate your subscription with a new plan.',
+                        'current_plan': 'Cancelled',
+                        'upgrade_needed': True,
+                        'is_cancelled': True
+                    }, status=status.HTTP_403_FORBIDDEN)
+
                 # Fallback to authentication plan
                 active_assignment = UserPlanAssignment.objects.filter(
                     user=request.user,
@@ -1347,33 +1366,29 @@ def delete_agent_view(request, agent_id):
     Delete an agent
     DELETE /api/admin-dashboard/delete-agent/{agent_id}/
     """
-    print(f"DEBUG: Attempting to delete agent with ID: {agent_id}")
+    # DEAD CODE REMOVED - Debug prints removed for cleaner production code
 
     try:
         agent = Agent.objects.get(id=agent_id)
-        print(f"DEBUG: Found agent: {agent.name} ({agent.email})")
-
         # Delete the associated user as well
         user = agent.user
-        print(f"DEBUG: Found associated user: {user.username}")
 
         # Use transaction to ensure both are deleted together
         with transaction.atomic():
             agent.delete()
             user.delete()
-            print(f"DEBUG: Successfully deleted agent and user")
 
         return Response({
             'message': 'Agent deleted successfully'
         }, status=status.HTTP_200_OK)
 
     except Agent.DoesNotExist:
-        print(f"DEBUG: Agent with ID {agent_id} not found")
+        # DEAD CODE REMOVED - Debug print removed
         return Response({
             'error': 'Agent not found'
         }, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
-        print(f"DEBUG: Error deleting agent: {str(e)}")
+        # DEAD CODE REMOVED - Debug print removed
         return Response({
         'error': f'Failed to delete agent: {str(e)}'
     }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -1881,7 +1896,29 @@ def update_user_plan(upgrade_request):
             status='active',
             notes=f'Plan upgraded from admin request ID: {upgrade_request.id}'
         )
-        
+
+        # Update CompanyPlan to sync with the new assignment
+        from chatbot.models import CompanyPlan, Plan as ChatbotPlan
+        try:
+            company_plan = CompanyPlan.objects.get(company_id=upgrade_request.company_id)
+            # Find corresponding chatbot plan (case-insensitive)
+            chatbot_plan_updated = ChatbotPlan.objects.filter(name__icontains=upgrade_request.requested_plan).first()
+            if chatbot_plan_updated:
+                company_plan.current_plan = chatbot_plan_updated
+                company_plan.is_active = True
+                company_plan.save()
+                print(f"Updated CompanyPlan for {upgrade_request.company_id} to {chatbot_plan_updated.name}")
+        except CompanyPlan.DoesNotExist:
+            # Create new CompanyPlan if it doesn't exist
+            chatbot_plan_updated = ChatbotPlan.objects.filter(name__icontains=upgrade_request.requested_plan).first()
+            if chatbot_plan_updated:
+                CompanyPlan.objects.create(
+                    company_id=upgrade_request.company_id,
+                    current_plan=chatbot_plan_updated,
+                    is_active=True
+                )
+                print(f"Created new CompanyPlan for {upgrade_request.company_id} with {chatbot_plan_updated.name}")
+
         print(f"Successfully updated plan for user {upgrade_request.requested_by.username} to {upgrade_request.requested_plan}")
         return True
         

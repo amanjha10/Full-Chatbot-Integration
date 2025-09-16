@@ -68,6 +68,7 @@ urlpatterns = [
 
     # Embed widget endpoints
     path('company-config/<str:company_id>/', views.company_config_view, name='company_config'),
+    path('company/<str:company_id>/status/', views.company_subscription_status_view, name='company_subscription_status'),
     path('update-chatbot-config/', views.update_chatbot_config_view, name='update_chatbot_config'),
     path('detection-report/', views.chatbot_detection_report_view, name='chatbot_detection_report'),
     path('detection-status/<str:company_id>/', views.chatbot_detection_status_view, name='chatbot_detection_status'),

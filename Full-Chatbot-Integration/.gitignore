@@ -145,3 +145,78 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# ===== PRODUCTION CLEANUP - FILES NOT NEEDED FOR DEPLOYMENT =====
+
+# Debug and Test Files
+debug_*.py
+*debug*.py
+test_*.py
+*test*.py
+*_test_*.py
+*_test_*.txt
+test_rag_debug.py
+test_subscription_management.py
+ChatBot_DRF_Api/debug_*.py
+ChatBot_DRF_Api/test_*.py
+
+# Documentation and Markdown Files (keep only essential ones)
+documentation_chatbot/*.md
+!documentation_chatbot/README.md
+PROJECT_AUDIT_REPORT.md
+QUICKSTART.md
+postgresql_database_access.md
+ChatBot_DRF_Api/FILE_*.md
+ChatBot_DRF_Api/IMPLEMENTATION_*.md
+ChatBot_DRF_Api/MIGRATION_*.md
+
+# Migration and Setup Scripts (temporary)
+recreate_all_collections.py
+ChatBot_DRF_Api/assign_company_ids.py
+ChatBot_DRF_Api/complete_data_migration.py
+ChatBot_DRF_Api/create_sample_plans.py
+ChatBot_DRF_Api/create_test_data.py
+ChatBot_DRF_Api/find_admin_user.py
+ChatBot_DRF_Api/fix_*.py
+ChatBot_DRF_Api/load_rag_data.py
+ChatBot_DRF_Api/migrate_*.py
+ChatBot_DRF_Api/populate_default_plans.py
+ChatBot_DRF_Api/recreate_*.py
+ChatBot_DRF_Api/refresh_vectors.py
+ChatBot_DRF_Api/reset_admin_password.py
+ChatBot_DRF_Api/restore_user_data.py
+
+# Log Files and Data
+logs/
+*.log
+chroma.log
+ChatBot_DRF_Api/chroma.log
+
+# Database Files
+db.sqlite3
+ChatBot_DRF_Api/db.sqlite3
+ChatBot_DRF_Api/db.sqlite3-journal
+
+# ChromaDB Data
+chroma_data/
+ChatBot_DRF_Api/chroma_data/
+ChatBot_DRF_Api/chroma/
+
+# Media Files (user uploads)
+ChatBot_DRF_Api/media/
+
+# Temporary Test Folders
+"New folder"/
+agent-websocket-test.html
+
+# Reference Files
+ChatBot_DRF_Api/refrence/
+ChatBot_DRF_Api/agent_response.txt
+
+# Shell Scripts (keep essential ones)
+setup_*.sh
+start_*.sh
+stop_*.sh
+
+# Documentation Verification Scripts
+documentation_chatbot/verify_*.py

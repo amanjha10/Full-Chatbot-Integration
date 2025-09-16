@@ -38,6 +38,7 @@ urlpatterns = [
     # New Company Subscription Management endpoints
     path('company-subscriptions/', views.company_subscriptions_view, name='company_subscriptions'),
     path('cancel-subscription/<int:company_id>/', views.cancel_company_subscription_view, name='cancel_company_subscription'),
+    path('reactivate-subscription/<int:company_id>/', views.reactivate_company_subscription_view, name='reactivate_company_subscription'),
     path('cancel-subscription-by-assignment/<int:assignment_id>/', views.cancel_subscription_by_assignment_view, name='cancel_subscription_by_assignment'),
     path('create-enhanced-company/', views.create_enhanced_company_view, name='create_enhanced_company'),
     

@@ -1798,6 +1798,23 @@ def superadmin_change_company_plan_view(request, company_id):
             notes=f'Plan changed by SuperAdmin from {old_plan_name} to {new_chatbot_plan.name}: {reason}'
         )
 
+        # Update CompanyPlan to sync with the new assignment
+        from .models import CompanyPlan
+        try:
+            company_plan = CompanyPlan.objects.get(company_id=company_id)
+            company_plan.current_plan = new_chatbot_plan
+            company_plan.is_active = True
+            company_plan.save()
+            print(f"Updated CompanyPlan for {company_id} to {new_chatbot_plan.name}")
+        except CompanyPlan.DoesNotExist:
+            # Create new CompanyPlan if it doesn't exist
+            CompanyPlan.objects.create(
+                company_id=company_id,
+                current_plan=new_chatbot_plan,
+                is_active=True
+            )
+            print(f"Created new CompanyPlan for {company_id} with {new_chatbot_plan.name}")
+
         return Response({
             'success': True,
             'message': f'Company {company_id} plan changed from {old_plan_name} to {new_chatbot_plan.name}',
@@ -2946,6 +2963,71 @@ def test_data_view(request):
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
+def company_subscription_status_view(request, company_id):
+    """
+    Check company subscription status for chatbot widget
+    GET /api/chatbot/company/{company_id}/status/
+
+    This endpoint is called by chatbot.js to check if the company's subscription is active.
+
+    Response:
+    {
+        "success": true,
+        "is_active": true,
+        "company_id": "NHS001",
+        "plan_name": "Bronze",
+        "message": "Subscription is active"
+    }
+    """
+    try:
+        from authentication.models import User, UserPlanAssignment
+
+        try:
+            # Get company user
+            user = User.objects.get(company_id=company_id, role=User.Role.ADMIN)
+
+            # Check if company has active subscription
+            active_assignment = UserPlanAssignment.objects.filter(
+                user=user,
+                status='active'
+            ).first()
+
+            if active_assignment:
+                return Response({
+                    'success': True,
+                    'is_active': True,
+                    'company_id': company_id,
+                    'plan_name': active_assignment.plan.get_plan_name_display(),
+                    'message': 'Subscription is active'
+                })
+            else:
+                return Response({
+                    'success': True,
+                    'is_active': False,
+                    'company_id': company_id,
+                    'plan_name': None,
+                    'message': 'Subscription is inactive or cancelled'
+                })
+
+        except User.DoesNotExist:
+            return Response({
+                'success': False,
+                'is_active': False,
+                'company_id': company_id,
+                'error': 'Company not found'
+            }, status=status.HTTP_404_NOT_FOUND)
+
+    except Exception as e:
+        return Response({
+            'success': False,
+            'is_active': False,
+            'company_id': company_id,
+            'error': f'Failed to check subscription status: {str(e)}'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
 def company_config_view(request, company_id):
     """
     Get company-specific chatbot configuration for embed widget
@@ -2971,7 +3053,7 @@ def company_config_view(request, company_id):
     }
     """
     try:
-        # Get company information from authentication system
+        # First check subscription status
         from authentication.models import User, UserPlanAssignment
 
         try:
@@ -2984,6 +3066,14 @@ def company_config_view(request, company_id):
             ).first()
 
             is_active = active_assignment is not None
+
+            # If subscription is not active, return inactive config
+            if not is_active:
+                return Response({
+                    'success': False,
+                    'error': 'Subscription is inactive or cancelled',
+                    'is_active': False
+                }, status=status.HTTP_403_FORBIDDEN)
 
         except User.DoesNotExist:
             return Response({

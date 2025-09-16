@@ -18,11 +18,13 @@ django_asgi_app = get_asgi_application()
 # Import your app routing AFTER settings + Django app init
 from chatbot import routing as chatbot_routing
 from human_handoff import routing as handoff_routing
+from subscription_websocket import routing as subscription_routing
 
 # Combine all WebSocket URL patterns
 websocket_urlpatterns = (
     chatbot_routing.websocket_urlpatterns +
-    handoff_routing.websocket_urlpatterns
+    handoff_routing.websocket_urlpatterns +
+    subscription_routing.websocket_urlpatterns
 )
 
 application = ProtocolTypeRouter({

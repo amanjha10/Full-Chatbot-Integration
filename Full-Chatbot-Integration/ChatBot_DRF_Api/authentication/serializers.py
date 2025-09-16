@@ -4,7 +4,6 @@ from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 from django.utils import timezone
-from datetime import timedelta
 from .models import User, Plan, UserPlanAssignment
 
 
@@ -161,13 +160,20 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'company_id', 'date_joined')
 
     def get_current_plan(self, obj):
+        # First try to get active assignment
         assignment = obj.current_plan_assignment
+
+        # If no active assignment (e.g., cancelled subscription), get the most recent one
+        if not assignment:
+            assignment = obj.plan_assignments.order_by('-created_at').first()
+
         if assignment:
             return {
                 'id': assignment.plan.id,
                 'name': assignment.plan.get_plan_name_display(),
                 'max_agents': assignment.plan.max_agents,
-                'price': str(assignment.plan.price)
+                'price': str(assignment.plan.price),
+                'status': assignment.status  # Include status to know if it's cancelled
             }
         return None
 
@@ -335,6 +341,7 @@ class CompanySubscriptionSerializer(serializers.ModelSerializer):
 
     company_name = serializers.CharField(source='user.name')
     company_id = serializers.CharField(source='user.company_id')
+    user_id = serializers.IntegerField(source='user.id')  # Add user ID for cancellation
     plan_name = serializers.CharField(source='plan.plan_name_display')
     price = serializers.DecimalField(source='plan.price', max_digits=10, decimal_places=2)
     max_agents = serializers.IntegerField(source='plan.max_agents')
@@ -343,7 +350,7 @@ class CompanySubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserPlanAssignment
         fields = [
-            'id', 'company_name', 'company_id', 'plan_name', 'price', 'max_agents',
+            'id', 'company_name', 'company_id', 'user_id', 'plan_name', 'price', 'max_agents',
             'created_at', 'expiry_date', 'status', 'plan_history'
         ]
     
