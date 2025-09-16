@@ -1,0 +1,2431 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Excellence Consultancy - Transform Your Business Future</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary-color: #652d90;
+        --secondary-color: #3b82f6;
+        --accent-color: #f7941d;
+        --success-color: #10b981;
+        --text-dark: #1f2937;
+        --text-light: #6b7280;
+        --bg-light: #f8fafc;
+        --smokey-grey: #efefef;
+        --white: #ffffff;
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+        --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+        --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.1);
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+        line-height: 1.6;
+        color: var(--text-dark);
+        overflow-x: hidden;
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: var(--bg-light);
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--primary-color);
+        border-radius: 4px;
+      }
+
+      /* Navigation - Fixed for desktop and tablet */
+      .navbar {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        z-index: 1000;
+        padding: 1rem 0;
+        transition: all 0.3s ease;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      /* Mobile-specific navbar styling - remove fixed positioning */
+      @media (max-width: 768px) {
+        .navbar {
+          position: relative;
+          background: rgba(255, 255, 255, 1);
+          backdrop-filter: none;
+          padding: 12px 0;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+          box-shadow: var(--shadow-sm);
+        }
+
+        .navbar.scrolled {
+          padding: 12px 0;
+          box-shadow: var(--shadow-sm);
+        }
+      }
+
+      .navbar.scrolled {
+        padding: 0.5rem 0;
+        box-shadow: var(--shadow-md);
+      }
+
+      .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 2rem;
+      }
+
+      .logo {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .spell-logo {
+        width: 235px;
+        height: 40px;
+      }
+
+      @media (max-width: 480px) {
+        .spell-logo {
+          width: 109px;
+        }
+      }
+
+      .nav-menu {
+        display: flex;
+        list-style: none;
+        gap: 2rem;
+        align-items: center;
+      }
+
+      .nav-link {
+        color: var(--text-dark);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        position: relative;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        white-space: nowrap;
+      }
+
+      .nav-link:hover {
+        color: var(--primary-color);
+        background: rgba(101, 45, 144, 0.1);
+      }
+
+      .nav-cta {
+        background: var(--accent-color) !important;
+        color: white !important;
+        padding: 0.75rem 1.5rem !important;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        margin-left: 1rem;
+      }
+
+      .nav-cta:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+        background: var(--accent-color) !important;
+      }
+
+      .hamburger {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+        padding: 0.5rem;
+      }
+
+      .hamburger span {
+        width: 25px;
+        height: 3px;
+        background: var(--text-dark);
+        margin: 3px 0;
+        transition: 0.3s;
+        border-radius: 2px;
+      }
+
+      /* Hero Section - Adjust padding-top for mobile */
+      .hero {
+        min-height: 100vh;
+        background: var(--primary-color);
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        padding-top: 80px;
+      }
+
+      /* Mobile hero adjustment - remove top padding since navbar is not fixed */
+      @media (max-width: 768px) {
+        .hero {
+          padding-top: 0;
+          min-height: 100vh;
+        }
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="a"><stop offset="0" stop-color="rgba(255,255,255,0.1)"/><stop offset="1" stop-color="rgba(255,255,255,0)"/></radialGradient></defs><circle cx="200" cy="200" r="100" fill="url(%23a)"/><circle cx="800" cy="300" r="150" fill="url(%23a)"/><circle cx="400" cy="700" r="120" fill="url(%23a)"/></svg>');
+        opacity: 0.6;
+      }
+
+      .hero-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+      }
+
+      .hero-content {
+        color: white;
+        animation: fadeInLeft 1s ease-out;
+      }
+
+      .hero-badge {
+        backdrop-filter: blur(10px);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        display: inline-block;
+        margin-bottom: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+
+      .hero h1 {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        line-height: 1.1;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .hero-subtitle {
+        font-size: 1.25rem;
+        margin-bottom: 2.5rem;
+        opacity: 0.9;
+        line-height: 1.6;
+      }
+
+      .hero-buttons {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .btn-primary {
+        background: var(--accent-color);
+        color: white;
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        min-width: 235px;
+        text-align: center;
+        height: 54px;
+        box-sizing: border-box;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 1rem 2rem;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        min-width: 220px;
+        text-align: center;
+        height: 54px;
+        box-sizing: border-box;
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-3px);
+      }
+
+      .hero-visual {
+        position: relative;
+        animation: fadeInRight 1s ease-out;
+      }
+
+      .hero-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 24px;
+        padding: 2rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero-stats {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .stat-item {
+        text-align: center;
+        color: white;
+      }
+
+      .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--accent-color);
+        display: block;
+      }
+
+      .stat-label {
+        font-size: 0.9rem;
+        opacity: 0.8;
+      }
+
+      .floating-shapes {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        pointer-events: none;
+      }
+
+      .shape {
+        position: absolute;
+        opacity: 0.1;
+        animation: float 8s ease-in-out infinite;
+      }
+
+      .shape-1 {
+        top: 20%;
+        left: 10%;
+        width: 80px;
+        height: 80px;
+        animation-delay: 0s;
+      }
+
+      .shape-2 {
+        top: 19%;
+        right: 7%;
+        width: 97px;
+        height: 97px;
+        animation-delay: 2s;
+      }
+
+      .shape-3 {
+        bottom: 30%;
+        left: 30%;
+        width: 100px;
+        height: 100px;
+        animation-delay: 4s;
+      }
+
+      /* Services Section */
+      .services {
+        padding: 3rem 0 4rem 0;
+        background: var(--smokey-grey);
+        position: relative;
+      }
+
+      @media (max-width: 480px) {
+        .services {
+          padding: 1rem 0;
+        }
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+
+      .section-header {
+        text-align: center;
+        margin-bottom: 1rem;
+      }
+
+      .section-badge {
+        color: black;
+        padding: 0rem 1rem;
+        border-radius: 25px;
+        font-size: 1.9rem;
+        font-weight: 600;
+        display: inline-block;
+        margin-bottom: 1rem;
+      }
+      @media (max-width: 480px) {
+        .section-badge {
+          margin: 0;
+        }
+      }
+      .section-title {
+        font-size: 2.75rem;
+        font-weight: 800;
+        margin-bottom: 20px;
+        color: var(--text-dark);
+        line-height: 1.1;
+      }
+
+      .section-subtitle {
+        font-size: 1.2rem;
+        color: var(--text-light);
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+      }
+
+      .service-card {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 8px;
+        box-shadow: var(--shadow-lg);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+      }
+
+      .service-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 4px;
+        background: var(--primary-color);
+        transition: left 0.5s ease;
+      }
+
+      .service-card:hover::before {
+        left: 0;
+      }
+
+      .service-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-xl);
+      }
+      .service-block {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 36px;
+      }
+      .service-icon {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 1.5rem;
+      }
+
+      .service-card h3 {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        line-height: 25px;
+        color: var(--text-dark);
+      }
+
+      .service-card p {
+        color: var(--text-light);
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+      }
+
+      .service-features {
+        list-style: none;
+        padding: 0;
+      }
+
+      .service-features li {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+        color: var(--text-light);
+      }
+
+      .service-features li::before {
+        content: "✓";
+        color: var(--success-color);
+        font-weight: bold;
+      }
+
+      /* About Section */
+      .about {
+        padding: 3rem 0;
+        background: white;
+      }
+
+      .about-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+      }
+
+      .about-content h2 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        color: var(--text-dark);
+        line-height: 1.1;
+      }
+
+      .about-content p {
+        font-size: 1.1rem;
+        color: var(--text-light);
+        margin-bottom: 1.5rem;
+        line-height: 1.4;
+      }
+
+      .about-features {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin: 2rem 0;
+      }
+      .about-features-image {
+        width: 33px;
+        height: 33px;
+      }
+      .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1rem;
+        background: var(--bg-light);
+        border-radius: 12px;
+      }
+
+      .feature-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--primary-color);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1rem;
+      }
+
+      .feature-text {
+        font-weight: 600;
+        color: var(--text-dark);
+      }
+
+      .about-visual {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .about-img {
+        width: 497px;
+        height: 509px;
+        object-fit: fill;
+      }
+      @media (max-width: 480px) {
+        .about-img {
+          width: 312px;
+          height: 328px;
+        }
+      }
+      .about-image {
+        width: 100%;
+        height: 500px;
+        background: linear-gradient(135deg, var(--primary-color), #8b5fbf);
+        border-radius: 24px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 3rem 2rem;
+        box-shadow: var(--shadow-xl);
+      }
+
+      .about-image::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="grad1"><stop offset="0%" stop-color="rgba(255,255,255,0.1)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/></radialGradient></defs><circle cx="20" cy="30" r="15" fill="url(%23grad1)"/><circle cx="70" cy="60" r="20" fill="url(%23grad1)"/><circle cx="40" cy="80" r="12" fill="url(%23grad1)"/></svg>');
+        opacity: 0.3;
+      }
+
+      .about-stats-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        color: white;
+        width: 100%;
+      }
+
+      .about-stats-title {
+        font-size: 2rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        color: white;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .about-stats-subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 3rem;
+        opacity: 0.9;
+        line-height: 1.6;
+      }
+
+      .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        max-width: 400px;
+        margin: 0 auto;
+      }
+
+      .metric {
+        text-align: center;
+        padding: 1.5rem 1rem;
+        background-color: var(--primary-color);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+      }
+
+      .metric:hover {
+        transform: translateY(-5px);
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      .metric-number {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: var(--accent-color);
+        display: block;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .metric-label {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: black;
+        opacity: 0.9;
+      }
+
+      /* Why Choose Us Section */
+      .why-choose-us {
+        padding: 3rem 0 4rem 0;
+        background: var(--smokey-grey);
+      }
+
+      .why-choose-us-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+      }
+
+      .why-choose-card {
+        background: white;
+        padding: 1.8rem;
+        border-radius: 8px;
+        box-shadow: var(--shadow-md);
+        transition: all 0.3s ease;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .why-choose-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .why-choose-card h3 {
+        color: var(--primary-color);
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-align: left;
+      }
+
+      .why-choose-features {
+        list-style: none;
+        padding: 0;
+        text-align: left;
+      }
+
+      .why-choose-features li {
+        display: flex;
+        align-items: center;
+        margin-right: "20px";
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+        color: var(--text-light);
+        font-size: 0.9rem;
+      }
+
+      .why-choose-features li::before {
+        content: "*";
+        color: var(--accent-color);
+        font-weight: bold;
+      }
+
+      /* Testimonials Section */
+      .testimonials {
+        padding: 3rem 0 4rem 0;
+        background: white;
+        color: var(--text-dark);
+      }
+
+      .testimonials .section-title {
+        color: var(--text-dark);
+      }
+
+      .testimonials .section-subtitle {
+        color: var(--text-light);
+      }
+
+      .testimonials-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+        /* margin-top: 3rem; */
+      }
+
+      .testimonial-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 32px;
+        position: relative;
+        box-shadow: var(--shadow-md);
+      }
+      .testimonial-content-wrapper {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        justify-content: space-between;
+      }
+      .testimonial-content {
+        font-style: italic;
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+        color: var(--text-light);
+      }
+
+      .testimonial-author {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .author-avatar {
+        width: 50px;
+        height: 50px;
+        background: var(--accent-color);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: white;
+      }
+
+      .author-info h4 {
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+        color: var(--text-dark);
+      }
+
+      .author-info span {
+        font-size: 0.9rem;
+        opacity: 0.8;
+        color: var(--text-light);
+      }
+      /* excellence Section */
+      .excellence {
+        background: var(--smokey-grey);
+        padding: 3rem 0 4rem 0;
+        color: var(--text-dark);
+        text-align: center;
+      }
+      .excellence h2 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 20px;
+        line-height: 1.1;
+      }
+      .excellence-number-card {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 2rem;
+      }
+
+      @media (max-width: 1200px) {
+        .excellence-number-card {
+          justify-content: center;
+          gap: 1.5rem;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .excellence-number-card {
+          flex-direction: column;
+          align-items: center;
+          gap: 1rem;
+        }
+
+        .excellence_card {
+          max-width: 300px;
+          width: 100%;
+        }
+      }
+
+      .excellence_card {
+        text-align: center;
+        width: 260px;
+        padding: 1.5rem 1rem;
+        background-color: white;
+        backdrop-filter: blur(10px);
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+      }
+      .excellence_card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .excellence_card .metric-number {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: var(--accent-color);
+        display: block;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .excellence_card .metric-label {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        opacity: 0.9;
+      }
+
+      /* CTA Section */
+      .cta {
+        padding: 3rem 0;
+        text-align: center;
+        color: var(--text-dark);
+      }
+
+      .cta h2 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        line-height: 1.1;
+      }
+
+      .cta p {
+        font-size: 1.2rem;
+        margin-bottom: 2.5rem;
+        color: var(--text-light);
+      }
+
+      .cta-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .cta .btn-secondary {
+        background: var(--accent-color);
+        color: white;
+        border: 2px solid var(--accent-color);
+        min-width: 250px;
+      }
+
+      .cta .btn-secondary:hover {
+        background: var(--accent-color);
+        opacity: 0.9;
+        transform: translateY(-3px);
+      }
+
+      /* Footer */
+      .footer {
+        background: var(--primary-color);
+        color: white;
+        padding: 4rem 0 2rem;
+      }
+
+      .footer-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+      }
+
+      .footer-section h3 {
+        margin-bottom: 1.5rem;
+        color: var(--accent-color);
+        font-weight: 700;
+      }
+
+      .footer-section p,
+      .footer-section li {
+        margin-bottom: 0.75rem;
+        opacity: 0.8;
+        line-height: 1.6;
+      }
+
+      .footer-section ul {
+        list-style: none;
+      }
+
+      .footer-section a {
+        color: white;
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+
+      .footer-section a:hover {
+        color: var(--accent-color);
+      }
+
+      .footer-bottom {
+        text-align: center;
+        padding-top: 2rem;
+        border-top: 1px solid #374151;
+        opacity: 0.6;
+      }
+
+      .social-links {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      .social-link {
+        width: 40px;
+        height: 40px;
+        background: white;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        color: white;
+      }
+      .social-link-img {
+        width: 22px;
+        height: 22px;
+        cursor: pointer;
+      }
+      .social-link:hover {
+        background: var(--accent-color);
+        transform: translateY(-3px);
+      }
+
+      .image {
+        height: 457px;
+        width: 440px;
+        object-fit: contain;
+      }
+      @media (max-width: 480px) {
+        .image {
+          width: 304px;
+          height: 349px;
+        }
+      }
+      /* Animations */
+      @keyframes fadeInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes fadeInRight {
+        from {
+          opacity: 0;
+          transform: translateX(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+      }
+
+      @keyframes countUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Chatbot Icon Styles */
+      .chatbot-icon {
+        position: fixed;
+        bottom: 70px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+        /* background: var(--accent-color); */
+        background-color: white;
+        box-shadow: var(--shadow-lg);
+        z-index: 1000;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8);
+        animation: floatUpDown 2s ease-in-out infinite;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.3s ease;
+      }
+
+      .chatbot-icon.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .chatbot-icon.hidden {
+        opacity: 0;
+        transform: translateY(20px);
+        pointer-events: none;
+      }
+
+      /* Chatbot iframe container */
+      .chatbot-container {
+        position: fixed;
+        bottom: 140px;
+        right: 30px;
+        width: 400px;
+        height: 600px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        z-index: 1001;
+        display: none;
+        overflow: hidden;
+      }
+
+      .chatbot-container.show {
+        display: block;
+        animation: slideUp 0.3s ease-out;
+      }
+
+      .chatbot-iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        border-radius: 12px;
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .chatbot-img {
+        width: 50px;
+        height: 66px;
+      }
+
+      @keyframes floatUpDown {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .chatbot-icon:hover {
+        transform: scale(1.5);
+      }
+
+      @keyframes bounce {
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+          transform: translateY(0);
+        }
+        40% {
+          transform: translateY(-10px);
+        }
+        60% {
+          transform: translateY(-5px);
+        }
+      }
+
+      /* Responsive Design */
+      @media (max-width: 1024px) {
+        .nav-menu {
+          gap: 1rem;
+        }
+
+        .nav-link {
+          padding: 0.5rem 0.75rem;
+          font-size: 0.9rem;
+        }
+
+        .nav-cta {
+          padding: 0.75rem 1.25rem !important;
+          font-size: 0.9rem !important;
+          margin-left: 0.5rem;
+        }
+
+        .hero {
+          padding-top: 120px;
+          min-height: calc(100vh - 40px);
+        }
+
+        .hero-buttons {
+          justify-content: flex-start;
+          gap: 1rem;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+          flex: 1;
+          min-width: 200px;
+          max-width: 250px;
+        }
+
+        .hero-container {
+          gap: 3rem;
+        }
+
+        .hero h1 {
+          font-size: 3rem;
+        }
+
+        .hero-subtitle {
+          font-size: 1.15rem;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .hamburger {
+          display: flex;
+        }
+
+        .nav-menu {
+          position: fixed;
+          left: -100%;
+          top: 80px;
+          flex-direction: column;
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(20px);
+          width: 100%;
+          text-align: center;
+          transition: 0.3s;
+          padding: 2rem 0;
+          border-top: 1px solid rgba(0, 0, 0, 0.1);
+          gap: 1rem;
+        }
+
+        .nav-menu.active {
+          left: 0;
+        }
+
+        .nav-cta {
+          margin-left: 0 !important;
+          margin-top: 0.5rem;
+        }
+
+        .hero-container {
+          grid-template-columns: 1fr;
+          gap: 2rem;
+          text-align: center;
+          padding-top: 1rem;
+        }
+
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+
+        .hero-buttons {
+          justify-content: center;
+          flex-direction: column;
+          align-items: center;
+          gap: 1rem;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+          width: 100%;
+          max-width: 320px;
+          padding: 1rem 2rem;
+          font-size: 1.1rem;
+          height: 54px;
+          flex: none;
+        }
+
+        .services-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .about-container {
+          grid-template-columns: 1fr;
+          gap: 2rem;
+        }
+
+        .about-features {
+          grid-template-columns: 1fr;
+        }
+
+        .about-image {
+          height: 400px;
+          padding: 2rem 1.5rem;
+        }
+
+        .about-stats-title {
+          font-size: 1.5rem;
+        }
+
+        .metrics-grid {
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
+        }
+
+        .why-choose-us-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .testimonials-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .cta-buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .cta .btn-secondary {
+          width: 100%;
+          max-width: 320px;
+        }
+
+        .section-title {
+          font-size: 2rem;
+        }
+
+        .cta h2 {
+          font-size: 2rem;
+        }
+      }
+
+      /* Tablet-specific adjustments (769px - 1024px) */
+      @media (min-width: 769px) and (max-width: 1024px) {
+        .hero-container {
+          grid-template-columns: 1fr 1fr;
+          gap: 2rem;
+          align-items: center;
+        }
+
+        .hero-buttons {
+          flex-direction: row;
+          flex-wrap: wrap;
+          gap: 1rem;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+          flex: 1;
+          min-width: 180px;
+          max-width: 220px;
+        }
+
+        .image {
+          height: 380px;
+          width: 100%;
+          max-width: 380px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .service-card,
+        .testimonial-card,
+        .why-choose-card {
+          padding: 1.5rem;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+          padding: 0.875rem 1.5rem;
+          font-size: 1rem;
+          max-width: 280px;
+        }
+
+        .about-image {
+          height: 350px;
+          padding: 1.5rem 1rem;
+        }
+
+        .metric-number {
+          font-size: 2rem;
+        }
+
+        .about-stats-title {
+          font-size: 1.3rem;
+        }
+        .section-title {
+          font-size: 21px;
+        }
+        .about-content h2 {
+          font-size: 21px;
+        }
+        .why-choose-us {
+          padding: 17px 0;
+        }
+        .testimonials {
+          padding: 17px 0;
+        }
+        .excellence {
+          padding: 17px 0;
+        }
+        .excellence h2 {
+          font-size: 21px;
+        }
+        .excellence_card .metric-number {
+          font-size: 28px;
+        }
+        .cta {
+          padding: 35px 0;
+        }
+        .cta h2 {
+          font-size: 21px;
+        }
+      }
+      .contact-info {
+        display: flex;
+        gap: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+      <div class="nav-container">
+        <a href="#" class="logo">
+          <div class="logo-icon">
+            <img
+              src="./image/spellbotlogoweb.svg"
+              alt="logo"
+              class="spell-logo"
+            />
+          </div>
+        </a>
+        <ul class="nav-menu" id="nav-menu">
+          <li><a href="#home" class="nav-link">Home</a></li>
+          <li><a href="#services" class="nav-link">Services</a></li>
+          <li><a href="#about" class="nav-link">About</a></li>
+          <li><a href="#why-us" class="nav-link">Why Us</a></li>
+          <li><a href="#testimonials" class="nav-link">Reviews</a></li>
+          <li><a href="#contact" class="nav-link nav-cta">Get Started</a></li>
+        </ul>
+        <div class="hamburger" id="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+      <div class="floating-shapes">
+        <div class="shape shape-1">
+          <img src="./image/3dbox.png" alt="image" class="shape-1" />
+        </div>
+        <div class="shape shape-2">
+          <img src="./image/3dbox1.png" alt="image" class="shape-2" />
+        </div>
+        <div class="shape shape-3">
+          <img src="./image/3dbox3.png" alt="image" class="shape-3" />
+        </div>
+      </div>
+      <div class="hero-container">
+        <div class="hero-content">
+          <div class="hero-badge">Your Success Partner in Nepal</div>
+          <h1>Innovation for a Smarter Future</h1>
+          <p class="hero-subtitle">
+            Committed to delivering intelligent, reliable, and user-friendly
+            chatbot solutions that combine technology, innovation, and customer
+            satisfaction to transform the way you connect with your audience.
+          </p>
+          <div class="hero-buttons">
+            <a href="#services" class="btn-primary"> Explore Services → </a>
+            <a href="#contact" class="btn-secondary"> 📞 Free Consultation </a>
+          </div>
+        </div>
+        <div class="image">
+          <img
+            src="./image//smartFutureImage.png"
+            alt="image of banner"
+            class="image"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-badge">Our Expertise</div>
+          <h2 class="section-title">Comprehensive Business Solutions</h2>
+        </div>
+        <div class="services-grid">
+          <div class="service-card">
+            <div class="service-block">
+              <img
+                src="./image/interview.png"
+                alt="icon education"
+                class="service-icon"
+              />
+              <h3>Educational Consultancies</h3>
+            </div>
+
+            <p>Engage prospects and manage inquiries smoothly.</p>
+            <ul class="service-features">
+              <li>Instant FAQs</li>
+              <li>Course guidance</li>
+              <li>Appointment scheduling</li>
+              <li>Document submission help</li>
+            </ul>
+          </div>
+          <div class="service-card">
+            <div class="service-block">
+              <img
+                src="./image//school.png"
+                alt="icon of schools"
+                class="service-icon"
+              />
+              <h3>Schools</h3>
+            </div>
+
+            <p>Improve student and parent engagement with our assistance.</p>
+            <ul class="service-features">
+              <li>Student inquiries</li>
+              <li>Parent inquiries</li>
+              <li>Academic support</li>
+              <li>Event notifications</li>
+            </ul>
+          </div>
+          <div class="service-card">
+            <div class="service-block">
+              <img
+                src="./image//bank.png"
+                alt="image of bank"
+                class="service-icon"
+              />
+              <h3>Banks</h3>
+            </div>
+
+            <p>Provide quick and secure customer support.</p>
+            <ul class="service-features">
+              <li>Account inquiries</li>
+              <li>Loan information</li>
+              <li>24/7 customer support</li>
+              <li>Transaction assistance</li>
+            </ul>
+          </div>
+          <div class="service-card">
+            <div class="service-block">
+              <img
+                src="./image/hospital.png"
+                alt="icon of hospitals"
+                class="service-icon"
+              />
+              <h3>Hospitals</h3>
+            </div>
+
+            <p>Enhance patient care with instant chatbot services.</p>
+            <ul class="service-features">
+              <li>Appointment booking</li>
+              <li>Patient follow-ups</li>
+              <li>Emergency contacts</li>
+              <li>Medical inquiries</li>
+            </ul>
+          </div>
+          <div class="service-card">
+            <div class="service-block">
+              <img
+                src="./image/online-shop.png"
+                alt="icon of ecommerce"
+                class="service-icon"
+              />
+              <h3>Ecommerce</h3>
+            </div>
+
+            <p>Support your customers and boost your sales.</p>
+            <ul class="service-features">
+              <li>Order tracking</li>
+              <li>Product recommendations</li>
+              <li>Returns and refunds</li>
+              <li>Payment assistance</li>
+            </ul>
+          </div>
+          <div class="service-card">
+            <div class="service-block">
+              <img
+                src="./image/hotel.png"
+                alt="icon of hotel"
+                class="service-icon"
+              />
+              <h3>Hotels</h3>
+            </div>
+
+            <p>Deliver smooth guest services and booking help via chatbots.</p>
+            <ul class="service-features">
+              <li>Booking management</li>
+              <li>Room service requests</li>
+              <li>Local information</li>
+              <li>Guest assistance</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+      <div class="container">
+        <div class="about-container">
+          <div class="about-content">
+            <h2>Your Reliable Partners in Digital Growth</h2>
+            <p>
+              With over 5 years of experience serving businesses across Nepal,
+              we have established ourselves as the premier consultancy partner
+              for organizations seeking sustainable growth and competitive
+              advantage.
+            </p>
+            <p>
+              Our expert team uses creative strategies and innovative chatbot
+              technologies that improve your company's performance. Our primary
+              objectives are to increase consumer engagement, automate
+              processes, and provide tailored digital experiences that enhance
+              your company's success.
+            </p>
+            <div class="about-features">
+              <div class="feature-item">
+                <!-- <div class="feature-icon">🏆</div> -->
+                <img
+                  src="./image/medal.png"
+                  alt="logo of award"
+                  class="about-features-image"
+                />
+                <span class="feature-text">Award-Winning Team</span>
+              </div>
+              <div class="feature-item">
+                <!-- <div class="feature-icon">🌟</div> -->
+                <img
+                  src="./image/review.png"
+                  alt="logo of award"
+                  class="about-features-image"
+                />
+                <span class="feature-text">Client-Centric Approach</span>
+              </div>
+              <div class="feature-item">
+                <!-- <div class="feature-icon">💡</div> -->
+                <img
+                  src="./image/inspiration.png"
+                  alt="logo of award"
+                  class="about-features-image"
+                />
+                <span class="feature-text">Innovative Solutions</span>
+              </div>
+              <div class="feature-item">
+                <!-- <div class="feature-icon">📈</div> -->
+                <img
+                  src="./image/chart.png"
+                  alt="logo of award"
+                  class="about-features-image"
+                />
+                <span class="feature-text">Proven Results</span>
+              </div>
+            </div>
+            <a href="#contact" class="btn-primary">Learn More About Us</a>
+          </div>
+          <div>
+            <img src="./image/Asset_32.png" alt="image" class="about-img" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="why-choose-us" id="why-us">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-badge">Our Advantages</div>
+          <h2 class="section-title">Why Us?</h2>
+        </div>
+        <div class="why-choose-us-grid">
+          <div class="why-choose-card">
+            <div>
+              <h3>Cutting-Edge Technology</h3>
+              <ul class="why-choose-features">
+                <li>Smart AI conversations</li>
+                <li>Regular updates</li>
+              </ul>
+            </div>
+          </div>
+          <div class="why-choose-card">
+            <div>
+              <h3>Customizable Solutions</h3>
+              <ul class="why-choose-features">
+                <li>Suitable for any business</li>
+                <li>Simple integration</li>
+              </ul>
+            </div>
+          </div>
+          <div class="why-choose-card">
+            <div>
+              <h3>Customer Engagement</h3>
+              <ul class="why-choose-features">
+                <li>Instant 24/7 replies</li>
+                <li>Personalized support</li>
+              </ul>
+            </div>
+          </div>
+          <div class="why-choose-card">
+            <div>
+              <h3>Cost and Time Efficiency</h3>
+              <ul class="why-choose-features">
+                <li>Automates tasks</li>
+                <li>Less support costs</li>
+              </ul>
+            </div>
+          </div>
+          <div class="why-choose-card">
+            <div>
+              <h3>Support and Maintenance</h3>
+              <ul class="why-choose-features">
+                <li>Continuous assistance</li>
+                <li>Performance report</li>
+              </ul>
+            </div>
+          </div>
+          <div class="why-choose-card">
+            <div>
+              <h3>Scalable and Flexible</h3>
+              <ul class="why-choose-features">
+                <li>Grows with you</li>
+                <li>Readily adjustable</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-badge">Client Success Stories</div>
+          <h2 class="section-title">What Our Clients Say</h2>
+        </div>
+        <div class="testimonials-grid">
+          <div class="testimonial-card">
+            <div class="testimonial-content-wrapper">
+              <div class="testimonial-content">
+                "Excellence Consultancy helped us navigate the complex
+                regulatory landscape and expand our operations across three
+                major cities in Nepal. Their strategic guidance was invaluable."
+              </div>
+              <div class="testimonial-author">
+                <div class="author-avatar">RS</div>
+                <div class="author-info">
+                  <h4>Rajesh Shrestha</h4>
+                  <span>CEO, Himalayan Enterprises</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-content">
+              "The digital transformation strategy they developed increased our
+              operational efficiency by 40% and significantly improved our
+              customer satisfaction scores."
+            </div>
+            <div class="testimonial-author">
+              <div class="author-avatar">SP</div>
+              <div class="author-info">
+                <h4>Sita Poudel</h4>
+                <span>Director, Tech Solutions Nepal</span>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-content-wrapper">
+              <div class="testimonial-content">
+                "Their financial advisory services helped us secure funding and
+                implement sustainable growth strategies that doubled our revenue
+                in two years."
+              </div>
+              <div class="testimonial-author">
+                <div class="author-avatar">AK</div>
+                <div class="author-info">
+                  <h4>Arjun KC</h4>
+                  <span>Founder, Green Valley Industries</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="excellence">
+      <div class="container">
+        <h2>Excellence in Numbers</h2>
+        <div class="excellence-number-card">
+          <div class="excellence_card">
+            <div class="metric-number" data-target="47">0</div>
+            <div class="metric-label">Projects Completed</div>
+          </div>
+          <div class="excellence_card">
+            <div class="metric-number" data-target="157">0</div>
+            <div class="metric-label">Happy Clients</div>
+          </div>
+          <div class="excellence_card">
+            <div class="metric-number" data-target="5">0</div>
+            <div class="metric-label">Years Experience</div>
+          </div>
+          <div class="excellence_card">
+            <div class="metric-number" data-target="99">0</div>
+            <div class="metric-label">Success Rate %</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="contact">
+      <div class="container">
+        <h2>Ready to Transform Your Business?</h2>
+        <div class="cta-buttons">
+          <a href="#" class="btn-secondary">Schedule Free Consultation</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3>Excellence Consultancy</h3>
+            <p>
+              Nepal's premier business consultancy firm, dedicated to driving
+              sustainable growth and innovation across industries. Partner with
+              us for your business transformation journey.
+            </p>
+            <div class="social-links">
+              <a
+                href="https://www.facebook.com/spellinnovation"
+                target="_blank"
+                class="social-link"
+                ><img
+                  src="./image/facebook.png"
+                  alt="img of facebook"
+                  class="social-link-img"
+              /></a>
+              <a
+                href="https://www.instagram.com/spellinnovation"
+                target="_blank"
+                class="social-link"
+                ><img
+                  src="./image/instagram.png"
+                  alt="img of instagram"
+                  class="social-link-img"
+              /></a>
+              <a
+                href="https://www.tiktok.com/@spellinnovation"
+                target="_blank"
+                class="social-link"
+                ><img
+                  src="./image/tik-tok.png"
+                  alt="img of tiktok"
+                  class="social-link-img"
+              /></a>
+              <a
+                href="https://www.youtube.com/@spellinnovation"
+                target="_blank"
+                class="social-link"
+                ><img
+                  src="./image/youtube.png"
+                  alt="img of youtube"
+                  class="social-link-img"
+              /></a>
+            </div>
+          </div>
+          <div class="footer-section">
+            <h3>Our Services</h3>
+            <ul>
+              <li><a href="#">Educational Consultancies</a></li>
+              <li><a href="#">Schools</a></li>
+              <li><a href="#">Banks</a></li>
+              <li><a href="#">Hospitals</a></li>
+              <li><a href="#">Ecommerce</a></li>
+              <li><a href="#">Hotels</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h3>Company</h3>
+            <ul>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Our Team</a></li>
+              <li><a href="#">Case Studies</a></li>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">News & Insights</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h3>Contact Information</h3>
+            <div class="contact-info">
+              <p>Mail:</p>
+              <p>contact@spellinnovation.com</p>
+            </div>
+            <div class="contact-info">
+              <p>Phone:</p>
+              <p>01-5910781</p>
+            </div>
+            <div class="contact-info">
+              <p>Mobile:</p>
+              <p>+977-9801047737</p>
+            </div>
+            <div class="contact-info">
+              <p>Address:</p>
+              <p>Pipal bot, Mid baneswor, Kathmandu , Nepal</p>
+            </div>
+            <div class="contact-info">
+              <p>Time:</p>
+              <p>Mon-Fri: 9:00 AM - 6:00 PM</p>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>
+            &copy; 2025 Excellence Consultancy Nepal. All rights reserved. |
+            Privacy Policy | Terms of Service
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Chatbot Icon -->
+    <div
+      class="chatbot-icon"
+      id="chatbotIcon"
+      title="Chat with our Study Abroad Assistant"
+      onclick="toggleChatbot()"
+    >
+      <img
+        src="./image/sbiconwhitepurple.svg"
+        alt="icon of chat boot"
+        class="chatbot-img"
+      />
+    </div>
+
+    <!-- Chatbot Container -->
+    <div class="chatbot-container" id="chatbotContainer">
+      <iframe
+        id="chatbotIframe"
+        class="chatbot-iframe"
+        src="./chatbot-iframe.html"
+        title="SpellBot Chat Assistant"
+      >
+      </iframe>
+    </div>
+
+    <script>
+      // Mobile menu toggle
+      const hamburger = document.getElementById("hamburger");
+      const navMenu = document.getElementById("nav-menu");
+
+      hamburger.addEventListener("click", () => {
+        navMenu.classList.toggle("active");
+        hamburger.classList.toggle("active");
+      });
+
+      // Close menu when clicking on a link
+      document.querySelectorAll(".nav-link").forEach((link) => {
+        link.addEventListener("click", () => {
+          navMenu.classList.remove("active");
+          hamburger.classList.remove("active");
+        });
+      });
+
+      // Navbar scroll effect - Only for desktop and tablet
+      window.addEventListener("scroll", () => {
+        const navbar = document.getElementById("navbar");
+        // Only apply scroll effects if not on mobile
+        if (window.innerWidth > 768) {
+          if (window.scrollY > 50) {
+            navbar.classList.add("scrolled");
+          } else {
+            navbar.classList.remove("scrolled");
+          }
+        }
+      });
+
+      // Smooth scrolling for navigation links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            // Adjust offset for mobile (no fixed navbar) vs desktop (fixed navbar)
+            const offsetTop =
+              window.innerWidth <= 768
+                ? target.offsetTop
+                : target.offsetTop - 80;
+            window.scrollTo({
+              top: offsetTop,
+              behavior: "smooth",
+            });
+          }
+        });
+      });
+
+      // Intersection Observer for animations
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.style.animation = "fadeInUp 0.8s ease-out forwards";
+            entry.target.style.opacity = "1";
+          }
+        });
+      }, observerOptions);
+
+      // Observe elements for animation
+      document
+        .querySelectorAll(
+          ".service-card, .testimonial-card, .feature-item, .why-choose-card"
+        )
+        .forEach((el) => {
+          el.style.opacity = "0";
+          observer.observe(el);
+        });
+
+      // Enhanced Counter Animation Function
+      const animateCounters = (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const counters = entry.target.querySelectorAll(".metric-number");
+
+            counters.forEach((counter, index) => {
+              // Add staggered delay for each counter
+              setTimeout(() => {
+                const target = parseInt(counter.getAttribute("data-target"));
+                const duration = 2000; // 2 seconds
+                const steps = 60; // Number of steps for smooth animation
+                const increment = target / steps;
+                let current = 0;
+                let step = 0;
+
+                // Add animation class
+                counter.style.animation = "countUp 0.5s ease-out forwards";
+
+                const updateCounter = () => {
+                  if (step < steps) {
+                    current += increment;
+                    step++;
+
+                    // Use easing function for smooth animation
+                    const progress = step / steps;
+                    const easeOutCubic = 1 - Math.pow(1 - progress, 3);
+                    const displayValue = Math.floor(target * easeOutCubic);
+
+                    // Format the number based on its value
+                    if (
+                      counter.parentElement
+                        .querySelector(".metric-label")
+                        .textContent.includes("%")
+                    ) {
+                      counter.textContent = displayValue + "%";
+                    } else if (target > 50) {
+                      counter.textContent = displayValue + "+";
+                    } else {
+                      counter.textContent = displayValue + "+";
+                    }
+
+                    requestAnimationFrame(updateCounter);
+                  } else {
+                    // Final value
+                    if (
+                      counter.parentElement
+                        .querySelector(".metric-label")
+                        .textContent.includes("%")
+                    ) {
+                      counter.textContent = target + "%";
+                    } else {
+                      counter.textContent = target + "+";
+                    }
+                  }
+                };
+
+                updateCounter();
+              }, index * 200); // Stagger each counter by 200ms
+            });
+
+            // Unobserve after animation
+            excellenceObserver.unobserve(entry.target);
+          }
+        });
+      };
+
+      // Create observer for excellence section
+      const excellenceObserver = new IntersectionObserver(animateCounters, {
+        threshold: 0.3,
+        rootMargin: "0px",
+      });
+
+      // Observe the excellence section
+      const excellenceSection = document.querySelector(".excellence");
+      if (excellenceSection) {
+        excellenceObserver.observe(excellenceSection);
+      }
+
+      // Add dynamic hover effects
+      document
+        .querySelectorAll(".service-card, .why-choose-card")
+        .forEach((card) => {
+          card.addEventListener("mouseenter", function () {
+            this.style.transform = "translateY(-8px) scale(1.02)";
+          });
+
+          card.addEventListener("mouseleave", function () {
+            this.style.transform = "translateY(-8px) scale(1)";
+          });
+        });
+
+      // Enhanced metric hover effects
+      document
+        .querySelectorAll(".metric, .excellence_card")
+        .forEach((metric) => {
+          metric.addEventListener("mouseenter", function () {
+            this.style.transform = "translateY(-5px) scale(1.05)";
+          });
+
+          metric.addEventListener("mouseleave", function () {
+            this.style.transform = "translateY(-5px) scale(1)";
+          });
+        });
+
+      // Parallax effect for floating shapes
+      window.addEventListener("scroll", () => {
+        const scrolled = window.pageYOffset;
+        const rate = scrolled * -0.3;
+
+        document.querySelectorAll(".shape").forEach((shape, index) => {
+          const speed = (index + 1) * 0.1;
+          shape.style.transform = `translateY(${scrolled * speed}px)`;
+        });
+      });
+
+      // Add loading animation
+      window.addEventListener("load", () => {
+        document.body.style.opacity = "1";
+        document.body.style.transition = "opacity 0.5s ease-in-out";
+      });
+
+      // Set initial body opacity
+      document.body.style.opacity = "0";
+
+      // Chatbot Icon Functionality
+      const chatbotIcon = document.getElementById("chatbotIcon");
+
+      // Show chatbot icon after 3 seconds
+      setTimeout(() => {
+        chatbotIcon.classList.add("show");
+        // Add pulse effect after showing
+        setTimeout(() => {
+          chatbotIcon.classList.add("pulse");
+        }, 1000);
+      }, 3000);
+
+      // Handle chatbot icon click - removed conflicting handler
+      // The onclick="toggleChatbot()" in HTML handles the click
+
+      // Enhanced button interactions
+      document
+        .querySelectorAll(".btn-primary, .btn-secondary")
+        .forEach((btn) => {
+          btn.addEventListener("click", function (e) {
+            // Create ripple effect
+            const rect = this.getBoundingClientRect();
+            const ripple = document.createElement("span");
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+
+            ripple.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}px;
+                    top: ${y}px;
+                    background: rgba(255, 255, 255, 0.3);
+                    border-radius: 50%;
+                    transform: scale(0);
+                    animation: ripple 0.6s linear;
+                    pointer-events: none;
+                `;
+
+            this.style.position = "relative";
+            this.style.overflow = "hidden";
+            this.appendChild(ripple);
+
+            setTimeout(() => ripple.remove(), 600);
+          });
+        });
+
+      // Add ripple animation CSS
+      const rippleCSS = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+      const style = document.createElement("style");
+      style.textContent = rippleCSS;
+      document.head.appendChild(style);
+
+      // Chatbot functionality
+      let chatbotOpen = false;
+      let chatbotConfig = null;
+
+      // Toggle chatbot visibility
+      function toggleChatbot() {
+        const container = document.getElementById("chatbotContainer");
+        const icon = document.getElementById("chatbotIcon");
+
+        if (chatbotOpen) {
+          closeChatbot();
+        } else {
+          openChatbot();
+        }
+      }
+
+      // Open chatbot
+      function openChatbot() {
+        const container = document.getElementById("chatbotContainer");
+        const iframe = document.getElementById("chatbotIframe");
+        const icon = document.getElementById("chatbotIcon");
+
+        chatbotOpen = true;
+        container.classList.add("show");
+        icon.classList.add("hidden"); // Hide the icon when chatbot opens
+
+        // Load chatbot configuration and send to iframe
+        loadChatbotConfig().then((config) => {
+          if (config && iframe.contentWindow) {
+            iframe.contentWindow.postMessage(
+              {
+                type: "CHATBOT_CONFIG",
+                config: config,
+              },
+              "*"
+            );
+          }
+        });
+      }
+
+      // Close chatbot
+      function closeChatbot() {
+        const container = document.getElementById("chatbotContainer");
+        const icon = document.getElementById("chatbotIcon");
+
+        chatbotOpen = false;
+        container.classList.remove("show");
+        icon.classList.remove("hidden"); // Show the icon when chatbot closes
+      }
+
+      // Load chatbot configuration from API
+      async function loadChatbotConfig() {
+        if (chatbotConfig) {
+          return chatbotConfig;
+        }
+
+        try {
+          // Get company ID from URL parameter (use ?company=ZIL001)
+          const urlParams = new URLSearchParams(window.location.search);
+          const companyId = urlParams.get("company") || urlParams.get("company_id") || "ZIL001";
+
+          const response = await fetch(
+            `http://localhost:8001/api/chatbot/configuration/?company_id=${companyId}`
+          );
+
+          if (response.ok) {
+            const config = await response.json();
+            chatbotConfig = {
+              apiBaseUrl: "http://localhost:8001/api",
+              companyId: companyId,
+              primaryColor: config.primary_color || "#f7941d",
+              secondaryColor: config.secondary_color || "#652d90",
+              position: config.position || "bottom-right",
+              iframeWidth: config.iframe_width || 400,
+              iframeHeight: config.iframe_height || 600,
+              welcomeMessage:
+                config.welcome_message || "Hello! How can I help you today?",
+              companyName: config.company_name || "SpellBot Assistant",
+              enableFileUpload: config.enable_file_upload !== false,
+            };
+
+            // Apply configuration to main page
+            applyChatbotConfig(chatbotConfig);
+
+            return chatbotConfig;
+          }
+        } catch (error) {
+          console.error("Failed to load chatbot configuration:", error);
+        }
+
+        // Return default configuration
+        chatbotConfig = {
+          apiBaseUrl: "http://localhost:8001/api",
+          companyId: "ZIL001",
+          primaryColor: "#f7941d",
+          secondaryColor: "#652d90",
+          position: "bottom-right",
+          iframeWidth: 400,
+          iframeHeight: 600,
+          welcomeMessage: "Hello! How can I help you today?",
+          companyName: "SpellBot Assistant",
+          enableFileUpload: true,
+        };
+
+        return chatbotConfig;
+      }
+
+      // Apply chatbot configuration to main page
+      function applyChatbotConfig(config) {
+        const container = document.getElementById("chatbotContainer");
+
+        // Apply positioning
+        if (config.position) {
+          const [vertical, horizontal] = config.position.split("-");
+
+          // Reset all position styles
+          container.style.top = "auto";
+          container.style.bottom = "auto";
+          container.style.left = "auto";
+          container.style.right = "auto";
+
+          // Calculate navbar height for top positioning
+          let topOffset = "20px";
+          if (vertical === "top") {
+            const navbar = document.querySelector(".navbar");
+            if (navbar) {
+              const navbarHeight = navbar.offsetHeight;
+              topOffset = `${navbarHeight + 20}px`; // navbar height + 20px margin
+            } else {
+              topOffset = "100px"; // fallback if navbar not found
+            }
+          }
+
+          // Apply new position
+          if (vertical === "top") {
+            // Position below navbar
+            container.style.top = topOffset;
+          } else {
+            container.style.bottom = "140px";
+          }
+
+          if (horizontal === "left") {
+            container.style.left = "30px";
+          } else {
+            container.style.right = "30px";
+          }
+
+          // Also update chatbot icon position
+          const icon = document.getElementById("chatbotIcon");
+          icon.style.top = "auto";
+          icon.style.bottom = "auto";
+          icon.style.left = "auto";
+          icon.style.right = "auto";
+
+          if (vertical === "top") {
+            // Position below navbar
+            icon.style.top = topOffset;
+          } else {
+            icon.style.bottom = "70px";
+          }
+
+          if (horizontal === "left") {
+            icon.style.left = "30px";
+          } else {
+            icon.style.right = "30px";
+          }
+        }
+
+        // Apply dimensions
+        if (config.iframeWidth || config.iframe_width) {
+          container.style.width =
+            (config.iframeWidth || config.iframe_width) + "px";
+        }
+        if (config.iframeHeight || config.iframe_height) {
+          container.style.height =
+            (config.iframeHeight || config.iframe_height) + "px";
+        }
+      }
+
+      // Make applyChatbotConfig available globally for iframe access
+      window.applyChatbotConfig = applyChatbotConfig;
+
+      // Initialize chatbot on page load
+      document.addEventListener("DOMContentLoaded", function () {
+        // Pre-load configuration
+        loadChatbotConfig();
+      });
+    </script>
+
+    <!--
+    ============================================
+    CHATBOT EMBED CODE SECTION
+    ============================================
+    Replace the data-company value with any company ID to test different companies:
+    - data-company="ZIL001" → Zillion Technologies (Green + Purple)
+    - data-company="SPE002" → Spell Innovation (Red + Blue, top-left)
+    - data-company="KIK001" → Kiki Company (Orange + Purple)
+    ============================================
+    -->
+    <script src="http://localhost:8002/static/chatbot.js?v=28" data-company="ZIL001"></script>
+     <!-- <script src="http://localhost:8002/static/chatbot.js?v=27" data-company="KIK001"></script> -->
+
+
+  </body>
+</html>
