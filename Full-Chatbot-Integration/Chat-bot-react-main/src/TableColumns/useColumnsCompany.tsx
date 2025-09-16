@@ -2,16 +2,19 @@ import { Dropdown, type MenuProps } from "antd"
 import type { ColumnsType } from "antd/es/table"
 import { BsThreeDotsVertical } from "react-icons/bs"
 import { IoEyeOutline } from "react-icons/io5"
-import { MdDeleteOutline } from "react-icons/md"
+import { MdDeleteOutline, MdCancel } from "react-icons/md"
 import { RiResetLeftFill } from "react-icons/ri"
+import { FiPlay } from "react-icons/fi"
 
 interface useColumnsCompanyProps{
     handleOpenViewCompanyModal:(id:number)=>void;
     handleDeleteOpenModal:(companyName:string,id:number)=>void;
+    handleCancelSubscription:(companyName:string,id:number)=>void;
+    handleReactivateSubscription:(companyName:string,id:number)=>void;
     handleResetPassword:(id:number,email:string)=>void;
 }
 
-export const useCoumnsCompany=({handleOpenViewCompanyModal,handleDeleteOpenModal,handleResetPassword}:useColumnsCompanyProps)=>{
+export const useCoumnsCompany=({handleOpenViewCompanyModal,handleDeleteOpenModal,handleCancelSubscription,handleReactivateSubscription,handleResetPassword}:useColumnsCompanyProps)=>{
  const getItemMenu=(row:any):MenuProps['items']=>[
   {
        label: "View",
@@ -30,8 +33,25 @@ export const useCoumnsCompany=({handleOpenViewCompanyModal,handleDeleteOpenModal
        }
      },
      {
-       label: "Delete",
+       label: "Cancel Subscription",
        key: "3",
+       icon:<MdCancel size={17} />,
+       danger: true,
+       onClick:()=>{
+       handleCancelSubscription(row?.name,row?.id)
+       }
+     },
+     {
+       label: "Reactivate Subscription",
+       key: "4",
+       icon:<FiPlay size={17} />,
+       onClick:()=>{
+       handleReactivateSubscription(row?.name,row?.id)
+       }
+     },
+     {
+       label: "Delete Company",
+       key: "5",
        icon:<MdDeleteOutline size={17} />,
        danger: true,
        onClick:()=>{

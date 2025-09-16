@@ -182,21 +182,30 @@ export default function ManageAgent() {
       {/* Upgrade Alert */}
       {limits?.upgrade_needed && (
         <Alert
-          message="Agent Limit Reached"
+          message={limits?.is_cancelled ? "Subscription Cancelled" : "Agent Limit Reached"}
           description={
             <div className="flex justify-between items-center">
-              <span>{`Agent limit reached. Your ${limits.plan_name} plan allows maximum ${limits.max_allowed} agents. Please upgrade to add more agents.`}</span>
+              <span>
+                {limits?.is_cancelled
+                  ? `Your subscription was cancelled. Please upgrade your plan.`
+                  : `Agent limit reached. Your ${limits.plan_name} plan allows maximum ${limits.max_allowed} agents. Please upgrade to add more agents.`
+                }
+              </span>
               <Button
                 type="primary"
                 size="small"
-                className="ml-4 bg-yellow-500 border-yellow-500 hover:bg-yellow-600 hover:border-yellow-600"
+                className={`ml-4 ${
+                  limits?.is_cancelled
+                    ? "bg-red-500 border-red-500 hover:bg-red-600 hover:border-red-600"
+                    : "bg-yellow-500 border-yellow-500 hover:bg-yellow-600 hover:border-yellow-600"
+                }`}
                 onClick={() => setIsUpgradeModalOpen(true)}
               >
                 Upgrade
               </Button>
             </div>
           }
-          type="warning"
+          type={limits?.is_cancelled ? "error" : "warning"}
           showIcon
           closable
         />

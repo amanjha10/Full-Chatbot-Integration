@@ -110,8 +110,8 @@ const PlanUpgradeModal: React.FC<PlanUpgradeModalProps> = ({
       }
 
       // For Admin users, use the profile data directly (more reliable)
-      // The profile already contains current_plan information
-      const currentPlan = profileResponse.data.current_plan?.name || "Silver";
+      // The profile already contains current_plan information (including cancelled plans)
+      const currentPlan = profileResponse.data.current_plan?.name || "Bronze";
 
       // Set initial company plan info
       setCompanyPlanInfo({
@@ -145,7 +145,7 @@ const PlanUpgradeModal: React.FC<PlanUpgradeModalProps> = ({
       // Set fallback data if API fails
       setCompanyPlanInfo({
         company_id: "SPE001",
-        current_plan: currentPlan || "Silver",
+        current_plan: "Bronze", // Default fallback
         requested_plan: null,
         has_pending_request: false,
       });

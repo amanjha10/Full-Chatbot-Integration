@@ -34,6 +34,7 @@ interface CompanySubscription {
   id: number;
   company_name: string;
   company_id: string;
+  user_id: number;  // Add user_id for cancellation
   plan_name: string;
   price: number;
   max_agents: string;
@@ -211,15 +212,15 @@ export default function Plan() {
 
 
   // Handle cancel subscription
-  const handleCancelSubscription = async (assignmentId: number) => {
+  const handleCancelSubscription = async (assignmentId: number, companyUserId: number) => {
     try {
       setLoading(true);
       // Get token from localStorage or context
       const token = localStorage.getItem("access_token");
 
-      // API call to cancel subscription using assignment ID
+      // Use the new endpoint that preserves data instead of deleting
       const response = await fetch(
-        `http://localhost:8001/api/auth/cancel-subscription-by-assignment/${assignmentId}/`,
+        `http://localhost:8001/api/auth/cancel-subscription/${companyUserId}/`,
         {
           method: "POST",
           headers: {
@@ -227,16 +228,19 @@ export default function Plan() {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            reason: "Subscription cancelled by admin",
+            reason: "Subscription cancelled by admin from Plan management",
           }),
         }
       );
 
       if (response.ok) {
+        const result = await response.json();
+        console.log("✅ Subscription cancelled successfully:", result);
         mutate(); // Refresh the data
         setViewModalVisible(false);
       } else {
-        console.error("Failed to cancel subscription:", response.statusText);
+        const errorData = await response.json();
+        console.error("Failed to cancel subscription:", errorData);
       }
     } catch (error) {
       console.error("Error canceling subscription:", error);
@@ -387,7 +391,7 @@ export default function Plan() {
                   label: "Cancel Subscription",
                   icon: <FiXCircle />,
                   danger: true,
-                  onClick: () => handleCancelSubscription(record.id),
+                  onClick: () => handleCancelSubscription(record.id, record.user_id),
                 },
               ]
             : []),
@@ -612,7 +616,7 @@ export default function Plan() {
             danger
             icon={<FiXCircle />}
             loading={loading}
-            onClick={() => handleCancelSubscription(selectedCompany?.id || 0)}
+            onClick={() => handleCancelSubscription(selectedCompany?.id || 0, selectedCompany?.user_id || 0)}
           >
             Cancel Subscription
           </Button>,

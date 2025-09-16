@@ -52,7 +52,7 @@ export default function Login() {
             className="space-y-6"
             onSubmit={(e) => {
               e.preventDefault();
-              console.log("DEBUG: Form submit event triggered");
+              // DEAD CODE REMOVED - Debug console.log removed
               formSubmit(e);
             }}
           >

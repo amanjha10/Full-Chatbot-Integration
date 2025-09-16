@@ -45,14 +45,7 @@ const ChatbotEmbedCode: React.FC<ChatbotEmbedCodeProps> = ({
 
   const companyId = propCompanyId || contextCompanyId || fetchedCompanyId || generateTempCompanyId();
 
-  // Debug logging
-  console.log('🔍 ChatbotEmbedCode Debug:', {
-    propCompanyId,
-    contextCompanyId,
-    fetchedCompanyId,
-    finalCompanyId: companyId,
-    isTemporary: !propCompanyId && !contextCompanyId && !fetchedCompanyId
-  });
+  // DEAD CODE REMOVED - Debug logging removed for production
 
   const [copied, setCopied] = useState(false);
   const [detectionStatus, setDetectionStatus] = useState<any>(null);

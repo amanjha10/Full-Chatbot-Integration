@@ -110,24 +110,13 @@ export const useLogin = ({
           res?.data?.agent?.company_id ||
           "DEFAULT_COMPANY";
 
-        console.log("DEBUG: Setting localStorage with:", {
-          access_token: res?.data?.access,
-          adminId: userId,
-          company_id: companyId,
-          role: userRole,
-          isAuth: "true",
-        });
+        // DEAD CODE REMOVED - Debug console.log statements removed for production
 
         localStorage.setItem("access_token", res?.data?.access);
         localStorage.setItem("adminId", userId);
         localStorage.setItem("company_id", companyId);
         localStorage.setItem("role", userRole);
         localStorage.setItem("isAuth", "true");
-
-        console.log("DEBUG: Setting context with:", {
-          isAuth: "true",
-          role: userRole,
-        });
 
         context?.setIsAuth("true");
         context?.setRole(userRole);

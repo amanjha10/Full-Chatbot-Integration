@@ -53,6 +53,9 @@ export const getCompanySubscriptions = (params?: string) =>
 export const cancelCompanySubscription = (companyId: number, reason?: string) =>
   axiosClient.post(`/auth/cancel-subscription/${companyId}/`, { reason });
 
+export const reactivateCompanySubscription = (companyId: number, planId: number, reason?: string) =>
+  axiosClient.post(`/auth/reactivate-subscription/${companyId}/`, { plan_id: planId, reason });
+
 // Subscription management APIs
 export const cancelSubscription = (assignmentId: number, reason?: string) =>
   axiosClient.post("/auth/cancel-subscription/", {

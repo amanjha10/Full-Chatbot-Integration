@@ -12,6 +12,7 @@ interface AgentLimits {
   suggestion?: string;
   upgrade_needed?: boolean;
   current_plan?: string;
+  is_cancelled?: boolean;
 }
 
 export const useAgentLimits = () => {
@@ -28,7 +29,7 @@ export const useAgentLimits = () => {
       setLimits(response.data);
     } catch (err: unknown) {
       const error = err as {
-        response?: { data?: { error?: string; can_create?: boolean; current_count?: number; max_allowed?: number; plan_name?: string; upgrade_needed?: boolean } };
+        response?: { data?: { error?: string; can_create?: boolean; current_count?: number; max_allowed?: number; plan_name?: string; upgrade_needed?: boolean; is_cancelled?: boolean } };
         message?: string;
       };
 
@@ -58,10 +59,19 @@ export const useAgentLimits = () => {
 
   const showUpgradeMessage = () => {
     if (limits?.upgrade_needed && limits?.suggestion) {
-      messageApi.warning({
-        content: `${limits.error}\n${limits.suggestion}\nCurrent usage: ${limits.current_count}/${limits.max_allowed} agents`,
-        duration: 6,
-      });
+      if (limits?.is_cancelled) {
+        // Show cancellation message
+        messageApi.error({
+          content: `${limits.error}\n${limits.suggestion}`,
+          duration: 8,
+        });
+      } else {
+        // Show regular upgrade message
+        messageApi.warning({
+          content: `${limits.error}\n${limits.suggestion}\nCurrent usage: ${limits.current_count}/${limits.max_allowed} agents`,
+          duration: 6,
+        });
+      }
     }
   };
 
@@ -73,7 +83,9 @@ export const useAgentLimits = () => {
     showUpgradeMessage,
     canCreateAgent: limits?.can_create || false,
     currentUsage: limits
-      ? `${limits.current_count}/${limits.max_allowed}`
+      ? limits.is_cancelled
+        ? `${limits.current_count} agents`
+        : `${limits.current_count}/${limits.max_allowed}`
       : null,
     planName: limits?.plan_name || null,
   };

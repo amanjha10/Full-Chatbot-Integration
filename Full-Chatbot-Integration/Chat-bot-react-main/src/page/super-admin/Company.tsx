@@ -1,4 +1,4 @@
-import { Button } from "antd";
+import { Button, Modal, Select, Form, Input } from "antd";
 import { FiPlus } from "react-icons/fi";
 import AppTable from "../../share/form/AppTable";
 import { useCoumnsCompany } from "../../TableColumns/useColumnsCompany";
@@ -11,16 +11,20 @@ import { useMessageContext } from "../../context-provider/MessageProvider";
 import { deleteCompany } from "../../api/delete";
 import { useSearchParams } from "react-router-dom";
 import { axiosClient } from "../../config/axiosConfig";
+import { getPlanTypes } from "../../api/get";
 
 export default function Company() {
   const { messageApi } = useMessageContext();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isDeleteOpenModal, setIsDeleteModal] = useState<boolean>(false);
+  const [isCancelSubscriptionModal, setIsCancelSubscriptionModal] = useState<boolean>(false);
+  const [isReactivateSubscriptionModal, setIsReactivateSubscriptionModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [companyId, setCompanyId] = useState<number | null>(null);
   const [name, setName] = useState<string>("");
   const [searchParams, setSearchParams] = useSearchParams({});
   const page = Number(searchParams.get("page")) || 1;
+  const [form] = Form.useForm();
   const handleCloseModal = () => {
     console.log("Closing modal");
     setIsModalOpen(false);
@@ -39,6 +43,18 @@ export default function Company() {
     setCompanyId(id);
   };
 
+  const handleCancelSubscriptionModal = (companyName: string, id: number) => {
+    setIsCancelSubscriptionModal(true);
+    setName(companyName);
+    setCompanyId(id);
+  };
+
+  const handleReactivateSubscriptionModal = (companyName: string, id: number) => {
+    setIsReactivateSubscriptionModal(true);
+    setName(companyName);
+    setCompanyId(id);
+  };
+
   const handleDeleteCompany = () => {
     setLoading(true);
     deleteCompany(companyId)
@@ -52,6 +68,62 @@ export default function Company() {
         messageApi.error(err?.message);
         setLoading(false);
       });
+  };
+
+  const handleCancelSubscription = async () => {
+    if (!companyId) return;
+
+    setLoading(true);
+    try {
+      const reason = form.getFieldValue('reason') || 'Subscription cancelled by admin';
+
+      await axiosClient.post(`/auth/cancel-subscription/${companyId}/`, {
+        reason: reason
+      });
+
+      messageApi.success("Subscription cancelled successfully");
+      setIsCancelSubscriptionModal(false);
+      setName("");
+      setCompanyId(null);
+      form.resetFields();
+      mutate();
+    } catch (error: any) {
+      messageApi.error(error?.response?.data?.error || "Failed to cancel subscription");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleReactivateSubscription = async () => {
+    if (!companyId) return;
+
+    setLoading(true);
+    try {
+      const planId = form.getFieldValue('plan_id');
+      const reason = form.getFieldValue('reason') || 'Subscription reactivated by admin';
+
+      if (!planId) {
+        messageApi.error("Please select a plan");
+        setLoading(false);
+        return;
+      }
+
+      await axiosClient.post(`/auth/reactivate-subscription/${companyId}/`, {
+        plan_id: planId,
+        reason: reason
+      });
+
+      messageApi.success("Subscription reactivated successfully");
+      setIsReactivateSubscriptionModal(false);
+      setName("");
+      setCompanyId(null);
+      form.resetFields();
+      mutate();
+    } catch (error: any) {
+      messageApi.error(error?.response?.data?.error || "Failed to reactivate subscription");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleOpenAddCompanyModal = () => {
@@ -102,16 +174,22 @@ export default function Company() {
   const { columns } = useCoumnsCompany({
     handleOpenViewCompanyModal,
     handleDeleteOpenModal,
+    handleCancelSubscription: handleCancelSubscriptionModal,
+    handleReactivateSubscription: handleReactivateSubscriptionModal,
     handleResetPassword,
   });
   const { data, isLoading, mutate } = useSWR(`/auth/list-admins/?page=${page}`);
+  const { data: planTypesResponse, error: planTypesError } = useSWR('/auth/plan-types/', getPlanTypes);
 
-  console.log(
-    "Company component render - isModalOpen:",
-    isModalOpen,
-    "companyId:",
-    companyId
-  );
+  // Safely extract planTypes data
+  const planTypes = planTypesResponse?.data || [];
+
+  // Debug planTypes data (remove in production)
+  if (planTypesError) {
+    console.error('Error loading plan types:', planTypesError);
+  }
+
+  // DEAD CODE REMOVED - Debug console.log removed for production
 
   const tableData = data?.results.map(
     (adminItem: CompanyListType, index: number) => ({
@@ -162,6 +240,83 @@ export default function Company() {
             onDelete={handleDeleteCompany}
           />
         )}
+
+        {/* Cancel Subscription Modal */}
+        <Modal
+          title="Cancel Subscription"
+          open={isCancelSubscriptionModal}
+          onOk={handleCancelSubscription}
+          onCancel={() => {
+            setIsCancelSubscriptionModal(false);
+            setName("");
+            setCompanyId(null);
+            form.resetFields();
+          }}
+          confirmLoading={loading}
+          okText="Cancel Subscription"
+          okButtonProps={{ danger: true }}
+        >
+          <Form form={form} layout="vertical">
+            <p>Are you sure you want to cancel the subscription for <strong>{name}</strong>?</p>
+            <p className="text-sm text-gray-600 mb-4">
+              This will disable the chatbot widget but preserve all company data.
+              The subscription can be reactivated later.
+            </p>
+            <Form.Item
+              name="reason"
+              label="Reason for cancellation (optional)"
+            >
+              <Input.TextArea
+                rows={3}
+                placeholder="Enter reason for cancelling subscription..."
+              />
+            </Form.Item>
+          </Form>
+        </Modal>
+
+        {/* Reactivate Subscription Modal */}
+        <Modal
+          title="Reactivate Subscription"
+          open={isReactivateSubscriptionModal}
+          onOk={handleReactivateSubscription}
+          onCancel={() => {
+            setIsReactivateSubscriptionModal(false);
+            setName("");
+            setCompanyId(null);
+            form.resetFields();
+          }}
+          confirmLoading={loading}
+          okText="Reactivate Subscription"
+        >
+          <Form form={form} layout="vertical">
+            <p>Reactivate subscription for <strong>{name}</strong></p>
+            <p className="text-sm text-gray-600 mb-4">
+              Select a plan to reactivate the subscription and enable the chatbot widget.
+            </p>
+            <Form.Item
+              name="plan_id"
+              label="Select Plan"
+              rules={[{ required: true, message: 'Please select a plan' }]}
+            >
+              <Select placeholder="Choose a plan">
+                {Array.isArray(planTypes) && planTypes.map((plan: any) => (
+                  <Select.Option key={plan.value} value={plan.value}>
+                    {plan.label}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              name="reason"
+              label="Reason for reactivation (optional)"
+            >
+              <Input.TextArea
+                rows={3}
+                placeholder="Enter reason for reactivating subscription..."
+              />
+            </Form.Item>
+          </Form>
+        </Modal>
       </div>
     </div>
   );
