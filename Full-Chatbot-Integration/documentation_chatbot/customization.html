@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="keywords" content="customization, chatbot widget, branding, themes">
+	<meta name="description" content="Customization guide for Full Chatbot Integration System">
+	<meta name="author" content="Full Chatbot Integration">
+
+	<title>Customization Guide - Full Chatbot Integration</title>
+
+	<!-- App favicon -->
+	<link rel="shortcut icon" href="assets/img/logo/favicon.png?v=2">
+	<link rel="icon" type="image/png" sizes="32x32" href="assets/img/logo/favicon.png?v=2">
+	<link rel="icon" type="image/png" sizes="16x16" href="assets/img/logo/favicon.png?v=2">
+	<link rel="apple-touch-icon" href="assets/img/logo/favicon.png?v=2">
+
+	<!-- Vendor -->
+	<link href="assets/css/bootstrap.min.css" rel="stylesheet">
+	<link href="assets/css/prism.css" rel="stylesheet">
+
+	<!-- Fontawesome CSS -->
+	<link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
+	<link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+	
+	<link rel="stylesheet" href="assets/css/magnific-popup.css">
+
+<!-- Main CSS -->
+<link id="mainCss" href="assets/css/style.css" rel="stylesheet">
+
+<!-- Custom Theme CSS -->
+<link href="assets/css/custom-theme.css" rel="stylesheet">
+</head>
+
+<body>
+	<main class="wrapper sb-default">
+		<!-- Loader -->
+		<div id="loader-wrapper">
+			<div class="loader-ellipsis">
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
+		</div>
+
+		<!-- Header -->
+		<header class="header">
+			<div class="container-fluid">
+				<div class="header-left">
+					<div class="left-header me-2">
+						<a href="javascript:void(0)" class="sidebar-toggle">
+							<span class="outer-ring">
+								<span class="inner-ring"></span>
+							</span>
+						</a>
+					</div>
+					<div class="text-end">
+						<a href="index.html" class="btn btn-outline-primary btn-sm me-2"><i class="fa-solid fa-arrow-left me-2"></i>Back to Home</a>
+					</div>
+				</div>
+			</div>
+		</header>
+		 
+		<div class="sidebar-overlay"></div>
+		<div class="sidebar" data-mode="light">
+			<div class="sidebar-logo">
+				<a href="index.html" class="sb-full"><img src="assets/img/logo/logo.png" alt="logo"></a>
+				<a href="index.html" class="sb-collapse"><img src="assets/img/logo/favicon.png" alt="logo"></a>
+			</div>
+			<div class="sidebar-body">
+				<div class="sidebar-menu">
+					<ul class="menu">
+						<li class="menu-item">
+							<a href="index.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-home"></i></span>
+								<span class="menu-text">Home</span>
+							</a>
+						</li>
+						<li class="menu-item">
+							<a href="installation.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-download"></i></span>
+								<span class="menu-text">Installation</span>
+							</a>
+						</li>
+						<li class="menu-item">
+							<a href="configuration.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-cogs"></i></span>
+								<span class="menu-text">Configuration</span>
+							</a>
+						</li>
+						<li class="menu-item">
+							<a href="api-reference.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-code"></i></span>
+								<span class="menu-text">API Reference</span>
+							</a>
+						</li>
+						<li class="menu-item">
+							<a href="deployment.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-cloud"></i></span>
+								<span class="menu-text">Deployment</span>
+							</a>
+						</li>
+						<li class="menu-item active">
+							<a href="customization.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-palette"></i></span>
+								<span class="menu-text">Customization</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+         </div>
+
+		<!-- main content -->
+		<div class="main-content">
+			<div class="container">
+				<div class="row sections">
+					<div class="col-xl-12 col-md-12">
+						
+						<!-- Page Header -->
+						<section class="section-block">
+							<div class="section-header">
+								<h1 class="section-title">🎨 Customization Guide</h1>
+								<p class="section-subtitle">Customize chatbot appearance and behavior for your brand</p>
+							</div>
+						</section>
+
+						<!-- Chatbot Widget Customization -->
+						<section class="section-block" id="widget-customization">
+							<div class="section-header">
+								<h2 class="section-title">🤖 Chatbot Widget Customization</h2>
+							</div>
+							<div class="section-body">
+								<h4>Basic Widget Integration</h4>
+								<p>Add the chatbot widget to any website with this simple script:</p>
+								
+								<pre><code class="language-html">&lt;!-- Basic Integration --&gt;
+&lt;script src="http://localhost:8001/static/chatbot.js" data-company="SPE001"&gt;&lt;/script&gt;
+
+&lt;!-- With Custom Configuration --&gt;
+&lt;script 
+  src="http://localhost:8001/static/chatbot.js" 
+  data-company="SPE001"
+  data-theme="dark"
+  data-position="bottom-left"
+  data-welcome-message="Hello! How can I help you today?"
+  data-primary-color="#652d90"
+  data-secondary-color="#3b82f6"
+&gt;&lt;/script&gt;</code></pre>
+
+								<h4 class="mt-4">Widget Configuration Options</h4>
+								<div class="table-responsive">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th>Attribute</th>
+												<th>Description</th>
+												<th>Default</th>
+												<th>Options</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td><code>data-company</code></td>
+												<td>Company ID (required)</td>
+												<td>-</td>
+												<td>SPE001, NHS001, BOT001, etc.</td>
+											</tr>
+											<tr>
+												<td><code>data-theme</code></td>
+												<td>Widget theme</td>
+												<td>light</td>
+												<td>light, dark, auto</td>
+											</tr>
+											<tr>
+												<td><code>data-position</code></td>
+												<td>Widget position</td>
+												<td>bottom-right</td>
+												<td>bottom-right, bottom-left, top-right, top-left</td>
+											</tr>
+											<tr>
+												<td><code>data-primary-color</code></td>
+												<td>Primary brand color</td>
+												<td>#652d90</td>
+												<td>Any hex color</td>
+											</tr>
+											<tr>
+												<td><code>data-secondary-color</code></td>
+												<td>Secondary color</td>
+												<td>#3b82f6</td>
+												<td>Any hex color</td>
+											</tr>
+											<tr>
+												<td><code>data-welcome-message</code></td>
+												<td>Initial greeting</td>
+												<td>Hello! How can I help?</td>
+												<td>Custom message</td>
+											</tr>
+											<tr>
+												<td><code>data-auto-open</code></td>
+												<td>Auto-open widget</td>
+												<td>false</td>
+												<td>true, false</td>
+											</tr>
+											<tr>
+												<td><code>data-show-agent-info</code></td>
+												<td>Show agent details</td>
+												<td>true</td>
+												<td>true, false</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+
+								<h4 class="mt-4">Advanced Widget Customization</h4>
+								<p>For advanced customization, modify the <code>chatbot.js</code> file:</p>
+								
+								<pre><code class="language-javascript">// Custom CSS injection
+const customStyles = `
+  .chatbot-widget {
+    border-radius: 20px !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
+  }
+  
+  .chatbot-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  }
+  
+  .chatbot-message.bot {
+    background-color: #f0f0f0 !important;
+    border-radius: 18px 18px 18px 4px !important;
+  }
+  
+  .chatbot-message.user {
+    background-color: #007bff !important;
+    border-radius: 18px 18px 4px 18px !important;
+  }
+`;
+
+// Inject custom styles
+const styleSheet = document.createElement('style');
+styleSheet.textContent = customStyles;
+document.head.appendChild(styleSheet);</code></pre>
+							</div>
+						</section>
+
+						<!-- Dashboard Customization -->
+						<section class="section-block" id="dashboard-customization">
+							<div class="section-header">
+								<h2 class="section-title">📊 Dashboard Customization</h2>
+							</div>
+							<div class="section-body">
+								<h4>React Dashboard Theming</h4>
+								<p>Customize the React dashboards by modifying the theme configuration:</p>
+								
+								<pre><code class="language-typescript">// src/config/theme.ts
+export const theme = {
+  colors: {
+    primary: '#652d90',
+    secondary: '#3b82f6',
+    success: '#10b981',
+    warning: '#f59e0b',
+    danger: '#ef4444',
+    info: '#06b6d4',
+    light: '#f8fafc',
+    dark: '#1f2937',
+  },
+  
+  fonts: {
+    primary: 'Inter, sans-serif',
+    secondary: 'Roboto, sans-serif',
+  },
+  
+  spacing: {
+    xs: '0.25rem',
+    sm: '0.5rem',
+    md: '1rem',
+    lg: '1.5rem',
+    xl: '3rem',
+  },
+  
+  borderRadius: {
+    sm: '0.25rem',
+    md: '0.5rem',
+    lg: '1rem',
+    full: '9999px',
+  }
+};</code></pre>
+
+								<h4 class="mt-4">Company Branding</h4>
+								<p>Add company-specific branding in the dashboard:</p>
+								
+								<pre><code class="language-typescript">// src/components/CompanyBranding.tsx
+interface CompanyBrandingProps {
+  companyId: string;
+}
+
+export const CompanyBranding: React.FC&lt;CompanyBrandingProps&gt; = ({ companyId }) =&gt; {
+  const brandingConfig = {
+    SPE001: {
+      logo: '/logos/spe001-logo.png',
+      primaryColor: '#652d90',
+      secondaryColor: '#3b82f6',
+      companyName: 'Spell Consultancy'
+    },
+    NHS001: {
+      logo: '/logos/nhs001-logo.png',
+      primaryColor: '#1e40af',
+      secondaryColor: '#059669',
+      companyName: 'NHS Consultancy'
+    }
+  };
+
+  const branding = brandingConfig[companyId] || brandingConfig.SPE001;
+
+  return (
+    &lt;div className="company-branding"&gt;
+      &lt;img src={branding.logo} alt={branding.companyName} /&gt;
+      &lt;h1 style={{ color: branding.primaryColor }}&gt;{branding.companyName}&lt;/h1&gt;
+    &lt;/div&gt;
+  );
+};</code></pre>
+
+								<h4 class="mt-4">Custom Dashboard Components</h4>
+								<p>Create reusable components for consistent branding:</p>
+								
+								<pre><code class="language-typescript">// src/components/CustomButton.tsx
+interface CustomButtonProps {
+  variant: 'primary' | 'secondary' | 'success' | 'danger';
+  size: 'sm' | 'md' | 'lg';
+  children: React.ReactNode;
+  onClick?: () =&gt; void;
+}
+
+export const CustomButton: React.FC&lt;CustomButtonProps&gt; = ({
+  variant,
+  size,
+  children,
+  onClick
+}) =&gt; {
+  const baseClasses = 'font-medium rounded-lg transition-colors duration-200';
+  
+  const variantClasses = {
+    primary: 'bg-purple-600 hover:bg-purple-700 text-white',
+    secondary: 'bg-blue-600 hover:bg-blue-700 text-white',
+    success: 'bg-green-600 hover:bg-green-700 text-white',
+    danger: 'bg-red-600 hover:bg-red-700 text-white'
+  };
+  
+  const sizeClasses = {
+    sm: 'px-3 py-1.5 text-sm',
+    md: 'px-4 py-2 text-base',
+    lg: 'px-6 py-3 text-lg'
+  };
+
+  return (
+    &lt;button
+      className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]}`}
+      onClick={onClick}
+    &gt;
+      {children}
+    &lt;/button&gt;
+  );
+};</code></pre>
+							</div>
+						</section>
+
+						<!-- FAQ Customization -->
+						<section class="section-block" id="faq-customization">
+							<div class="section-header">
+								<h2 class="section-title">❓ FAQ & Knowledge Base Customization</h2>
+							</div>
+							<div class="section-body">
+								<h4>Adding Custom FAQs</h4>
+								<p>Add company-specific FAQs by creating JSON files in <code>refrence/data/documents/</code>:</p>
+								
+								<pre><code class="language-json">// company_YOURCOMPANY_faq.json
+[
+  {
+    "question": "What services do you offer?",
+    "answer": "We offer comprehensive study abroad consulting services including university selection, application assistance, visa guidance, and pre-departure support.",
+    "category": "services",
+    "tags": ["services", "consulting", "study abroad"]
+  },
+  {
+    "question": "How much do your services cost?",
+    "answer": "Our service fees vary based on the package you choose. We offer Bronze, Silver, Gold, Platinum, and Diamond packages with different levels of support.",
+    "category": "pricing",
+    "tags": ["pricing", "cost", "packages"]
+  },
+  {
+    "question": "Which countries do you support?",
+    "answer": "We support applications to universities in USA, UK, Canada, Australia, Germany, Netherlands, and many other countries.",
+    "category": "countries",
+    "tags": ["countries", "destinations", "universities"]
+  }
+]</code></pre>
+
+								<h4 class="mt-4">Custom Response Templates</h4>
+								<p>Customize chatbot response templates in <code>chatbot/utils/response_templates.py</code>:</p>
+								
+								<pre><code class="language-python"># Custom response templates by company
+COMPANY_RESPONSE_TEMPLATES = {
+    'SPE001': {
+        'greeting': "Hello! Welcome to Spell Consultancy. I'm here to help you with your study abroad journey. How can I assist you today?",
+        'no_answer': "I apologize, but I don't have specific information about that. Would you like me to connect you with one of our expert consultants?",
+        'escalation': "Let me connect you with one of our experienced consultants who can provide personalized assistance.",
+        'goodbye': "Thank you for choosing Spell Consultancy. Have a great day!"
+    },
+    'NHS001': {
+        'greeting': "Welcome to NHS Consultancy! I'm your AI assistant ready to help with your education abroad queries. What would you like to know?",
+        'no_answer': "I don't have that information readily available. Shall I connect you with our specialist team?",
+        'escalation': "I'll connect you with our expert team for detailed assistance.",
+        'goodbye': "Thank you for visiting NHS Consultancy. Best of luck with your studies!"
+    }
+}
+
+def get_response_template(company_id: str, template_type: str) -> str:
+    """Get company-specific response template"""
+    company_templates = COMPANY_RESPONSE_TEMPLATES.get(company_id, COMPANY_RESPONSE_TEMPLATES['SPE001'])
+    return company_templates.get(template_type, "How can I help you today?")</code></pre>
+
+								<h4 class="mt-4">Custom Suggestion Buttons</h4>
+								<p>Customize suggestion buttons based on company services:</p>
+								
+								<pre><code class="language-python"># Company-specific suggestions
+COMPANY_SUGGESTIONS = {
+    'SPE001': [
+        "🌍 Study Destinations",
+        "🎓 University Selection", 
+        "📝 Application Process",
+        "💰 Scholarship Information",
+        "🗣️ Talk to Consultant"
+    ],
+    'NHS001': [
+        "🇺🇸 USA Programs",
+        "🇬🇧 UK Universities",
+        "🇨🇦 Canada Options",
+        "💼 Career Guidance",
+        "👨‍💼 Expert Consultation"
+    ]
+}</code></pre>
+							</div>
+						</section>
+
+						<!-- Email Templates -->
+						<section class="section-block" id="email-customization">
+							<div class="section-header">
+								<h2 class="section-title">📧 Email Template Customization</h2>
+							</div>
+							<div class="section-body">
+								<h4>Custom Email Templates</h4>
+								<p>Create company-branded email templates in <code>templates/emails/</code>:</p>
+								
+								<pre><code class="language-html">&lt;!-- templates/emails/welcome_email.html --&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;Welcome to {{ company_name }}&lt;/title&gt;
+    &lt;style&gt;
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            background-color: {{ primary_color }};
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .content {
+            padding: 30px;
+            background-color: #f9f9f9;
+        }
+        .button {
+            background-color: {{ secondary_color }};
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="email-container"&gt;
+        &lt;div class="header"&gt;
+            &lt;img src="{{ company_logo }}" alt="{{ company_name }}" height="50"&gt;
+            &lt;h1&gt;Welcome to {{ company_name }}!&lt;/h1&gt;
+        &lt;/div&gt;
+        &lt;div class="content"&gt;
+            &lt;h2&gt;Hello {{ user_name }},&lt;/h2&gt;
+            &lt;p&gt;Thank you for choosing {{ company_name }} for your study abroad journey. We're excited to help you achieve your educational goals.&lt;/p&gt;
+            
+            &lt;p&gt;Our team of expert consultants is ready to assist you with:&lt;/p&gt;
+            &lt;ul&gt;
+                &lt;li&gt;University selection and applications&lt;/li&gt;
+                &lt;li&gt;Visa guidance and documentation&lt;/li&gt;
+                &lt;li&gt;Scholarship opportunities&lt;/li&gt;
+                &lt;li&gt;Pre-departure preparation&lt;/li&gt;
+            &lt;/ul&gt;
+            
+            &lt;p&gt;Get started by accessing your dashboard:&lt;/p&gt;
+            &lt;p&gt;&lt;a href="{{ dashboard_url }}" class="button"&gt;Access Dashboard&lt;/a&gt;&lt;/p&gt;
+            
+            &lt;p&gt;If you have any questions, feel free to reach out to us at {{ support_email }} or use our chatbot on the website.&lt;/p&gt;
+            
+            &lt;p&gt;Best regards,&lt;br&gt;The {{ company_name }} Team&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+								<h4 class="mt-4">Dynamic Email Configuration</h4>
+								<p>Configure company-specific email settings:</p>
+								
+								<pre><code class="language-python"># utils/email_config.py
+COMPANY_EMAIL_CONFIG = {
+    'SPE001': {
+        'from_email': 'noreply@spellconsultancy.com',
+        'support_email': 'support@spellconsultancy.com',
+        'company_name': 'Spell Consultancy',
+        'company_logo': 'https://spellconsultancy.com/logo.png',
+        'primary_color': '#652d90',
+        'secondary_color': '#3b82f6',
+        'dashboard_url': 'https://spellconsultancy.com/dashboard'
+    },
+    'NHS001': {
+        'from_email': 'noreply@nhsconsultancy.com',
+        'support_email': 'support@nhsconsultancy.com',
+        'company_name': 'NHS Consultancy',
+        'company_logo': 'https://nhsconsultancy.com/logo.png',
+        'primary_color': '#1e40af',
+        'secondary_color': '#059669',
+        'dashboard_url': 'https://nhsconsultancy.com/dashboard'
+    }
+}
+
+def get_email_config(company_id: str) -> dict:
+    """Get company-specific email configuration"""
+    return COMPANY_EMAIL_CONFIG.get(company_id, COMPANY_EMAIL_CONFIG['SPE001'])</code></pre>
+							</div>
+						</section>
+
+						<!-- Multi-language Support -->
+						<section class="section-block" id="i18n-customization">
+							<div class="section-header">
+								<h2 class="section-title">🌍 Multi-language Support</h2>
+							</div>
+							<div class="section-body">
+								<h4>Adding Language Support</h4>
+								<p>Add multi-language support to your chatbot:</p>
+								
+								<pre><code class="language-javascript">// Language configuration
+const LANGUAGES = {
+  en: {
+    welcome: "Hello! How can I help you today?",
+    typing: "Agent is typing...",
+    send: "Send",
+    file_upload: "Upload File",
+    talk_to_agent: "Talk to Agent"
+  },
+  es: {
+    welcome: "¡Hola! ¿Cómo puedo ayudarte hoy?",
+    typing: "El agente está escribiendo...",
+    send: "Enviar",
+    file_upload: "Subir Archivo",
+    talk_to_agent: "Hablar con Agente"
+  },
+  fr: {
+    welcome: "Bonjour! Comment puis-je vous aider aujourd'hui?",
+    typing: "L'agent tape...",
+    send: "Envoyer",
+    file_upload: "Télécharger le fichier",
+    talk_to_agent: "Parler à un agent"
+  }
+};
+
+// Auto-detect language or use data attribute
+const userLanguage = document.documentElement.lang || 
+                    navigator.language.substring(0, 2) || 
+                    'en';
+
+const t = (key) => LANGUAGES[userLanguage]?.[key] || LANGUAGES.en[key];</code></pre>
+
+								<h4 class="mt-4">Localized FAQ Content</h4>
+								<p>Create language-specific FAQ files:</p>
+								
+								<pre><code class="language-json">// company_SPE001_faq_es.json (Spanish)
+[
+  {
+    "question": "¿Qué servicios ofrecen?",
+    "answer": "Ofrecemos servicios integrales de consultoría para estudiar en el extranjero, incluyendo selección de universidades, asistencia con aplicaciones, orientación de visa y apoyo antes de la partida.",
+    "category": "servicios",
+    "tags": ["servicios", "consultoría", "estudiar en el extranjero"]
+  }
+]</code></pre>
+							</div>
+						</section>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<!-- Scripts -->
+	<script src="assets/js/jquery-3.7.1.min.js"></script>
+	<script src="assets/js/bootstrap.bundle.min.js"></script>
+	<script src="assets/js/feather.min.js"></script>
+	<script src="assets/js/prism.js"></script>
+	<script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="keywords" content="chatbot configuration, environment variables, settings">
+	<meta name="description" content="Configuration guide for Full Chatbot Integration System">
+	<meta name="author" content="Full Chatbot Integration">
+
+	<title>Configuration - Full Chatbot Integration</title>
+
+	<!-- App favicon -->
+	<link rel="shortcut icon" href="assets/img/logo/favicon.png?v=2">
+	<link rel="icon" type="image/png" sizes="32x32" href="assets/img/logo/favicon.png?v=2">
+	<link rel="icon" type="image/png" sizes="16x16" href="assets/img/logo/favicon.png?v=2">
+	<link rel="apple-touch-icon" href="assets/img/logo/favicon.png?v=2">
+
+	<!-- Vendor -->
+	<link href="assets/css/bootstrap.min.css" rel="stylesheet">
+	<link href="assets/css/prism.css" rel="stylesheet">
+
+	<!-- Fontawesome CSS -->
+	<link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
+	<link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+	
+	<link rel="stylesheet" href="assets/css/magnific-popup.css">
+
+<!-- Main CSS -->
+<link id="mainCss" href="assets/css/style.css" rel="stylesheet">
+
+<!-- Custom Theme CSS -->
+<link href="assets/css/custom-theme.css" rel="stylesheet">
+</head>
+
+<body>
+	<main class="wrapper sb-default">
+		<!-- Loader -->
+		<div id="loader-wrapper">
+			<div class="loader-ellipsis">
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
+		</div>
+
+		<!-- Header -->
+		<header class="header">
+			<div class="container-fluid">
+				<div class="header-left">
+					<div class="left-header me-2">
+						<a href="javascript:void(0)" class="sidebar-toggle">
+							<span class="outer-ring">
+								<span class="inner-ring"></span>
+							</span>
+						</a>
+					</div>
+					<div class="text-end">
+						<a href="index.html" class="btn btn-outline-primary btn-sm me-2"><i class="fa-solid fa-arrow-left me-2"></i>Back to Home</a>
+					</div>
+				</div>
+			</div>
+		</header>
+		 
+		<div class="sidebar-overlay"></div>
+		<div class="sidebar" data-mode="light">
+			<div class="sidebar-logo">
+				<a href="index.html" class="sb-full"><img src="assets/img/logo/logo.png" alt="logo"></a>
+				<a href="index.html" class="sb-collapse"><img src="assets/img/logo/favicon.png" alt="logo"></a>
+			</div>
+			<div class="sidebar-body">
+				<div class="sidebar-menu">
+					<ul class="menu">
+						<li class="menu-item">
+							<a href="index.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-home"></i></span>
+								<span class="menu-text">Home</span>
+							</a>
+						</li>
+						<li class="menu-item">
+							<a href="installation.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-download"></i></span>
+								<span class="menu-text">Installation</span>
+							</a>
+						</li>
+						<li class="menu-item active">
+							<a href="configuration.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-cogs"></i></span>
+								<span class="menu-text">Configuration</span>
+							</a>
+						</li>
+						<li class="menu-item">
+							<a href="api-reference.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-code"></i></span>
+								<span class="menu-text">API Reference</span>
+							</a>
+						</li>
+						<li class="menu-item">
+							<a href="deployment.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-cloud"></i></span>
+								<span class="menu-text">Deployment</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+         </div>
+
+		<!-- main content -->
+		<div class="main-content">
+			<div class="container">
+				<div class="row sections">
+					<div class="col-xl-12 col-md-12">
+						
+						<!-- Page Header -->
+						<section class="section-block">
+							<div class="section-header">
+								<h1 class="section-title">⚙️ Configuration Guide</h1>
+								<p class="section-subtitle">Environment setup and configuration options</p>
+							</div>
+						</section>
+
+						<!-- Django Configuration -->
+						<section class="section-block" id="django-config">
+							<div class="section-header">
+								<h2 class="section-title">🐍 Django Backend Configuration</h2>
+							</div>
+							<div class="section-body">
+								<h4>Environment Variables</h4>
+								<p>Create a <code>.env</code> file in the <code>ChatBot_DRF_Api</code> directory:</p>
+								
+								<pre><code class="language-bash"># Django Settings
+DEBUG=True
+SECRET_KEY=your-secret-key-here
+ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0
+
+# Database Configuration (SQLite by default)
+DATABASE_URL=sqlite:///db.sqlite3
+
+# For PostgreSQL (optional)
+# DATABASE_URL=postgresql://username:password@localhost:5432/chatbot_db
+
+# Redis Configuration
+REDIS_URL=redis://localhost:6379/0
+
+# ChromaDB Configuration
+CHROMADB_HOST=localhost
+CHROMADB_PORT=8002
+
+# CORS Settings
+CORS_ALLOWED_ORIGINS=http://localhost:5173,http://localhost:5174,http://localhost:3000
+
+# JWT Settings
+JWT_ACCESS_TOKEN_LIFETIME=24  # hours
+JWT_REFRESH_TOKEN_LIFETIME=7  # days
+
+# File Upload Settings
+MAX_FILE_SIZE=10485760  # 10MB in bytes
+ALLOWED_FILE_TYPES=pdf,doc,docx,txt,jpg,jpeg,png</code></pre>
+
+								<h4 class="mt-4">Database Settings</h4>
+								<p>The system supports both SQLite (default) and PostgreSQL:</p>
+								
+								<div class="alert alert-info">
+									<h6><i class="fas fa-info-circle me-2"></i>SQLite (Development)</h6>
+									<p>Default configuration, no additional setup required.</p>
+								</div>
+
+								<div class="alert alert-warning">
+									<h6><i class="fas fa-database me-2"></i>PostgreSQL (Production)</h6>
+									<p>For production, configure PostgreSQL:</p>
+									<pre><code class="language-bash"># Install PostgreSQL dependencies
+pip install psycopg2-binary
+
+# Update .env file
+DATABASE_URL=postgresql://username:password@localhost:5432/chatbot_db</code></pre>
+								</div>
+
+								<h4 class="mt-4">CORS Configuration</h4>
+								<p>Configure CORS settings in <code>auth_system/settings.py</code>:</p>
+								
+								<pre><code class="language-python"># CORS Settings
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # HTML demo site
+    "http://localhost:5173",  # React dev server
+    "http://localhost:5174",  # React dev server (alternative port)
+    "https://yourdomain.com", # Your production domain
+]
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_ALL_ORIGINS = False  # Set to True only for development</code></pre>
+							</div>
+						</section>
+
+						<!-- React Configuration -->
+						<section class="section-block" id="react-config">
+							<div class="section-header">
+								<h2 class="section-title">⚛️ React Frontend Configuration</h2>
+							</div>
+							<div class="section-body">
+								<h4>Environment Variables</h4>
+								<p>Create a <code>.env</code> file in the <code>Chat-bot-react-main</code> directory:</p>
+								
+								<pre><code class="language-bash"># API Configuration
+VITE_API_BASE_URL=http://localhost:8001/api
+
+# WebSocket Configuration
+VITE_WS_BASE_URL=ws://localhost:8000
+
+# App Configuration
+VITE_APP_NAME=Full Chatbot Integration
+VITE_APP_VERSION=1.0.0
+
+# Development Settings
+VITE_DEV_MODE=true
+VITE_DEBUG_MODE=true</code></pre>
+
+								<h4 class="mt-4">Build Configuration</h4>
+								<p>For production builds, update the environment variables:</p>
+								
+								<pre><code class="language-bash"># Production Environment (.env.production)
+VITE_API_BASE_URL=https://your-api-domain.com/api
+VITE_WS_BASE_URL=wss://your-websocket-domain.com
+VITE_DEV_MODE=false
+VITE_DEBUG_MODE=false</code></pre>
+
+								<h4 class="mt-4">Vite Configuration</h4>
+								<p>The <code>vite.config.ts</code> file is already configured with:</p>
+								
+								<pre><code class="language-typescript">import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    port: 5173,
+    host: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8001',
+        changeOrigin: true,
+      },
+      '/ws': {
+        target: 'ws://localhost:8000',
+        ws: true,
+      }
+    }
+  }
+})</code></pre>
+							</div>
+						</section>
+
+						<!-- ChromaDB Configuration -->
+						<section class="section-block" id="chromadb-config">
+							<div class="section-header">
+								<h2 class="section-title">🧠 ChromaDB Configuration</h2>
+							</div>
+							<div class="section-body">
+								<h4>Server Configuration</h4>
+								<p>ChromaDB server settings in <code>start_chromadb_simple.py</code>:</p>
+								
+								<pre><code class="language-python">import chromadb
+from chromadb.config import Settings
+
+# ChromaDB Server Configuration
+CHROMADB_HOST = "localhost"
+CHROMADB_PORT = 8002
+CHROMADB_PATH = "./chroma_data"
+
+# Start ChromaDB server
+server = chromadb.HttpClient(
+    host=CHROMADB_HOST,
+    port=CHROMADB_PORT,
+    settings=Settings(
+        chroma_server_host=CHROMADB_HOST,
+        chroma_server_http_port=CHROMADB_PORT,
+        persist_directory=CHROMADB_PATH,
+        chroma_server_cors_allow_origins=["*"]
+    )
+)</code></pre>
+
+								<h4 class="mt-4">Collection Configuration</h4>
+								<p>RAG system collections are configured in <code>chatbot/utils/rag_system.py</code>:</p>
+								
+								<pre><code class="language-python"># Collection naming convention
+COMPANY_COLLECTION_PREFIX = "company_{company_id}_faq"
+GENERAL_COLLECTION = "general_faq"
+
+# Embedding model configuration
+EMBEDDING_MODEL = "all-MiniLM-L6-v2"
+SIMILARITY_THRESHOLD = 0.5</code></pre>
+
+								<div class="alert alert-info">
+									<h6><i class="fas fa-info-circle me-2"></i>Data Loading</h6>
+									<p>FAQ data is loaded from <code>refrence/data/documents/</code>:</p>
+									<ul class="mb-0">
+										<li><code>education_faq.json</code> → General FAQ collection</li>
+										<li><code>company_{ID}_faq.json</code> → Company-specific collections</li>
+									</ul>
+								</div>
+							</div>
+						</section>
+
+						<!-- WebSocket Configuration -->
+						<section class="section-block" id="websocket-config">
+							<div class="section-header">
+								<h2 class="section-title">🔌 WebSocket Configuration</h2>
+							</div>
+							<div class="section-body">
+								<h4>Django Channels Settings</h4>
+								<p>WebSocket configuration in <code>auth_system/settings.py</code>:</p>
+								
+								<pre><code class="language-python"># Channels Configuration
+ASGI_APPLICATION = 'auth_system.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
+
+# WebSocket Settings
+WEBSOCKET_URL = 'ws://localhost:8000'
+WEBSOCKET_TIMEOUT = 30</code></pre>
+
+								<h4 class="mt-4">ASGI Configuration</h4>
+								<p>The <code>auth_system/asgi.py</code> file configures routing:</p>
+								
+								<pre><code class="language-python">import os
+from django.core.asgi import get_asgi_application
+from channels.routing import ProtocolTypeRouter, URLRouter
+from channels.auth import AuthMiddlewareStack
+from chatbot.routing import websocket_urlpatterns
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'auth_system.settings')
+
+application = ProtocolTypeRouter({
+    "http": get_asgi_application(),
+    "websocket": AuthMiddlewareStack(
+        URLRouter(websocket_urlpatterns)
+    ),
+})</code></pre>
+
+								<h4 class="mt-4">Starting WebSocket Server</h4>
+								<pre><code class="language-bash"># Start Daphne WebSocket server
+cd ChatBot_DRF_Api
+source chat/bin/activate
+daphne -p 8000 auth_system.asgi:application</code></pre>
+							</div>
+						</section>
+
+						<!-- Redis Configuration -->
+						<section class="section-block" id="redis-config">
+							<div class="section-header">
+								<h2 class="section-title">🔴 Redis Configuration</h2>
+							</div>
+							<div class="section-body">
+								<h4>Redis Settings</h4>
+								<p>Redis is used for caching and WebSocket channel layers:</p>
+								
+								<pre><code class="language-python"># Django Cache Configuration
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
+# Session Configuration
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_CACHE_ALIAS = 'default'</code></pre>
+
+								<h4 class="mt-4">Redis Configuration File</h4>
+								<p>Create <code>redis.conf</code> for custom Redis settings:</p>
+								
+								<pre><code class="language-bash"># Redis Configuration
+port 6379
+bind 127.0.0.1
+timeout 0
+tcp-keepalive 300
+maxmemory 256mb
+maxmemory-policy allkeys-lru</code></pre>
+
+								<div class="alert alert-warning">
+									<h6><i class="fas fa-exclamation-triangle me-2"></i>Production Note</h6>
+									<p>For production, configure Redis with authentication and proper security settings.</p>
+								</div>
+							</div>
+						</section>
+
+						<!-- Security Configuration -->
+						<section class="section-block" id="security-config">
+							<div class="section-header">
+								<h2 class="section-title">🔒 Security Configuration</h2>
+							</div>
+							<div class="section-body">
+								<h4>JWT Configuration</h4>
+								<pre><code class="language-python"># JWT Settings in settings.py
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=24),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+}</code></pre>
+
+								<h4 class="mt-4">HTTPS Configuration (Production)</h4>
+								<pre><code class="language-python"># Production Security Settings
+SECURE_SSL_REDIRECT = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True</code></pre>
+
+								<h4 class="mt-4">File Upload Security</h4>
+								<pre><code class="language-python"># File Upload Settings
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10MB
+ALLOWED_FILE_EXTENSIONS = ['.pdf', '.doc', '.docx', '.txt', '.jpg', '.jpeg', '.png']</code></pre>
+							</div>
+						</section>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<!-- Scripts -->
+	<script src="assets/js/jquery-3.7.1.min.js"></script>
+	<script src="assets/js/bootstrap.bundle.min.js"></script>
+	<script src="assets/js/feather.min.js"></script>
+	<script src="assets/js/prism.js"></script>
+	<script src="assets/js/main.js"></script>
+</body>
+</html>

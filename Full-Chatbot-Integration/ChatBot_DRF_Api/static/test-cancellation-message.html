@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Cancellation Message</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .alert {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .alert-error {
+            background-color: #fff2f0;
+            border: 1px solid #ffccc7;
+            color: #a8071a;
+        }
+        .alert-warning {
+            background-color: #fffbe6;
+            border: 1px solid #ffe58f;
+            color: #d46b08;
+        }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .btn-error {
+            background-color: #ff4d4f;
+            color: white;
+        }
+        .btn-warning {
+            background-color: #faad14;
+            color: white;
+        }
+        .usage-display {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .plan-name {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+        .login-form {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .login-form input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .login-form button {
+            padding: 8px 16px;
+            background-color: #1890ff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .status-success {
+            background-color: #f6ffed;
+            border: 1px solid #b7eb8f;
+            color: #389e0d;
+        }
+        .status-error {
+            background-color: #fff2f0;
+            border: 1px solid #ffccc7;
+            color: #a8071a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test Cancellation Message Display</h1>
+        
+        <div class="test-section">
+            <h2>Login & Test</h2>
+            <div class="login-form">
+                <input type="text" id="username" placeholder="Username" value="nhs001">
+                <input type="password" id="password" placeholder="Password" value="password123">
+                <button onclick="loginAndTest()">Login & Check Agent Limits</button>
+            </div>
+            <div id="loginStatus"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Agent Limit Display</h2>
+            <div id="agentLimitDisplay">
+                <p>Click "Login & Check Agent Limits" to see the result</p>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>Expected vs Actual</h2>
+            <h3>❌ Before (Wrong):</h3>
+            <div class="alert alert-warning">
+                <div>
+                    <strong>Agent Limit Reached</strong><br>
+                    Agent limit reached. Your No Plan plan allows maximum 0 agents. Please upgrade to add more agents.
+                </div>
+                <button class="btn btn-warning">Upgrade</button>
+            </div>
+            <div class="usage-display">2/0</div>
+            <div class="plan-name">No Plan Plan</div>
+
+            <h3>✅ After (Correct):</h3>
+            <div class="alert alert-error">
+                <div>
+                    <strong>Subscription Cancelled</strong><br>
+                    Your subscription was cancelled. Please upgrade your plan.
+                </div>
+                <button class="btn btn-error">Upgrade</button>
+            </div>
+            <div class="usage-display">2 agents</div>
+            <div class="plan-name">Cancelled Plan</div>
+        </div>
+    </div>
+
+    <script>
+        async function loginAndTest() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const statusDiv = document.getElementById('loginStatus');
+            const displayDiv = document.getElementById('agentLimitDisplay');
+
+            try {
+                statusDiv.innerHTML = '<div class="status">Logging in...</div>';
+                
+                // Login
+                const loginResponse = await fetch('http://localhost:8001/api/auth/login/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                if (!loginResponse.ok) {
+                    throw new Error('Login failed');
+                }
+
+                const loginData = await loginResponse.json();
+                const token = loginData.access;
+
+                statusDiv.innerHTML = '<div class="status status-success">✅ Login successful</div>';
+
+                // Check agent limits
+                const limitsResponse = await fetch('http://localhost:8001/api/admin-dashboard/check-agent-limit/', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const limitsData = await limitsResponse.json();
+                console.log('Agent limits data:', limitsData);
+
+                // Display the result
+                displayAgentLimits(limitsData);
+
+            } catch (error) {
+                statusDiv.innerHTML = `<div class="status status-error">❌ Error: ${error.message}</div>`;
+                console.error('Error:', error);
+            }
+        }
+
+        function displayAgentLimits(limits) {
+            const displayDiv = document.getElementById('agentLimitDisplay');
+            
+            // Determine usage display
+            const usageDisplay = limits.is_cancelled 
+                ? `${limits.current_count} agents`
+                : `${limits.current_count}/${limits.max_allowed}`;
+
+            // Determine alert type and message
+            const alertType = limits.is_cancelled ? 'alert-error' : 'alert-warning';
+            const btnType = limits.is_cancelled ? 'btn-error' : 'btn-warning';
+            const title = limits.is_cancelled ? 'Subscription Cancelled' : 'Agent Limit Reached';
+            const message = limits.is_cancelled 
+                ? 'Your subscription was cancelled. Please upgrade your plan.'
+                : `Agent limit reached. Your ${limits.plan_name} plan allows maximum ${limits.max_allowed} agents. Please upgrade to add more agents.`;
+
+            displayDiv.innerHTML = `
+                <div class="alert ${alertType}">
+                    <div>
+                        <strong>${title}</strong><br>
+                        ${message}
+                    </div>
+                    <button class="btn ${btnType}">Upgrade</button>
+                </div>
+                <div class="usage-display">${usageDisplay}</div>
+                <div class="plan-name">${limits.plan_name} Plan</div>
+                
+                <h3>Raw API Response:</h3>
+                <pre style="background: #f5f5f5; padding: 10px; border-radius: 4px; overflow-x: auto;">${JSON.stringify(limits, null, 2)}</pre>
+            `;
+        }
+    </script>
+</body>
+</html>

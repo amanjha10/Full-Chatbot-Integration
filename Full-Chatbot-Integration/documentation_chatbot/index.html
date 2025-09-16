@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="keywords" content="chatbot, AI, multi-tenant, django, react, websocket, chromadb">
+	<meta name="description" content="Full Chatbot Integration System - Multi-tenant AI-powered chatbot platform">
+	<meta name="author" content="Full Chatbot Integration">
+
+	<title>Full Chatbot Integration - Documentation</title>
+
+	<!-- Preload critical fonts -->
+	<link rel="preload" href="assets/fonts/poppins/Poppins-Regular.ttf" as="font" type="font/ttf" crossorigin>
+	<link rel="preload" href="assets/fonts/poppins/Poppins-Medium.ttf" as="font" type="font/ttf" crossorigin>
+	<link rel="preload" href="assets/fonts/nunito/Nunito-SemiBold.ttf" as="font" type="font/ttf" crossorigin>
+
+	<!-- App favicon -->
+	<link rel="shortcut icon" href="assets/img/logo/favicon.png?v=2">
+	<link rel="icon" type="image/png" sizes="32x32" href="assets/img/logo/favicon.png?v=2">
+	<link rel="icon" type="image/png" sizes="16x16" href="assets/img/logo/favicon.png?v=2">
+	<link rel="apple-touch-icon" href="assets/img/logo/favicon.png?v=2">
+
+	<!-- Vendor -->
+	<link href="assets/css/bootstrap.min.css" rel="stylesheet">
+	<link href="assets/css/prism.css" rel="stylesheet">
+
+	<!-- Fontawesome CSS -->
+	<link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
+	<link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+
+	<link rel="stylesheet" href="assets/css/magnific-popup.css">
+
+<!-- Main CSS -->
+<link id="mainCss" href="assets/css/style.css" rel="stylesheet">
+
+<!-- Custom Theme CSS -->
+<link href="assets/css/custom-theme.css" rel="stylesheet">
+
+	<!-- Custom Theme CSS -->
+	<link href="assets/css/custom-theme.css" rel="stylesheet">
+</head>
+
+<body>
+	<main class="wrapper sb-default no-sidebar">
+		<!-- Loader -->
+		<div id="loader-wrapper">
+			<div class="loader-ellipsis">
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
+		</div>
+
+		<!-- Header -->
+		<header class="header">
+			<div class="container-fluid">
+				<div class="header-left">
+					<div class="left-header me-2">
+						<a href="javascript:void(0)" class="sidebar-toggle">
+							<span class="outer-ring">
+								<span class="inner-ring"></span>
+							</span>
+						</a>
+					</div>
+					<ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+						<li><a href="#support" class="nav-link px-2 link-body-emphasis"><i class="fa-solid fa-headset me-2"></i>Support</a></li>
+						<li><a href="#hire" class="nav-link px-2 link-body-emphasis"><i class="fa-brands fa-hire-a-helper me-2"></i>Hire Us</a></li>
+						<li><a href="https://codecanyon.net" target="_blank" class="nav-link px-2 link-body-emphasis"><i class="fa-brands fa-envira me-2"></i>Envato</a></li>
+					</ul> 
+					
+					<div class="right-header">
+						<div class="me-2 header-item theme-light">
+							<button type="button" class="btn-topbar tools-item mode" data-bs-theme-tool="light">
+								<span class="feather-icon"><i data-feather="moon"></i></span>
+							</button>
+						</div>
+						<div class="me-2 header-item theme-dark">
+							<button type="button" class="btn-topbar tools-item mode active" data-bs-theme-tool="dark">
+								<span class="feather-icon"><i data-feather="sun"></i></span>
+							</button>
+						</div>
+					</div>
+					<div class="text-end">
+						<a href="#demo" class="btn btn-white btn-sm me-2"><i class="fa-solid fa-link me-2"></i>Live Demo</a>
+						<a href="#buy" class="btn btn-primary btn-sm"><i class="fa-solid fa-cart-plus me-2"></i>Buy Now</a>
+					</div>
+				</div>
+			</div>
+		</header>
+		 
+		<div class="sidebar-overlay"></div>
+		<div class="sidebar" data-mode="light">
+			<div class="sidebar-logo">
+				<a href="index.html" class="sb-full"><img src="assets/img/logo/logo.png" alt="logo"></a>
+				<a href="index.html" class="sb-collapse"><img src="assets/img/logo/favicon.png" alt="logo"></a>
+			</div>
+			<div class="sidebar-body">
+				<div class="sidebar-menu">
+					<ul class="menu">
+						<li class="menu-item active">
+							<a href="index.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-home"></i></span>
+								<span class="menu-text">Home</span>
+							</a>
+						</li>
+						<li class="menu-item">
+							<a href="installation.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-download"></i></span>
+								<span class="menu-text">Installation</span>
+							</a>
+						</li>
+						<li class="menu-item">
+							<a href="configuration.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-cogs"></i></span>
+								<span class="menu-text">Configuration</span>
+							</a>
+						</li>
+						<li class="menu-item">
+							<a href="api-reference.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-code"></i></span>
+								<span class="menu-text">API Reference</span>
+							</a>
+						</li>
+						<li class="menu-item">
+							<a href="deployment.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-cloud"></i></span>
+								<span class="menu-text">Deployment</span>
+							</a>
+						</li>
+						<li class="menu-item">
+							<a href="customization.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-palette"></i></span>
+								<span class="menu-text">Customization</span>
+							</a>
+						</li>
+						<li class="menu-item">
+							<a href="troubleshooting.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-tools"></i></span>
+								<span class="menu-text">Troubleshooting</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+         </div>
+		<!-- main content -->
+		<div class="main-content">
+			<div class="container">
+				<div class="row sections">
+					<div class="col-xl-12 col-md-12">
+						
+						<section class="section-block">
+							<div class="intro">
+								<div class="row align-items-lg-center">
+								<div class="mx-auto col-md-8">
+								<div class="row justify-content-center">
+									<div class="col-md-4 d-flex align-items-center justify-content-center">
+										<img src="assets/img/logo/logo.png" alt="Full Chatbot Integration" class="img-fluid">
+									</div>
+									<div class="col-md-8">
+										<h1 class="display-4 fw-bold text-body-emphasis">Spell ChatBot</h1>
+										<p class="fs-5 text-muted">Multi-tenant AI-powered chatbot platform for businesses</p>
+										<div class="d-grid gap-2 d-md-flex justify-content-md-start">
+											<a href="installation.html" class="btn btn-primary btn-lg px-4 me-md-2">Get Started</a>
+											<a href="api-reference.html" class="btn btn-outline-secondary btn-lg px-4">API Reference</a>
+										</div>
+									</div>
+								</div>
+								</div>
+								</div>
+							</div>
+						</section>
+
+						<!-- Introduction Section -->
+						<section class="section-block" id="introduction">
+							<div class="section-header">
+								<h2 class="section-title">📖 Introduction</h2>
+							</div>
+							<div class="section-body">
+								<p class="lead">
+									<strong>Full Chatbot Integration System</strong> is a comprehensive <strong>multi-tenant AI-powered chatbot platform</strong> 
+									designed for businesses to easily embed and manage their own chatbot solution.
+								</p>
+								
+								<div class="alert alert-info">
+									<h5><i class="fas fa-info-circle me-2"></i>What's Included</h5>
+									<ul class="mb-0">
+										<li><strong>Super Admin Dashboard</strong> → Manage companies, subscriptions, and plans</li>
+										<li><strong>Company Admin Dashboard</strong> → Generate chatbot widget scripts, manage agents, and configure settings</li>
+										<li><strong>Agent Dashboard</strong> → Real-time communication with users via chatbot interface</li>
+										<li><strong>Chatbot Widget</strong> → Embeddable script (chatbot.js) for any website</li>
+										<li><strong>AI Features</strong> → User profile collection, RAG-based Q&A system, and human support escalation</li>
+									</ul>
+								</div>
+							</div>
+						</section>
+
+						<!-- Key Features Section -->
+						<section class="section-block" id="features">
+							<div class="section-header">
+								<h2 class="section-title">🔑 Key Features</h2>
+							</div>
+							<div class="section-body">
+								<div class="row">
+									<div class="col-md-6">
+										<div class="feature-card">
+											<h5><i class="fas fa-building text-primary me-2"></i>Multi-Tenancy System</h5>
+											<p>Super admin manages multiple companies with isolated data and configurations.</p>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="feature-card">
+											<h5><i class="fas fa-credit-card text-success me-2"></i>Subscription Plans</h5>
+											<p>Bronze, Silver, Gold, Platinum, Diamond, and Custom packages with agent limits.</p>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="feature-card">
+											<h5><i class="fas fa-robot text-info me-2"></i>AI-Powered Chatbot</h5>
+											<p>RAG-based answers using ChromaDB for intelligent knowledge retrieval.</p>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="feature-card">
+											<h5><i class="fas fa-comments text-warning me-2"></i>Real-Time Communication</h5>
+											<p>WebSocket support ensures instant chat between users and agents.</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+
+						<!-- Tech Stack Section -->
+						<section class="section-block" id="tech-stack">
+							<div class="section-header">
+								<h2 class="section-title">⚙️ Modern Tech Stack</h2>
+							</div>
+							<div class="section-body">
+								<div class="row">
+									<div class="col-md-4">
+										<div class="tech-stack-item">
+											<i class="fab fa-react fa-3x text-info mb-3"></i>
+											<h5>Frontend</h5>
+											<p>React with TypeScript, Ant Design, TailwindCSS</p>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="tech-stack-item">
+											<i class="fab fa-python fa-3x text-success mb-3"></i>
+											<h5>Backend</h5>
+											<p>Django REST Framework with JWT authentication</p>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="tech-stack-item">
+											<i class="fas fa-database fa-3x text-primary mb-3"></i>
+											<h5>Database</h5>
+											<p>ChromaDB for AI knowledge retrieval, SQLite/PostgreSQL</p>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row mt-4">
+									<div class="col-md-4">
+										<div class="tech-stack-item">
+											<i class="fas fa-plug fa-3x text-warning mb-3"></i>
+											<h5>WebSocket</h5>
+											<p>Django Channels with Daphne for real-time communication</p>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="tech-stack-item">
+											<i class="fas fa-code fa-3x text-danger mb-3"></i>
+											<h5>Widget</h5>
+											<p>Vanilla JavaScript chatbot.js for website embedding</p>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="tech-stack-item">
+											<i class="fas fa-server fa-3x text-secondary mb-3"></i>
+											<h5>Infrastructure</h5>
+											<p>Redis caching, ChromaDB vector database</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+
+						<!-- Quick Navigation -->
+						<section class="section-block" id="navigation">
+							<div class="section-header">
+								<h2 class="section-title">📚 Documentation Sections</h2>
+							</div>
+							<div class="section-body">
+								<div class="row">
+									<div class="col-md-6 col-lg-4 mb-3">
+										<a href="installation.html" class="card doc-card h-100 text-decoration-none">
+											<div class="card-body">
+												<i class="fas fa-download fa-2x text-primary mb-3"></i>
+												<h5 class="card-title">Installation Guide</h5>
+												<p class="card-text">Step-by-step setup instructions for all components</p>
+											</div>
+										</a>
+									</div>
+									<div class="col-md-6 col-lg-4 mb-3">
+										<a href="configuration.html" class="card doc-card h-100 text-decoration-none">
+											<div class="card-body">
+												<i class="fas fa-cogs fa-2x text-success mb-3"></i>
+												<h5 class="card-title">Configuration</h5>
+												<p class="card-text">Environment setup and configuration options</p>
+											</div>
+										</a>
+									</div>
+									<div class="col-md-6 col-lg-4 mb-3">
+										<a href="api-reference.html" class="card doc-card h-100 text-decoration-none">
+											<div class="card-body">
+												<i class="fas fa-code fa-2x text-info mb-3"></i>
+												<h5 class="card-title">API Reference</h5>
+												<p class="card-text">Complete API documentation and endpoints</p>
+											</div>
+										</a>
+									</div>
+									<div class="col-md-6 col-lg-4 mb-3">
+										<a href="deployment.html" class="card doc-card h-100 text-decoration-none">
+											<div class="card-body">
+												<i class="fas fa-cloud fa-2x text-warning mb-3"></i>
+												<h5 class="card-title">Deployment</h5>
+												<p class="card-text">Production deployment and scaling guide</p>
+											</div>
+										</a>
+									</div>
+									<div class="col-md-6 col-lg-4 mb-3">
+										<a href="customization.html" class="card doc-card h-100 text-decoration-none">
+											<div class="card-body">
+												<i class="fas fa-palette fa-2x text-danger mb-3"></i>
+												<h5 class="card-title">Customization</h5>
+												<p class="card-text">Customize chatbot appearance and behavior</p>
+											</div>
+										</a>
+									</div>
+									<div class="col-md-6 col-lg-4 mb-3">
+										<a href="troubleshooting.html" class="card doc-card h-100 text-decoration-none">
+											<div class="card-body">
+												<i class="fas fa-tools fa-2x text-secondary mb-3"></i>
+												<h5 class="card-title">Troubleshooting</h5>
+												<p class="card-text">Common issues and solutions</p>
+											</div>
+										</a>
+									</div>
+								</div>
+							</div>
+						</section>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<!-- Scripts -->
+	<script src="assets/js/jquery-3.7.1.min.js"></script>
+	<script src="assets/js/bootstrap.bundle.min.js"></script>
+	<script src="assets/js/feather.min.js"></script>
+	<script src="assets/js/jquery.magnific-popup.min.js"></script>
+	<script src="assets/js/prism.js"></script>
+	<script src="assets/js/main.js"></script>
+</body>
+</html>

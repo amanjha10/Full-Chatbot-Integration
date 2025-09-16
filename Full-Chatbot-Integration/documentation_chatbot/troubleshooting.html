@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="keywords" content="troubleshooting, common issues, debugging, support">
+	<meta name="description" content="Troubleshooting guide for Full Chatbot Integration System">
+	<meta name="author" content="Full Chatbot Integration">
+
+	<title>Troubleshooting - Full Chatbot Integration</title>
+
+	<!-- App favicon -->
+	<link rel="shortcut icon" href="assets/img/logo/favicon.png?v=2">
+	<link rel="icon" type="image/png" sizes="32x32" href="assets/img/logo/favicon.png?v=2">
+	<link rel="icon" type="image/png" sizes="16x16" href="assets/img/logo/favicon.png?v=2">
+	<link rel="apple-touch-icon" href="assets/img/logo/favicon.png?v=2">
+
+	<!-- Vendor -->
+	<link href="assets/css/bootstrap.min.css" rel="stylesheet">
+	<link href="assets/css/prism.css" rel="stylesheet">
+
+	<!-- Fontawesome CSS -->
+	<link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
+	<link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+	
+	<link rel="stylesheet" href="assets/css/magnific-popup.css">
+
+<!-- Main CSS -->
+<link id="mainCss" href="assets/css/style.css" rel="stylesheet">
+
+<!-- Custom Theme CSS -->
+<link href="assets/css/custom-theme.css" rel="stylesheet">
+</head>
+
+<body>
+	<main class="wrapper sb-default">
+		<!-- Loader -->
+		<div id="loader-wrapper">
+			<div class="loader-ellipsis">
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
+		</div>
+
+		<!-- Header -->
+		<header class="header">
+			<div class="container-fluid">
+				<div class="header-left">
+					<div class="left-header me-2">
+						<a href="javascript:void(0)" class="sidebar-toggle">
+							<span class="outer-ring">
+								<span class="inner-ring"></span>
+							</span>
+						</a>
+					</div>
+					<div class="text-end">
+						<a href="index.html" class="btn btn-outline-primary btn-sm me-2"><i class="fa-solid fa-arrow-left me-2"></i>Back to Home</a>
+					</div>
+				</div>
+			</div>
+		</header>
+		 
+		<div class="sidebar-overlay"></div>
+		<div class="sidebar" data-mode="light">
+			<div class="sidebar-logo">
+				<a href="index.html" class="sb-full"><img src="assets/img/logo/logo.png" alt="logo"></a>
+				<a href="index.html" class="sb-collapse"><img src="assets/img/logo/favicon.png" alt="logo"></a>
+			</div>
+			<div class="sidebar-body">
+				<div class="sidebar-menu">
+					<ul class="menu">
+						<li class="menu-item">
+							<a href="index.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-home"></i></span>
+								<span class="menu-text">Home</span>
+							</a>
+						</li>
+						<li class="menu-item">
+							<a href="installation.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-download"></i></span>
+								<span class="menu-text">Installation</span>
+							</a>
+						</li>
+						<li class="menu-item">
+							<a href="configuration.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-cogs"></i></span>
+								<span class="menu-text">Configuration</span>
+							</a>
+						</li>
+						<li class="menu-item">
+							<a href="api-reference.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-code"></i></span>
+								<span class="menu-text">API Reference</span>
+							</a>
+						</li>
+						<li class="menu-item">
+							<a href="deployment.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-cloud"></i></span>
+								<span class="menu-text">Deployment</span>
+							</a>
+						</li>
+						<li class="menu-item">
+							<a href="customization.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-palette"></i></span>
+								<span class="menu-text">Customization</span>
+							</a>
+						</li>
+						<li class="menu-item active">
+							<a href="troubleshooting.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-tools"></i></span>
+								<span class="menu-text">Troubleshooting</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+         </div>
+
+		<!-- main content -->
+		<div class="main-content">
+			<div class="container">
+				<div class="row sections">
+					<div class="col-xl-12 col-md-12">
+						
+						<!-- Page Header -->
+						<section class="section-block">
+							<div class="section-header">
+								<h1 class="section-title">🔧 Troubleshooting Guide</h1>
+								<p class="section-subtitle">Common issues and solutions</p>
+							</div>
+						</section>
+
+						<!-- Installation Issues -->
+						<section class="section-block" id="installation-issues">
+							<div class="section-header">
+								<h2 class="section-title">🚀 Installation Issues</h2>
+							</div>
+							<div class="section-body">
+								<div class="accordion" id="installationAccordion">
+									<div class="accordion-item">
+										<h2 class="accordion-header">
+											<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#install1">
+												<i class="fas fa-python me-2"></i>Python Virtual Environment Issues
+											</button>
+										</h2>
+										<div id="install1" class="accordion-collapse collapse show" data-bs-parent="#installationAccordion">
+											<div class="accordion-body">
+												<h6>Problem:</h6>
+												<p><code>command not found: python</code> or <code>ModuleNotFoundError</code></p>
+												
+												<h6>Solution:</h6>
+												<pre><code class="language-bash"># Check Python version
+python --version
+python3 --version
+
+# Create virtual environment with correct Python version
+python3 -m venv chat
+
+# Activate virtual environment
+source chat/bin/activate  # macOS/Linux
+# OR
+chat\Scripts\activate     # Windows
+
+# Verify activation
+which python
+pip list</code></pre>
+											</div>
+										</div>
+									</div>
+
+									<div class="accordion-item">
+										<h2 class="accordion-header">
+											<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#install2">
+												<i class="fas fa-database me-2"></i>Database Migration Errors
+											</button>
+										</h2>
+										<div id="install2" class="accordion-collapse collapse" data-bs-parent="#installationAccordion">
+											<div class="accordion-body">
+												<h6>Problem:</h6>
+												<p><code>django.db.utils.OperationalError</code> or migration conflicts</p>
+												
+												<h6>Solution:</h6>
+												<pre><code class="language-bash"># Reset migrations (development only)
+rm -rf */migrations/
+python manage.py makemigrations
+python manage.py migrate
+
+# Or reset database completely
+rm db.sqlite3
+python manage.py makemigrations
+python manage.py migrate
+python manage.py createsuperuser</code></pre>
+											</div>
+										</div>
+									</div>
+
+									<div class="accordion-item">
+										<h2 class="accordion-header">
+											<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#install3">
+												<i class="fab fa-node-js me-2"></i>Node.js Dependency Issues
+											</button>
+										</h2>
+										<div id="install3" class="accordion-collapse collapse" data-bs-parent="#installationAccordion">
+											<div class="accordion-body">
+												<h6>Problem:</h6>
+												<p><code>npm ERR!</code> or <code>Module not found</code> errors</p>
+												
+												<h6>Solution:</h6>
+												<pre><code class="language-bash"># Clear npm cache
+npm cache clean --force
+
+# Delete node_modules and reinstall
+rm -rf node_modules package-lock.json
+npm install
+
+# Use specific Node.js version
+nvm use 18
+npm install
+
+# Alternative: Use yarn
+npm install -g yarn
+yarn install</code></pre>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+
+						<!-- Service Connection Issues -->
+						<section class="section-block" id="service-issues">
+							<div class="section-header">
+								<h2 class="section-title">🔌 Service Connection Issues</h2>
+							</div>
+							<div class="section-body">
+								<div class="accordion" id="serviceAccordion">
+									<div class="accordion-item">
+										<h2 class="accordion-header">
+											<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#service1">
+												<i class="fas fa-brain me-2"></i>ChromaDB Connection Failed
+											</button>
+										</h2>
+										<div id="service1" class="accordion-collapse collapse show" data-bs-parent="#serviceAccordion">
+											<div class="accordion-body">
+												<h6>Problem:</h6>
+												<p><code>ChromaDB server not available</code> or <code>Connection refused</code></p>
+												
+												<h6>Diagnosis:</h6>
+												<pre><code class="language-bash"># Check if ChromaDB is running
+curl http://localhost:8002/api/v1/heartbeat
+
+# Check process
+ps aux | grep chromadb
+
+# Check port usage
+lsof -i :8002</code></pre>
+
+												<h6>Solution:</h6>
+												<pre><code class="language-bash"># Start ChromaDB server
+cd ChatBot_DRF_Api
+source chat/bin/activate
+python start_chromadb_simple.py
+
+# Or start manually
+python -m chromadb.cli.cli run --host localhost --port 8002 --path ./chroma_data
+
+# Verify connection
+python -c "import chromadb; client = chromadb.HttpClient(host='localhost', port=8002); print('✅ Connected')"</code></pre>
+											</div>
+										</div>
+									</div>
+
+									<div class="accordion-item">
+										<h2 class="accordion-header">
+											<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#service2">
+												<i class="fas fa-server me-2"></i>Redis Connection Issues
+											</button>
+										</h2>
+										<div id="service2" class="accordion-collapse collapse" data-bs-parent="#serviceAccordion">
+											<div class="accordion-body">
+												<h6>Problem:</h6>
+												<p><code>Redis connection failed</code> or WebSocket not working</p>
+												
+												<h6>Diagnosis:</h6>
+												<pre><code class="language-bash"># Check Redis status
+redis-cli ping  # Should return "PONG"
+
+# Check Redis process
+ps aux | grep redis
+
+# Check Redis logs
+tail -f /var/log/redis/redis-server.log</code></pre>
+
+												<h6>Solution:</h6>
+												<pre><code class="language-bash"># Start Redis (macOS)
+brew services start redis
+
+# Start Redis (Ubuntu)
+sudo systemctl start redis-server
+
+# Start Redis manually
+redis-server
+
+# Test connection
+redis-cli
+127.0.0.1:6379> ping
+PONG</code></pre>
+											</div>
+										</div>
+									</div>
+
+									<div class="accordion-item">
+										<h2 class="accordion-header">
+											<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#service3">
+												<i class="fas fa-plug me-2"></i>WebSocket Connection Failed
+											</button>
+										</h2>
+										<div id="service3" class="accordion-collapse collapse" data-bs-parent="#serviceAccordion">
+											<div class="accordion-body">
+												<h6>Problem:</h6>
+												<p>Real-time chat not working, WebSocket connection errors</p>
+												
+												<h6>Diagnosis:</h6>
+												<pre><code class="language-bash"># Check Daphne process
+ps aux | grep daphne
+
+# Check WebSocket port
+lsof -i :8000
+
+# Test WebSocket connection
+wscat -c ws://localhost:8000/ws/test/</code></pre>
+
+												<h6>Solution:</h6>
+												<pre><code class="language-bash"># Start WebSocket server
+cd ChatBot_DRF_Api
+source chat/bin/activate
+daphne -p 8000 auth_system.asgi:application
+
+# Check Django Channels configuration
+python manage.py shell
+>>> from channels.layers import get_channel_layer
+>>> channel_layer = get_channel_layer()
+>>> print(channel_layer)</code></pre>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+
+						<!-- Frontend Issues -->
+						<section class="section-block" id="frontend-issues">
+							<div class="section-header">
+								<h2 class="section-title">⚛️ Frontend Issues</h2>
+							</div>
+							<div class="section-body">
+								<div class="accordion" id="frontendAccordion">
+									<div class="accordion-item">
+										<h2 class="accordion-header">
+											<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#frontend1">
+												<i class="fas fa-exclamation-triangle me-2"></i>React Build Errors
+											</button>
+										</h2>
+										<div id="frontend1" class="accordion-collapse collapse show" data-bs-parent="#frontendAccordion">
+											<div class="accordion-body">
+												<h6>Problem:</h6>
+												<p><code>Module not found</code> or <code>Cannot resolve dependency</code></p>
+												
+												<h6>Solution:</h6>
+												<pre><code class="language-bash"># Clear cache and reinstall
+rm -rf node_modules package-lock.json
+npm cache clean --force
+npm install
+
+# Check for TypeScript errors
+npm run type-check
+
+# Build with verbose output
+npm run build -- --verbose</code></pre>
+											</div>
+										</div>
+									</div>
+
+									<div class="accordion-item">
+										<h2 class="accordion-header">
+											<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#frontend2">
+												<i class="fas fa-network-wired me-2"></i>API Connection Issues
+											</button>
+										</h2>
+										<div id="frontend2" class="accordion-collapse collapse" data-bs-parent="#frontendAccordion">
+											<div class="accordion-body">
+												<h6>Problem:</h6>
+												<p><code>Network Error</code> or <code>CORS policy</code> errors</p>
+												
+												<h6>Diagnosis:</h6>
+												<pre><code class="language-bash"># Test API directly
+curl http://localhost:8001/api/
+
+# Check CORS headers
+curl -H "Origin: http://localhost:5173" \
+     -H "Access-Control-Request-Method: POST" \
+     -H "Access-Control-Request-Headers: X-Requested-With" \
+     -X OPTIONS \
+     http://localhost:8001/api/auth/login/</code></pre>
+
+												<h6>Solution:</h6>
+												<pre><code class="language-python"># Update Django CORS settings
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "http://localhost:5174",
+]
+
+CORS_ALLOW_CREDENTIALS = True</code></pre>
+											</div>
+										</div>
+									</div>
+
+									<div class="accordion-item">
+										<h2 class="accordion-header">
+											<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#frontend3">
+												<i class="fas fa-robot me-2"></i>Chatbot Widget Not Loading
+											</button>
+										</h2>
+										<div id="frontend3" class="accordion-collapse collapse" data-bs-parent="#frontendAccordion">
+											<div class="accordion-body">
+												<h6>Problem:</h6>
+												<p>Chatbot widget doesn't appear on website</p>
+												
+												<h6>Diagnosis:</h6>
+												<pre><code class="language-javascript">// Check browser console for errors
+console.log('Chatbot script loaded');
+
+// Verify script attributes
+const script = document.querySelector('script[src*="chatbot.js"]');
+console.log('Script element:', script);
+console.log('Company ID:', script.getAttribute('data-company'));</code></pre>
+
+												<h6>Solution:</h6>
+												<pre><code class="language-html">&lt;!-- Ensure correct script tag --&gt;
+&lt;script 
+  src="http://localhost:8001/static/chatbot.js" 
+  data-company="SPE001"
+  defer
+&gt;&lt;/script&gt;
+
+&lt;!-- Or load after DOM ready --&gt;
+&lt;script&gt;
+document.addEventListener('DOMContentLoaded', function() {
+  const script = document.createElement('script');
+  script.src = 'http://localhost:8001/static/chatbot.js';
+  script.setAttribute('data-company', 'SPE001');
+  document.head.appendChild(script);
+});
+&lt;/script&gt;</code></pre>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+
+						<!-- Performance Issues -->
+						<section class="section-block" id="performance-issues">
+							<div class="section-header">
+								<h2 class="section-title">⚡ Performance Issues</h2>
+							</div>
+							<div class="section-body">
+								<div class="row">
+									<div class="col-md-6">
+										<h5>Slow API Responses</h5>
+										<div class="alert alert-warning">
+											<h6>Common Causes:</h6>
+											<ul class="mb-0">
+												<li>Database queries not optimized</li>
+												<li>ChromaDB collections too large</li>
+												<li>No caching configured</li>
+												<li>Too many concurrent requests</li>
+											</ul>
+										</div>
+										
+										<h6>Solutions:</h6>
+										<pre><code class="language-python"># Enable Django caching
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',
+    }
+}
+
+# Use database indexing
+class Meta:
+    indexes = [
+        models.Index(fields=['company_id']),
+        models.Index(fields=['created_at']),
+    ]
+
+# Optimize ChromaDB queries
+collection.query(
+    query_texts=[query],
+    n_results=5,  # Limit results
+    include=['documents', 'metadatas']
+)</code></pre>
+									</div>
+									
+									<div class="col-md-6">
+										<h5>High Memory Usage</h5>
+										<div class="alert alert-info">
+											<h6>Monitoring Commands:</h6>
+											<pre><code class="language-bash"># Check memory usage
+htop
+ps aux --sort=-%mem | head
+
+# Check Django memory
+python manage.py shell
+>>> import psutil
+>>> psutil.virtual_memory()
+
+# Monitor ChromaDB
+docker stats chromadb</code></pre>
+										</div>
+										
+										<h6>Solutions:</h6>
+										<pre><code class="language-python"># Limit Django query results
+queryset = Model.objects.all()[:100]
+
+# Use pagination
+from django.core.paginator import Paginator
+paginator = Paginator(queryset, 25)
+
+# Clear unused collections
+collection.delete()
+
+# Restart services periodically
+# Add to crontab:
+# 0 2 * * * docker-compose restart</code></pre>
+									</div>
+								</div>
+							</div>
+						</section>
+
+						<!-- Debug Tools -->
+						<section class="section-block" id="debug-tools">
+							<div class="section-header">
+								<h2 class="section-title">🔍 Debug Tools & Commands</h2>
+							</div>
+							<div class="section-body">
+								<h4>System Health Check Script</h4>
+								<p>Create a comprehensive health check script:</p>
+								
+								<pre><code class="language-bash">#!/bin/bash
+# health_check.sh
+
+echo "🔍 Full Chatbot Integration - Health Check"
+echo "=========================================="
+
+# Check Python environment
+echo "📍 Python Environment:"
+python --version
+pip list | grep -E "(django|chromadb|redis|channels)"
+
+# Check services
+echo -e "\n📍 Service Status:"
+echo "Django API (8001):"
+curl -s http://localhost:8001/api/ > /dev/null && echo "✅ Running" || echo "❌ Down"
+
+echo "ChromaDB (8002):"
+curl -s http://localhost:8002/api/v1/heartbeat > /dev/null && echo "✅ Running" || echo "❌ Down"
+
+echo "Redis (6379):"
+redis-cli ping > /dev/null 2>&1 && echo "✅ Running" || echo "❌ Down"
+
+echo "WebSocket (8000):"
+nc -z localhost 8000 > /dev/null 2>&1 && echo "✅ Running" || echo "❌ Down"
+
+# Check database
+echo -e "\n📍 Database Status:"
+cd ChatBot_DRF_Api
+source chat/bin/activate
+python manage.py check --deploy
+
+# Check ChromaDB collections
+echo -e "\n📍 ChromaDB Collections:"
+python -c "
+import chromadb
+try:
+    client = chromadb.HttpClient(host='localhost', port=8002)
+    collections = client.list_collections()
+    for col in collections:
+        print(f'  - {col.name}: {col.count()} documents')
+except Exception as e:
+    print(f'  ❌ Error: {e}')
+"
+
+echo -e "\n✅ Health check completed!"</code></pre>
+
+								<h4 class="mt-4">Logging Configuration</h4>
+								<pre><code class="language-python"># settings.py - Enhanced logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'logs/django.log',
+            'formatter': 'verbose',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'chatbot': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}</code></pre>
+
+								<h4 class="mt-4">Quick Debug Commands</h4>
+								<div class="row">
+									<div class="col-md-6">
+										<h6>Django Debug</h6>
+										<pre><code class="language-bash"># Check Django configuration
+python manage.py check
+
+# Show migrations status
+python manage.py showmigrations
+
+# Django shell for debugging
+python manage.py shell
+
+# Collect static files
+python manage.py collectstatic</code></pre>
+									</div>
+									<div class="col-md-6">
+										<h6>Service Debug</h6>
+										<pre><code class="language-bash"># Check all ports
+netstat -tulpn | grep -E "(8000|8001|8002|6379)"
+
+# View logs
+tail -f logs/django.log
+tail -f logs/chromadb.log
+
+# Process monitoring
+ps aux | grep -E "(python|node|redis|daphne)"</code></pre>
+									</div>
+								</div>
+							</div>
+						</section>
+
+						<!-- Getting Help -->
+						<section class="section-block" id="getting-help">
+							<div class="section-header">
+								<h2 class="section-title">🆘 Getting Help</h2>
+							</div>
+							<div class="section-body">
+								<div class="row">
+									<div class="col-md-4">
+										<div class="card h-100">
+											<div class="card-body text-center">
+												<i class="fas fa-book fa-3x text-primary mb-3"></i>
+												<h5>Documentation</h5>
+												<p>Check our comprehensive documentation for detailed guides and examples.</p>
+												<a href="index.html" class="btn btn-primary">View Docs</a>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="card h-100">
+											<div class="card-body text-center">
+												<i class="fab fa-github fa-3x text-dark mb-3"></i>
+												<h5>GitHub Issues</h5>
+												<p>Report bugs or request features on our GitHub repository.</p>
+												<a href="#" class="btn btn-dark">GitHub</a>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="card h-100">
+											<div class="card-body text-center">
+												<i class="fas fa-envelope fa-3x text-success mb-3"></i>
+												<h5>Email Support</h5>
+												<p>Contact our support team for personalized assistance.</p>
+												<a href="mailto:support@example.com" class="btn btn-success">Email Us</a>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="alert alert-info mt-4">
+									<h5><i class="fas fa-info-circle me-2"></i>Before Contacting Support</h5>
+									<p>Please include the following information:</p>
+									<ul class="mb-0">
+										<li>Operating system and version</li>
+										<li>Python and Node.js versions</li>
+										<li>Error messages and stack traces</li>
+										<li>Steps to reproduce the issue</li>
+										<li>Output from the health check script</li>
+									</ul>
+								</div>
+							</div>
+						</section>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<!-- Scripts -->
+	<script src="assets/js/jquery-3.7.1.min.js"></script>
+	<script src="assets/js/bootstrap.bundle.min.js"></script>
+	<script src="assets/js/feather.min.js"></script>
+	<script src="assets/js/prism.js"></script>
+	<script src="assets/js/main.js"></script>
+</body>
+</html>

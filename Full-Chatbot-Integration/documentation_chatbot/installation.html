@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="keywords" content="chatbot installation, setup, django, react">
+	<meta name="description" content="Installation guide for Full Chatbot Integration System">
+	<meta name="author" content="Full Chatbot Integration">
+
+	<title>Installation Guide - Full Chatbot Integration</title>
+
+	<!-- App favicon -->
+	<link rel="shortcut icon" href="assets/img/logo/favicon.png?v=2">
+	<link rel="icon" type="image/png" sizes="32x32" href="assets/img/logo/favicon.png?v=2">
+	<link rel="icon" type="image/png" sizes="16x16" href="assets/img/logo/favicon.png?v=2">
+	<link rel="apple-touch-icon" href="assets/img/logo/favicon.png?v=2">
+
+	<!-- Vendor -->
+	<link href="assets/css/bootstrap.min.css" rel="stylesheet">
+	<link href="assets/css/prism.css" rel="stylesheet">
+
+	<!-- Fontawesome CSS -->
+	<link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
+	<link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+	
+	<link rel="stylesheet" href="assets/css/magnific-popup.css">
+
+<!-- Main CSS -->
+<link id="mainCss" href="assets/css/style.css" rel="stylesheet">
+
+<!-- Custom Theme CSS -->
+<link href="assets/css/custom-theme.css" rel="stylesheet">
+</head>
+
+<body>
+	<main class="wrapper sb-default">
+		<!-- Loader -->
+		<div id="loader-wrapper">
+			<div class="loader-ellipsis">
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
+		</div>
+
+		<!-- Header -->
+		<header class="header">
+			<div class="container-fluid">
+				<div class="header-left">
+					<div class="left-header me-2">
+						<a href="javascript:void(0)" class="sidebar-toggle">
+							<span class="outer-ring">
+								<span class="inner-ring"></span>
+							</span>
+						</a>
+					</div>
+					<div class="text-end">
+						<a href="index.html" class="btn btn-outline-primary btn-sm me-2"><i class="fa-solid fa-arrow-left me-2"></i>Back to Home</a>
+					</div>
+				</div>
+			</div>
+		</header>
+		 
+		<div class="sidebar-overlay"></div>
+		<div class="sidebar" data-mode="light">
+			<div class="sidebar-logo">
+				<a href="index.html" class="sb-full"><img src="assets/img/logo/logo.png" alt="logo"></a>
+				<a href="index.html" class="sb-collapse"><img src="assets/img/logo/favicon.png" alt="logo"></a>
+			</div>
+			<div class="sidebar-body">
+				<div class="sidebar-menu">
+					<ul class="menu">
+						<li class="menu-item">
+							<a href="index.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-home"></i></span>
+								<span class="menu-text">Home</span>
+							</a>
+						</li>
+						<li class="menu-item active">
+							<a href="installation.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-download"></i></span>
+								<span class="menu-text">Installation</span>
+							</a>
+						</li>
+						<li class="menu-item">
+							<a href="configuration.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-cogs"></i></span>
+								<span class="menu-text">Configuration</span>
+							</a>
+						</li>
+						<li class="menu-item">
+							<a href="api-reference.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-code"></i></span>
+								<span class="menu-text">API Reference</span>
+							</a>
+						</li>
+						<li class="menu-item">
+							<a href="deployment.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-cloud"></i></span>
+								<span class="menu-text">Deployment</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+         </div>
+
+		<!-- main content -->
+		<div class="main-content">
+			<div class="container">
+				<div class="row sections">
+					<div class="col-xl-12 col-md-12">
+						
+						<!-- Page Header -->
+						<section class="section-block">
+							<div class="section-header">
+								<h1 class="section-title">🚀 Installation Guide</h1>
+								<p class="section-subtitle">Complete setup instructions for Full Chatbot Integration System</p>
+							</div>
+						</section>
+
+						<!-- System Requirements -->
+						<section class="section-block" id="requirements">
+							<div class="section-header">
+								<h2 class="section-title">📋 System Requirements</h2>
+							</div>
+							<div class="section-body">
+								<div class="alert alert-warning">
+									<h5><i class="fas fa-exclamation-triangle me-2"></i>Prerequisites</h5>
+									<p>Make sure you have the following installed on your system:</p>
+								</div>
+								
+								<div class="row">
+									<div class="col-md-6">
+										<h5>Backend Requirements</h5>
+										<ul>
+											<li>Python 3.8+ (recommended 3.11)</li>
+											<li>pip (Python package manager)</li>
+											<li>virtualenv or venv</li>
+											<li>Redis server (for caching and WebSocket)</li>
+										</ul>
+									</div>
+									<div class="col-md-6">
+										<h5>Frontend Requirements</h5>
+										<ul>
+											<li>Node.js 16+ (recommended 18+)</li>
+											<li>npm or yarn package manager</li>
+											<li>Modern web browser</li>
+										</ul>
+									</div>
+								</div>
+
+								<div class="alert alert-info mt-3">
+									<h6><i class="fas fa-info-circle me-2"></i>Port Usage</h6>
+									<ul class="mb-0">
+										<li><strong>Port 8001:</strong> Django REST API</li>
+										<li><strong>Port 8000:</strong> WebSocket (Daphne)</li>
+										<li><strong>Port 8002:</strong> ChromaDB Server</li>
+										<li><strong>Port 5173/5174:</strong> React Development Server</li>
+										<li><strong>Port 6379:</strong> Redis Server</li>
+									</ul>
+								</div>
+							</div>
+						</section>
+
+						<!-- Quick Start -->
+						<section class="section-block" id="quick-start">
+							<div class="section-header">
+								<h2 class="section-title">⚡ Quick Start</h2>
+							</div>
+							<div class="section-body">
+								<div class="alert alert-success">
+									<h5><i class="fas fa-rocket me-2"></i>One-Command Setup (macOS/Linux)</h5>
+									<p>For quick setup, use our automated script:</p>
+								</div>
+
+								<pre><code class="language-bash"># Clone the repository
+git clone https://github.com/your-repo/full-chatbot-integration.git
+cd full-chatbot-integration
+
+# Run the setup script
+chmod +x setup_macos.sh
+./setup_macos.sh</code></pre>
+
+								<div class="alert alert-info">
+									<p><strong>What the script does:</strong></p>
+									<ul class="mb-0">
+										<li>Creates Python virtual environment</li>
+										<li>Installs all Python dependencies</li>
+										<li>Installs Node.js dependencies</li>
+										<li>Sets up database and runs migrations</li>
+										<li>Creates superuser account</li>
+										<li>Starts all services</li>
+									</ul>
+								</div>
+							</div>
+						</section>
+
+						<!-- Manual Installation -->
+						<section class="section-block" id="manual-setup">
+							<div class="section-header">
+								<h2 class="section-title">🔧 Manual Installation</h2>
+							</div>
+							<div class="section-body">
+								<h4>Step 1: Backend Setup (Django)</h4>
+								<pre><code class="language-bash"># Navigate to Django project
+cd ChatBot_DRF_Api
+
+# Create virtual environment
+python -m venv chat
+source chat/bin/activate  # On Windows: chat\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run database migrations
+python manage.py migrate
+
+# Create superuser
+python manage.py createsuperuser
+
+# Load initial data (optional)
+python load_rag_data.py</code></pre>
+
+								<h4 class="mt-4">Step 2: Frontend Setup (React)</h4>
+								<pre><code class="language-bash"># Navigate to React project
+cd Chat-bot-react-main
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev</code></pre>
+
+								<h4 class="mt-4">Step 3: ChromaDB Setup</h4>
+								<pre><code class="language-bash"># Install ChromaDB dependencies (in Django virtual environment)
+cd ChatBot_DRF_Api
+source chat/bin/activate
+pip install chromadb fastapi uvicorn
+
+# Start ChromaDB server
+python start_chromadb_simple.py</code></pre>
+
+								<h4 class="mt-4">Step 4: Redis Setup</h4>
+								<pre><code class="language-bash"># Install Redis (macOS)
+brew install redis
+brew services start redis
+
+# Install Redis (Ubuntu)
+sudo apt update
+sudo apt install redis-server
+sudo systemctl start redis-server
+
+# Verify Redis is running
+redis-cli ping  # Should return "PONG"</code></pre>
+							</div>
+						</section>
+
+						<!-- Starting Services -->
+						<section class="section-block" id="starting-services">
+							<div class="section-header">
+								<h2 class="section-title">🎯 Starting All Services</h2>
+							</div>
+							<div class="section-body">
+								<div class="alert alert-warning">
+									<h5><i class="fas fa-exclamation-triangle me-2"></i>Service Order</h5>
+									<p>Start services in this order for proper functionality:</p>
+								</div>
+
+								<div class="row">
+									<div class="col-md-6">
+										<h5>1. Start Redis</h5>
+										<pre><code class="language-bash">redis-server</code></pre>
+									</div>
+									<div class="col-md-6">
+										<h5>2. Start ChromaDB</h5>
+										<pre><code class="language-bash">cd ChatBot_DRF_Api
+source chat/bin/activate
+python start_chromadb_simple.py</code></pre>
+									</div>
+								</div>
+
+								<div class="row mt-3">
+									<div class="col-md-6">
+										<h5>3. Start Django API</h5>
+										<pre><code class="language-bash">cd ChatBot_DRF_Api
+source chat/bin/activate
+python manage.py runserver 127.0.0.1:8001</code></pre>
+									</div>
+									<div class="col-md-6">
+										<h5>4. Start WebSocket</h5>
+										<pre><code class="language-bash">cd ChatBot_DRF_Api
+source chat/bin/activate
+daphne -p 8000 auth_system.asgi:application</code></pre>
+									</div>
+								</div>
+
+								<div class="row mt-3">
+									<div class="col-md-6">
+										<h5>5. Start React Frontend</h5>
+										<pre><code class="language-bash">cd Chat-bot-react-main
+npm run dev</code></pre>
+									</div>
+									<div class="col-md-6">
+										<h5>6. Serve HTML Pages</h5>
+										<pre><code class="language-bash">cd "New folder"
+python -m http.server 3000</code></pre>
+									</div>
+								</div>
+							</div>
+						</section>
+
+						<!-- Verification -->
+						<section class="section-block" id="verification">
+							<div class="section-header">
+								<h2 class="section-title">✅ Verify Installation</h2>
+							</div>
+							<div class="section-body">
+								<div class="alert alert-success">
+									<h5><i class="fas fa-check-circle me-2"></i>Check These URLs</h5>
+									<p>After starting all services, verify they're working:</p>
+								</div>
+
+								<div class="table-responsive">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th>Service</th>
+												<th>URL</th>
+												<th>Expected Response</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>Django API</td>
+												<td><code>http://localhost:8001/api/</code></td>
+												<td>API root page</td>
+											</tr>
+											<tr>
+												<td>React Frontend</td>
+												<td><code>http://localhost:5173/</code></td>
+												<td>Login page</td>
+											</tr>
+											<tr>
+												<td>ChromaDB</td>
+												<td><code>http://localhost:8002/api/v1/heartbeat</code></td>
+												<td>{"nanosecond heartbeat": ...}</td>
+											</tr>
+											<tr>
+												<td>WebSocket</td>
+												<td><code>ws://localhost:8000/ws/</code></td>
+												<td>WebSocket connection</td>
+											</tr>
+											<tr>
+												<td>HTML Demo</td>
+												<td><code>http://localhost:3000/hello.html</code></td>
+												<td>Demo website with chatbot</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+
+								<h5 class="mt-4">Default Credentials</h5>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="card">
+											<div class="card-header">
+												<h6>Super Admin</h6>
+											</div>
+											<div class="card-body">
+												<p><strong>Username:</strong> superadmin</p>
+												<p><strong>Password:</strong> superadmin123</p>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="card">
+											<div class="card-header">
+												<h6>Company Admin (SPE001)</h6>
+											</div>
+											<div class="card-body">
+												<p><strong>Username:</strong> spe001</p>
+												<p><strong>Password:</strong> admin123</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+
+						<!-- Next Steps -->
+						<section class="section-block" id="next-steps">
+							<div class="section-header">
+								<h2 class="section-title">🎯 Next Steps</h2>
+							</div>
+							<div class="section-body">
+								<div class="row">
+									<div class="col-md-4">
+										<div class="card h-100">
+											<div class="card-body text-center">
+												<i class="fas fa-cogs fa-3x text-primary mb-3"></i>
+												<h5>Configure Settings</h5>
+												<p>Set up environment variables and customize configurations</p>
+												<a href="configuration.html" class="btn btn-primary">Configure</a>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="card h-100">
+											<div class="card-body text-center">
+												<i class="fas fa-palette fa-3x text-success mb-3"></i>
+												<h5>Customize Chatbot</h5>
+												<p>Modify chatbot appearance and behavior for your brand</p>
+												<a href="customization.html" class="btn btn-success">Customize</a>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="card h-100">
+											<div class="card-body text-center">
+												<i class="fas fa-cloud fa-3x text-info mb-3"></i>
+												<h5>Deploy to Production</h5>
+												<p>Learn how to deploy your chatbot system to production</p>
+												<a href="deployment.html" class="btn btn-info">Deploy</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<!-- Scripts -->
+	<script src="assets/js/jquery-3.7.1.min.js"></script>
+	<script src="assets/js/bootstrap.bundle.min.js"></script>
+	<script src="assets/js/feather.min.js"></script>
+	<script src="assets/js/prism.js"></script>
+	<script src="assets/js/main.js"></script>
+</body>
+</html>

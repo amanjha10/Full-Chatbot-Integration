@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="keywords" content="API reference, REST API, endpoints, chatbot API">
+	<meta name="description" content="API Reference for Full Chatbot Integration System">
+	<meta name="author" content="Full Chatbot Integration">
+
+	<title>API Reference - Full Chatbot Integration</title>
+
+	<!-- App favicon -->
+	<link rel="shortcut icon" href="assets/img/logo/favicon.png?v=2">
+	<link rel="icon" type="image/png" sizes="32x32" href="assets/img/logo/favicon.png?v=2">
+	<link rel="icon" type="image/png" sizes="16x16" href="assets/img/logo/favicon.png?v=2">
+	<link rel="apple-touch-icon" href="assets/img/logo/favicon.png?v=2">
+
+	<!-- Vendor -->
+	<link href="assets/css/bootstrap.min.css" rel="stylesheet">
+	<link href="assets/css/prism.css" rel="stylesheet">
+
+	<!-- Fontawesome CSS -->
+	<link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
+	<link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+	
+	<link rel="stylesheet" href="assets/css/magnific-popup.css">
+
+<!-- Main CSS -->
+<link id="mainCss" href="assets/css/style.css" rel="stylesheet">
+
+<!-- Custom Theme CSS -->
+<link href="assets/css/custom-theme.css" rel="stylesheet">
+</head>
+
+<body>
+	<main class="wrapper sb-default">
+		<!-- Loader -->
+		<div id="loader-wrapper">
+			<div class="loader-ellipsis">
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
+		</div>
+
+		<!-- Header -->
+		<header class="header">
+			<div class="container-fluid">
+				<div class="header-left">
+					<div class="left-header me-2">
+						<a href="javascript:void(0)" class="sidebar-toggle">
+							<span class="outer-ring">
+								<span class="inner-ring"></span>
+							</span>
+						</a>
+					</div>
+					<div class="text-end">
+						<a href="index.html" class="btn btn-outline-primary btn-sm me-2"><i class="fa-solid fa-arrow-left me-2"></i>Back to Home</a>
+					</div>
+				</div>
+			</div>
+		</header>
+		 
+		<div class="sidebar-overlay"></div>
+		<div class="sidebar" data-mode="light">
+			<div class="sidebar-logo">
+				<a href="index.html" class="sb-full"><img src="assets/img/logo/logo.png" alt="logo"></a>
+				<a href="index.html" class="sb-collapse"><img src="assets/img/logo/favicon.png" alt="logo"></a>
+			</div>
+			<div class="sidebar-body">
+				<div class="sidebar-menu">
+					<ul class="menu">
+						<li class="menu-item">
+							<a href="index.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-home"></i></span>
+								<span class="menu-text">Home</span>
+							</a>
+						</li>
+						<li class="menu-item">
+							<a href="installation.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-download"></i></span>
+								<span class="menu-text">Installation</span>
+							</a>
+						</li>
+						<li class="menu-item">
+							<a href="configuration.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-cogs"></i></span>
+								<span class="menu-text">Configuration</span>
+							</a>
+						</li>
+						<li class="menu-item active">
+							<a href="api-reference.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-code"></i></span>
+								<span class="menu-text">API Reference</span>
+							</a>
+						</li>
+						<li class="menu-item">
+							<a href="deployment.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-cloud"></i></span>
+								<span class="menu-text">Deployment</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+         </div>
+
+		<!-- main content -->
+		<div class="main-content">
+			<div class="container">
+				<div class="row sections">
+					<div class="col-xl-12 col-md-12">
+						
+						<!-- Page Header -->
+						<section class="section-block">
+							<div class="section-header">
+								<h1 class="section-title">📚 API Reference</h1>
+								<p class="section-subtitle">Complete API documentation and endpoints</p>
+							</div>
+						</section>
+
+						<!-- Base URL -->
+						<section class="section-block" id="base-url">
+							<div class="section-header">
+								<h2 class="section-title">🌐 Base URL</h2>
+							</div>
+							<div class="section-body">
+								<div class="alert alert-info">
+									<h5><i class="fas fa-info-circle me-2"></i>API Base URL</h5>
+									<p><strong>Development:</strong> <code>http://localhost:8001/api</code></p>
+									<p><strong>Production:</strong> <code>https://your-domain.com/api</code></p>
+								</div>
+
+								<h4>Authentication</h4>
+								<p>Most endpoints require JWT authentication. Include the token in the Authorization header:</p>
+								<pre><code class="language-bash">Authorization: Bearer YOUR_JWT_TOKEN</code></pre>
+							</div>
+						</section>
+
+						<!-- Authentication Endpoints -->
+						<section class="section-block" id="auth-endpoints">
+							<div class="section-header">
+								<h2 class="section-title">🔐 Authentication Endpoints</h2>
+							</div>
+							<div class="section-body">
+								<h4>Login</h4>
+								<div class="api-endpoint">
+									<span class="badge bg-success">POST</span>
+									<code>/auth/login/</code>
+								</div>
+								<p>Authenticate user and get JWT tokens.</p>
+								
+								<h6>Request Body:</h6>
+								<pre><code class="language-json">{
+  "username": "superadmin",
+  "password": "superadmin123"
+}</code></pre>
+
+								<h6>Response:</h6>
+								<pre><code class="language-json">{
+  "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": 1,
+    "username": "superadmin",
+    "email": "superadmin@example.com",
+    "role": "SUPERADMIN",
+    "company_id": null
+  }
+}</code></pre>
+
+								<h4 class="mt-4">Get User Profile</h4>
+								<div class="api-endpoint">
+									<span class="badge bg-primary">GET</span>
+									<code>/auth/profile/</code>
+								</div>
+								<p>Get current user profile information.</p>
+								
+								<h6>Headers:</h6>
+								<pre><code class="language-bash">Authorization: Bearer YOUR_JWT_TOKEN</code></pre>
+
+								<h6>Response:</h6>
+								<pre><code class="language-json">{
+  "id": 91,
+  "username": "spe001",
+  "email": "spell@gmail.com",
+  "name": "Spell",
+  "role": "ADMIN",
+  "company_id": "SPE001",
+  "current_plan": null,
+  "date_joined": "2025-09-05T10:43:35.207249Z"
+}</code></pre>
+
+								<h4 class="mt-4">Refresh Token</h4>
+								<div class="api-endpoint">
+									<span class="badge bg-success">POST</span>
+									<code>/auth/token/refresh/</code>
+								</div>
+								<p>Refresh JWT access token using refresh token.</p>
+								
+								<h6>Request Body:</h6>
+								<pre><code class="language-json">{
+  "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}</code></pre>
+							</div>
+						</section>
+
+						<!-- Company Management -->
+						<section class="section-block" id="company-endpoints">
+							<div class="section-header">
+								<h2 class="section-title">🏢 Company Management</h2>
+							</div>
+							<div class="section-body">
+								<h4>List Companies/Admins</h4>
+								<div class="api-endpoint">
+									<span class="badge bg-primary">GET</span>
+									<code>/auth/list-admins/</code>
+								</div>
+								<p>Get paginated list of company admins (SuperAdmin only).</p>
+								
+								<h6>Query Parameters:</h6>
+								<ul>
+									<li><code>page</code> - Page number (default: 1)</li>
+									<li><code>search</code> - Search by company name or ID</li>
+								</ul>
+
+								<h6>Response:</h6>
+								<pre><code class="language-json">{
+  "count": 5,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 91,
+      "email": "spell@gmail.com",
+      "name": "Spell",
+      "company_id": "SPE001",
+      "current_plan": null,
+      "is_active": true
+    }
+  ]
+}</code></pre>
+
+								<h4 class="mt-4">Get Plan Types</h4>
+								<div class="api-endpoint">
+									<span class="badge bg-primary">GET</span>
+									<code>/auth/plan-types/</code>
+								</div>
+								<p>Get available subscription plan types (SuperAdmin only).</p>
+
+								<h6>Response:</h6>
+								<pre><code class="language-json">[
+  {
+    "value": "bronze",
+    "label": "Bronze",
+    "is_custom": false
+  },
+  {
+    "value": "silver",
+    "label": "Silver",
+    "is_custom": false
+  },
+  {
+    "value": "gold",
+    "label": "Gold",
+    "is_custom": false
+  },
+  {
+    "value": "platinum",
+    "label": "Platinum",
+    "is_custom": false
+  },
+  {
+    "value": "diamond",
+    "label": "Diamond",
+    "is_custom": false
+  },
+  {
+    "value": "custom",
+    "label": "Custom",
+    "is_custom": true
+  }
+]</code></pre>
+							</div>
+						</section>
+
+						<!-- Chatbot Endpoints -->
+						<section class="section-block" id="chatbot-endpoints">
+							<div class="section-header">
+								<h2 class="section-title">🤖 Chatbot Endpoints</h2>
+							</div>
+							<div class="section-body">
+								<h4>Send Chat Message</h4>
+								<div class="api-endpoint">
+									<span class="badge bg-success">POST</span>
+									<code>/chatbot/chat/</code>
+								</div>
+								<p>Send message to chatbot and get AI response.</p>
+								
+								<h6>Request Body:</h6>
+								<pre><code class="language-json">{
+  "message": "Who are you?",
+  "company_id": "SPE001",
+  "session_id": "unique-session-id"
+}</code></pre>
+
+								<h6>Response:</h6>
+								<pre><code class="language-json">{
+  "response": "I am SPE001 chatbot. How can I help you today?",
+  "suggestions": [
+    "🌍 Choose Country",
+    "🎓 Browse Programs",
+    "🗣️ Talk to Advisor"
+  ],
+  "type": "rag_response",
+  "session_id": "unique-session-id",
+  "source": "company_faq",
+  "company_specific": true
+}</code></pre>
+
+								<h4 class="mt-4">Get Chat History</h4>
+								<div class="api-endpoint">
+									<span class="badge bg-primary">GET</span>
+									<code>/chatbot/history/</code>
+								</div>
+								<p>Get chat history for a session.</p>
+								
+								<h6>Query Parameters:</h6>
+								<ul>
+									<li><code>session_id</code> - Chat session ID</li>
+									<li><code>company_id</code> - Company ID</li>
+								</ul>
+
+								<h4 class="mt-4">Upload File</h4>
+								<div class="api-endpoint">
+									<span class="badge bg-success">POST</span>
+									<code>/chatbot/upload/</code>
+								</div>
+								<p>Upload file for chatbot processing.</p>
+								
+								<h6>Request (multipart/form-data):</h6>
+								<pre><code class="language-bash">file: [FILE]
+company_id: SPE001
+session_id: unique-session-id</code></pre>
+							</div>
+						</section>
+
+						<!-- WebSocket Events -->
+						<section class="section-block" id="websocket-events">
+							<div class="section-header">
+								<h2 class="section-title">🔌 WebSocket Events</h2>
+							</div>
+							<div class="section-body">
+								<h4>Connection URL</h4>
+								<pre><code class="language-javascript">ws://localhost:8000/ws/chat/{session_id}/</code></pre>
+
+								<h4>Send Message Event</h4>
+								<pre><code class="language-json">{
+  "type": "chat_message",
+  "message": "Hello from user",
+  "company_id": "SPE001",
+  "user_type": "user"
+}</code></pre>
+
+								<h4>Receive Message Event</h4>
+								<pre><code class="language-json">{
+  "type": "chat_message",
+  "message": "Hello from agent",
+  "sender": "agent",
+  "timestamp": "2025-09-15T10:30:00Z"
+}</code></pre>
+
+								<h4>Agent Status Event</h4>
+								<pre><code class="language-json">{
+  "type": "agent_status",
+  "status": "online",
+  "agent_name": "John Doe"
+}</code></pre>
+							</div>
+						</section>
+
+						<!-- Error Responses -->
+						<section class="section-block" id="error-responses">
+							<div class="section-header">
+								<h2 class="section-title">❌ Error Responses</h2>
+							</div>
+							<div class="section-body">
+								<h4>HTTP Status Codes</h4>
+								<div class="table-responsive">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th>Status Code</th>
+												<th>Description</th>
+												<th>Example</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td><span class="badge bg-success">200</span></td>
+												<td>Success</td>
+												<td>Request completed successfully</td>
+											</tr>
+											<tr>
+												<td><span class="badge bg-warning">400</span></td>
+												<td>Bad Request</td>
+												<td>Invalid request data</td>
+											</tr>
+											<tr>
+												<td><span class="badge bg-danger">401</span></td>
+												<td>Unauthorized</td>
+												<td>Invalid or missing authentication</td>
+											</tr>
+											<tr>
+												<td><span class="badge bg-danger">403</span></td>
+												<td>Forbidden</td>
+												<td>Insufficient permissions</td>
+											</tr>
+											<tr>
+												<td><span class="badge bg-secondary">404</span></td>
+												<td>Not Found</td>
+												<td>Resource not found</td>
+											</tr>
+											<tr>
+												<td><span class="badge bg-danger">500</span></td>
+												<td>Internal Server Error</td>
+												<td>Server error occurred</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+
+								<h4>Error Response Format</h4>
+								<pre><code class="language-json">{
+  "error": "Authentication credentials were not provided.",
+  "code": "authentication_failed",
+  "details": {
+    "field": "authorization",
+    "message": "This field is required."
+  }
+}</code></pre>
+							</div>
+						</section>
+
+						<!-- Rate Limiting -->
+						<section class="section-block" id="rate-limiting">
+							<div class="section-header">
+								<h2 class="section-title">⏱️ Rate Limiting</h2>
+							</div>
+							<div class="section-body">
+								<div class="alert alert-info">
+									<h5><i class="fas fa-info-circle me-2"></i>Rate Limits</h5>
+									<ul class="mb-0">
+										<li><strong>Authentication:</strong> 5 requests per minute</li>
+										<li><strong>Chatbot API:</strong> 60 requests per minute</li>
+										<li><strong>File Upload:</strong> 10 requests per minute</li>
+										<li><strong>General API:</strong> 100 requests per minute</li>
+									</ul>
+								</div>
+
+								<h4>Rate Limit Headers</h4>
+								<pre><code class="language-bash">X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 59
+X-RateLimit-Reset: 1642694400</code></pre>
+
+								<h4>Rate Limit Exceeded Response</h4>
+								<pre><code class="language-json">{
+  "error": "Rate limit exceeded",
+  "code": "throttled",
+  "details": {
+    "available_in": 45,
+    "message": "Request was throttled. Expected available in 45 seconds."
+  }
+}</code></pre>
+							</div>
+						</section>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<!-- Scripts -->
+	<script src="assets/js/jquery-3.7.1.min.js"></script>
+	<script src="assets/js/bootstrap.bundle.min.js"></script>
+	<script src="assets/js/feather.min.js"></script>
+	<script src="assets/js/prism.js"></script>
+	<script src="assets/js/main.js"></script>
+</body>
+</html>

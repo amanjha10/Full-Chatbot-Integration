@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="keywords" content="deployment, production, docker, nginx, ssl">
+	<meta name="description" content="Deployment guide for Full Chatbot Integration System">
+	<meta name="author" content="Full Chatbot Integration">
+
+	<title>Deployment Guide - Full Chatbot Integration</title>
+
+	<!-- App favicon -->
+	<link rel="shortcut icon" href="assets/img/logo/favicon.png?v=2">
+	<link rel="icon" type="image/png" sizes="32x32" href="assets/img/logo/favicon.png?v=2">
+	<link rel="icon" type="image/png" sizes="16x16" href="assets/img/logo/favicon.png?v=2">
+	<link rel="apple-touch-icon" href="assets/img/logo/favicon.png?v=2">
+
+	<!-- Vendor -->
+	<link href="assets/css/bootstrap.min.css" rel="stylesheet">
+	<link href="assets/css/prism.css" rel="stylesheet">
+
+	<!-- Fontawesome CSS -->
+	<link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
+	<link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+	
+	<link rel="stylesheet" href="assets/css/magnific-popup.css">
+
+<!-- Main CSS -->
+<link id="mainCss" href="assets/css/style.css" rel="stylesheet">
+
+<!-- Custom Theme CSS -->
+<link href="assets/css/custom-theme.css" rel="stylesheet">
+</head>
+
+<body>
+	<main class="wrapper sb-default">
+		<!-- Loader -->
+		<div id="loader-wrapper">
+			<div class="loader-ellipsis">
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
+		</div>
+
+		<!-- Header -->
+		<header class="header">
+			<div class="container-fluid">
+				<div class="header-left">
+					<div class="left-header me-2">
+						<a href="javascript:void(0)" class="sidebar-toggle">
+							<span class="outer-ring">
+								<span class="inner-ring"></span>
+							</span>
+						</a>
+					</div>
+					<div class="text-end">
+						<a href="index.html" class="btn btn-outline-primary btn-sm me-2"><i class="fa-solid fa-arrow-left me-2"></i>Back to Home</a>
+					</div>
+				</div>
+			</div>
+		</header>
+		 
+		<div class="sidebar-overlay"></div>
+		<div class="sidebar" data-mode="light">
+			<div class="sidebar-logo">
+				<a href="index.html" class="sb-full"><img src="assets/img/logo/logo.png" alt="logo"></a>
+				<a href="index.html" class="sb-collapse"><img src="assets/img/logo/favicon.png" alt="logo"></a>
+			</div>
+			<div class="sidebar-body">
+				<div class="sidebar-menu">
+					<ul class="menu">
+						<li class="menu-item">
+							<a href="index.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-home"></i></span>
+								<span class="menu-text">Home</span>
+							</a>
+						</li>
+						<li class="menu-item">
+							<a href="installation.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-download"></i></span>
+								<span class="menu-text">Installation</span>
+							</a>
+						</li>
+						<li class="menu-item">
+							<a href="configuration.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-cogs"></i></span>
+								<span class="menu-text">Configuration</span>
+							</a>
+						</li>
+						<li class="menu-item">
+							<a href="api-reference.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-code"></i></span>
+								<span class="menu-text">API Reference</span>
+							</a>
+						</li>
+						<li class="menu-item active">
+							<a href="deployment.html" class="menu-link">
+								<span class="menu-icon"><i class="fas fa-cloud"></i></span>
+								<span class="menu-text">Deployment</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+         </div>
+
+		<!-- main content -->
+		<div class="main-content">
+			<div class="container">
+				<div class="row sections">
+					<div class="col-xl-12 col-md-12">
+						
+						<!-- Page Header -->
+						<section class="section-block">
+							<div class="section-header">
+								<h1 class="section-title">🚀 Deployment Guide</h1>
+								<p class="section-subtitle">Production deployment and scaling guide</p>
+							</div>
+						</section>
+
+						<!-- Production Checklist -->
+						<section class="section-block" id="production-checklist">
+							<div class="section-header">
+								<h2 class="section-title">✅ Production Checklist</h2>
+							</div>
+							<div class="section-body">
+								<div class="alert alert-warning">
+									<h5><i class="fas fa-exclamation-triangle me-2"></i>Before Deployment</h5>
+									<p>Complete these steps before deploying to production:</p>
+								</div>
+
+								<div class="row">
+									<div class="col-md-6">
+										<h5>Security</h5>
+										<ul class="checklist">
+											<li>✅ Change default passwords</li>
+											<li>✅ Set strong SECRET_KEY</li>
+											<li>✅ Configure HTTPS/SSL</li>
+											<li>✅ Set DEBUG=False</li>
+											<li>✅ Configure ALLOWED_HOSTS</li>
+											<li>✅ Set up firewall rules</li>
+										</ul>
+									</div>
+									<div class="col-md-6">
+										<h5>Database & Storage</h5>
+										<ul class="checklist">
+											<li>✅ Use PostgreSQL for production</li>
+											<li>✅ Set up database backups</li>
+											<li>✅ Configure Redis persistence</li>
+											<li>✅ Set up file storage (S3/local)</li>
+											<li>✅ Configure ChromaDB persistence</li>
+										</ul>
+									</div>
+								</div>
+
+								<div class="row mt-3">
+									<div class="col-md-6">
+										<h5>Performance</h5>
+										<ul class="checklist">
+											<li>✅ Configure caching</li>
+											<li>✅ Set up CDN for static files</li>
+											<li>✅ Optimize database queries</li>
+											<li>✅ Configure load balancing</li>
+											<li>✅ Set up monitoring</li>
+										</ul>
+									</div>
+									<div class="col-md-6">
+										<h5>Monitoring</h5>
+										<ul class="checklist">
+											<li>✅ Set up logging</li>
+											<li>✅ Configure error tracking</li>
+											<li>✅ Set up health checks</li>
+											<li>✅ Configure alerts</li>
+											<li>✅ Set up backup monitoring</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</section>
+
+						<!-- Docker Deployment -->
+						<section class="section-block" id="docker-deployment">
+							<div class="section-header">
+								<h2 class="section-title">🐳 Docker Deployment</h2>
+							</div>
+							<div class="section-body">
+								<h4>Docker Compose Setup</h4>
+								<p>Create a <code>docker-compose.prod.yml</code> file:</p>
+								
+								<pre><code class="language-yaml">version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: chatbot_db
+      POSTGRES_USER: chatbot_user
+      POSTGRES_PASSWORD: secure_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+
+  # ChromaDB
+  chromadb:
+    image: chromadb/chroma:latest
+    environment:
+      - CHROMA_SERVER_HOST=0.0.0.0
+      - CHROMA_SERVER_HTTP_PORT=8002
+    volumes:
+      - chromadb_data:/chroma/chroma
+    ports:
+      - "8002:8002"
+
+  # Django Backend
+  backend:
+    build:
+      context: ./ChatBot_DRF_Api
+      dockerfile: Dockerfile.prod
+    environment:
+      - DEBUG=False
+      - DATABASE_URL=postgresql://chatbot_user:secure_password@postgres:5432/chatbot_db
+      - REDIS_URL=redis://redis:6379/0
+      - CHROMADB_HOST=chromadb
+      - CHROMADB_PORT=8002
+    volumes:
+      - static_volume:/app/static
+      - media_volume:/app/media
+    ports:
+      - "8001:8001"
+    depends_on:
+      - postgres
+      - redis
+      - chromadb
+
+  # WebSocket Server
+  websocket:
+    build:
+      context: ./ChatBot_DRF_Api
+      dockerfile: Dockerfile.websocket
+    environment:
+      - DATABASE_URL=postgresql://chatbot_user:secure_password@postgres:5432/chatbot_db
+      - REDIS_URL=redis://redis:6379/0
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+
+  # React Frontend
+  frontend:
+    build:
+      context: ./Chat-bot-react-main
+      dockerfile: Dockerfile.prod
+    environment:
+      - VITE_API_BASE_URL=https://your-domain.com/api
+      - VITE_WS_BASE_URL=wss://your-domain.com/ws
+    volumes:
+      - frontend_build:/app/dist
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - static_volume:/var/www/static
+      - media_volume:/var/www/media
+      - frontend_build:/var/www/html
+      - ./ssl:/etc/nginx/ssl
+    depends_on:
+      - backend
+      - websocket
+      - frontend
+
+volumes:
+  postgres_data:
+  redis_data:
+  chromadb_data:
+  static_volume:
+  media_volume:
+  frontend_build:</code></pre>
+
+								<h4 class="mt-4">Django Dockerfile</h4>
+								<p>Create <code>ChatBot_DRF_Api/Dockerfile.prod</code>:</p>
+								
+								<pre><code class="language-dockerfile">FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+COPY requirements-prod.txt .
+RUN pip install --no-cache-dir -r requirements-prod.txt
+
+# Copy application code
+COPY . .
+
+# Collect static files
+RUN python manage.py collectstatic --noinput
+
+# Create non-root user
+RUN useradd --create-home --shell /bin/bash app
+RUN chown -R app:app /app
+USER app
+
+EXPOSE 8001
+
+CMD ["gunicorn", "--bind", "0.0.0.0:8001", "--workers", "4", "auth_system.wsgi:application"]</code></pre>
+							</div>
+						</section>
+
+						<!-- Nginx Configuration -->
+						<section class="section-block" id="nginx-config">
+							<div class="section-header">
+								<h2 class="section-title">🌐 Nginx Configuration</h2>
+							</div>
+							<div class="section-body">
+								<h4>Nginx Configuration File</h4>
+								<p>Create <code>nginx.conf</code>:</p>
+								
+								<pre><code class="language-nginx">events {
+    worker_connections 1024;
+}
+
+http {
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    # Gzip compression
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 1024;
+    gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+
+    # Rate limiting
+    limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
+    limit_req_zone $binary_remote_addr zone=chat:10m rate=30r/s;
+
+    # Upstream servers
+    upstream backend {
+        server backend:8001;
+    }
+
+    upstream websocket {
+        server websocket:8000;
+    }
+
+    # HTTP to HTTPS redirect
+    server {
+        listen 80;
+        server_name your-domain.com www.your-domain.com;
+        return 301 https://$server_name$request_uri;
+    }
+
+    # HTTPS server
+    server {
+        listen 443 ssl http2;
+        server_name your-domain.com www.your-domain.com;
+
+        # SSL configuration
+        ssl_certificate /etc/nginx/ssl/cert.pem;
+        ssl_certificate_key /etc/nginx/ssl/key.pem;
+        ssl_protocols TLSv1.2 TLSv1.3;
+        ssl_ciphers ECDHE-RSA-AES256-GCM-SHA512:DHE-RSA-AES256-GCM-SHA512;
+        ssl_prefer_server_ciphers off;
+
+        # Security headers
+        add_header X-Frame-Options DENY;
+        add_header X-Content-Type-Options nosniff;
+        add_header X-XSS-Protection "1; mode=block";
+        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+
+        # Frontend (React)
+        location / {
+            root /var/www/html;
+            try_files $uri $uri/ /index.html;
+        }
+
+        # API endpoints
+        location /api/ {
+            limit_req zone=api burst=20 nodelay;
+            proxy_pass http://backend;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        # WebSocket endpoints
+        location /ws/ {
+            limit_req zone=chat burst=50 nodelay;
+            proxy_pass http://websocket;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        # Static files
+        location /static/ {
+            alias /var/www/static/;
+            expires 1y;
+            add_header Cache-Control "public, immutable";
+        }
+
+        # Media files
+        location /media/ {
+            alias /var/www/media/;
+            expires 1y;
+            add_header Cache-Control "public";
+        }
+
+        # Chatbot widget
+        location /chatbot.js {
+            alias /var/www/static/chatbot.js;
+            expires 1h;
+            add_header Cache-Control "public";
+            add_header Access-Control-Allow-Origin "*";
+        }
+    }
+}</code></pre>
+							</div>
+						</section>
+
+						<!-- SSL Setup -->
+						<section class="section-block" id="ssl-setup">
+							<div class="section-header">
+								<h2 class="section-title">🔒 SSL/HTTPS Setup</h2>
+							</div>
+							<div class="section-body">
+								<h4>Let's Encrypt (Free SSL)</h4>
+								<pre><code class="language-bash"># Install Certbot
+sudo apt update
+sudo apt install certbot python3-certbot-nginx
+
+# Get SSL certificate
+sudo certbot --nginx -d your-domain.com -d www.your-domain.com
+
+# Auto-renewal (add to crontab)
+0 12 * * * /usr/bin/certbot renew --quiet</code></pre>
+
+								<h4 class="mt-4">Custom SSL Certificate</h4>
+								<pre><code class="language-bash"># Create SSL directory
+mkdir ssl
+
+# Copy your certificate files
+cp your-cert.pem ssl/cert.pem
+cp your-key.pem ssl/key.pem
+
+# Set proper permissions
+chmod 600 ssl/key.pem
+chmod 644 ssl/cert.pem</code></pre>
+
+								<div class="alert alert-info">
+									<h6><i class="fas fa-info-circle me-2"></i>SSL Best Practices</h6>
+									<ul class="mb-0">
+										<li>Use strong cipher suites</li>
+										<li>Enable HSTS headers</li>
+										<li>Redirect HTTP to HTTPS</li>
+										<li>Set up certificate auto-renewal</li>
+										<li>Test SSL configuration with SSL Labs</li>
+									</ul>
+								</div>
+							</div>
+						</section>
+
+						<!-- Environment Variables -->
+						<section class="section-block" id="production-env">
+							<div class="section-header">
+								<h2 class="section-title">🔧 Production Environment</h2>
+							</div>
+							<div class="section-body">
+								<h4>Production .env File</h4>
+								<pre><code class="language-bash"># Django Production Settings
+DEBUG=False
+SECRET_KEY=your-super-secret-production-key-here
+ALLOWED_HOSTS=your-domain.com,www.your-domain.com
+
+# Database
+DATABASE_URL=postgresql://username:password@localhost:5432/chatbot_prod
+
+# Redis
+REDIS_URL=redis://localhost:6379/0
+
+# ChromaDB
+CHROMADB_HOST=localhost
+CHROMADB_PORT=8002
+
+# Security
+SECURE_SSL_REDIRECT=True
+SECURE_PROXY_SSL_HEADER=HTTP_X_FORWARDED_PROTO,https
+SECURE_HSTS_SECONDS=31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS=True
+SECURE_HSTS_PRELOAD=True
+
+# Email (for notifications)
+EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER=your-email@gmail.com
+EMAIL_HOST_PASSWORD=your-app-password
+
+# File Storage (AWS S3)
+USE_S3=True
+AWS_ACCESS_KEY_ID=your-access-key
+AWS_SECRET_ACCESS_KEY=your-secret-key
+AWS_STORAGE_BUCKET_NAME=your-bucket-name
+AWS_S3_REGION_NAME=us-east-1
+
+# Monitoring
+SENTRY_DSN=https://your-sentry-dsn@sentry.io/project-id</code></pre>
+
+								<h4 class="mt-4">Deployment Script</h4>
+								<p>Create <code>deploy.sh</code>:</p>
+								
+								<pre><code class="language-bash">#!/bin/bash
+
+echo "🚀 Starting deployment..."
+
+# Pull latest code
+git pull origin main
+
+# Build and start services
+docker-compose -f docker-compose.prod.yml down
+docker-compose -f docker-compose.prod.yml build --no-cache
+docker-compose -f docker-compose.prod.yml up -d
+
+# Run migrations
+docker-compose -f docker-compose.prod.yml exec backend python manage.py migrate
+
+# Collect static files
+docker-compose -f docker-compose.prod.yml exec backend python manage.py collectstatic --noinput
+
+# Load initial data
+docker-compose -f docker-compose.prod.yml exec backend python load_rag_data.py
+
+echo "✅ Deployment completed!"</code></pre>
+							</div>
+						</section>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<!-- Scripts -->
+	<script src="assets/js/jquery-3.7.1.min.js"></script>
+	<script src="assets/js/bootstrap.bundle.min.js"></script>
+	<script src="assets/js/feather.min.js"></script>
+	<script src="assets/js/prism.js"></script>
+	<script src="assets/js/main.js"></script>
+</body>
+</html>

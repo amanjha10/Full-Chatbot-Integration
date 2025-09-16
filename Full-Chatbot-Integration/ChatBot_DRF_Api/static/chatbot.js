@@ -385,9 +385,37 @@
         }
     }
 
+    // Check subscription status before initializing
+    async function checkSubscriptionStatus() {
+        try {
+            const response = await fetch(`${apiBaseUrl}/chatbot/company/${companyId}/status/`);
+            const data = await response.json();
+
+            if (data.success && data.is_active) {
+                console.log('✅ Subscription is active, proceeding with chatbot initialization');
+                return true;
+            } else {
+                console.warn('❌ Subscription is inactive or cancelled:', data.message);
+                return false;
+            }
+        } catch (error) {
+            console.error('❌ Failed to check subscription status:', error);
+            // In case of error, don't load chatbot to be safe
+            return false;
+        }
+    }
+
     // Initialize chatbot
     async function initializeChatbot() {
         try {
+            // First check subscription status
+            const isSubscriptionActive = await checkSubscriptionStatus();
+
+            if (!isSubscriptionActive) {
+                console.warn('Chatbot not loaded: Subscription is inactive');
+                return;
+            }
+
             // Fetch configuration
             const config = await fetchCompanyConfig();
 
@@ -428,6 +456,60 @@
                 applyChatbotConfig(message.config);
             }
         });
+    }
+
+    // WebSocket connection for real-time subscription status updates
+    let subscriptionWebSocket = null;
+
+    function connectSubscriptionWebSocket() {
+        try {
+            const wsUrl = `ws://localhost:8001/ws/subscription/${companyId}/`;
+            subscriptionWebSocket = new WebSocket(wsUrl);
+
+            subscriptionWebSocket.onopen = function(event) {
+                console.log('✅ Subscription WebSocket connected');
+            };
+
+            subscriptionWebSocket.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+
+                if (data.type === 'subscription_cancelled') {
+                    console.warn('🚫 Subscription cancelled - removing chatbot widget');
+                    removeChatbotWidget();
+                } else if (data.type === 'subscription_reactivated') {
+                    console.log('✅ Subscription reactivated - reloading chatbot');
+                    location.reload(); // Reload to reinitialize chatbot
+                }
+            };
+
+            subscriptionWebSocket.onclose = function(event) {
+                console.log('Subscription WebSocket disconnected');
+                // Don't auto-reconnect to avoid spam - WebSocket is optional
+                // setTimeout(connectSubscriptionWebSocket, 5000);
+            };
+
+            subscriptionWebSocket.onerror = function(error) {
+                console.warn('Subscription WebSocket not available (this is optional)');
+                // Don't log error details to avoid console spam
+            };
+        } catch (error) {
+            console.warn('WebSocket not supported or not available (this is optional)');
+        }
+    }
+
+    // Function to remove chatbot widget
+    function removeChatbotWidget() {
+        const container = document.getElementById(containerID);
+        const iframe = document.getElementById(iframeID);
+
+        if (container) {
+            container.remove();
+        }
+        if (iframe) {
+            iframe.remove();
+        }
+
+        console.log('Chatbot widget removed due to subscription cancellation');
     }
 
     // Apply chatbot configuration changes (called via postMessage from iframe)
@@ -522,6 +604,14 @@
 
     // Setup message listener and start initialization
     setupMessageListener();
+
+    // Try to connect WebSocket (optional feature)
+    try {
+        connectSubscriptionWebSocket();
+    } catch (error) {
+        console.log('WebSocket connection skipped (optional feature)');
+    }
+
     initializeChatbot();
 
 })();
