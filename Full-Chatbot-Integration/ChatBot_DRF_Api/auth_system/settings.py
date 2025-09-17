@@ -16,8 +16,8 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-change-me-in-producti
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-# Allow everything (testing only!)
-ALLOWED_HOSTS = ["*"]
+# Allowed hosts configuration
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*').split(',') if config('ALLOWED_HOSTS', default='*') != '*' else ['*']
 
 # Application definition
 DJANGO_APPS = [
@@ -195,8 +195,11 @@ SIMPLE_JWT = {
     'TOKEN_TYPE_CLAIM': 'token_type',
 }
 
-# Allow everything (testing only!)
-CORS_ALLOW_ALL_ORIGINS = True
+# CORS settings - use specific origins in production
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
+else:
+    CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='https://bot.spell.com.np').split(',')
 
 # Django Channels Configuration
 ASGI_APPLICATION = "auth_system.asgi.application"

@@ -10,10 +10,10 @@ interface PlanUpgradeModalProps {
   currentPlan: string;
 }
 
-interface PlanFeature {
-  text: string;
-  included: boolean;
-}
+// interface PlanFeature {
+//   text: string;
+//   included: boolean;
+// }
 
 interface Plan {
   id: number;

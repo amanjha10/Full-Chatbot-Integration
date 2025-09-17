@@ -234,9 +234,9 @@ export default function UserTable({ handleOpenModal }: UserTableProps) {
 
       <AppTable
         rowKey="id"
-        rowSelection={rowSelection}
-        columns={columns}
-        dataSource={tableData}
+        rowSelection={rowSelection as any}
+        columns={columns as any}
+        dataSource={tableData as any}
         loading={isLoading}
         total={totalCount}
         paginationData={page}

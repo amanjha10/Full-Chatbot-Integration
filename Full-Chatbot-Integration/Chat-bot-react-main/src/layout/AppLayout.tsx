@@ -9,7 +9,7 @@ export default function AppLayout() {
   const navigate = useNavigate();
   const context = useAuth();
   const { pathname } = useLocation();
-  const isValidPath = pathname == "/app/chat";
+  // const isValidPath = pathname == "/app/chat";
 
   return (
     <div className="min-h-screen bg-slate-100 flex flex-col">

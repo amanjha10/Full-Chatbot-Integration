@@ -3,13 +3,13 @@ import PendingSession from "../../components/agent/PendingSession";
 import Card from "../../components/dashboard/Card";
 import { useAgentRealTimeData } from "../../hooks/useAgentWebSocket";
 
-interface AgentDashboardStats {
-  pending_sessions: number;
-  my_active_sessions: number;
-  total_handled_today: number;
-  total_handled_all_time: number;
-  agent_status: "AVAILABLE" | "BUSY" | "OFFLINE";
-}
+// interface AgentDashboardStats {
+//   pending_sessions: number;
+//   my_active_sessions: number;
+//   total_handled_today: number;
+//   total_handled_all_time: number;
+//   agent_status: "AVAILABLE" | "BUSY" | "OFFLINE";
+// }
 
 export default function Dashboard() {
   const { stats, isConnected, statsLoading } = useAgentRealTimeData();

@@ -6,8 +6,8 @@ import {
 } from '../api/get';
 import {
   sendAgentMessage,
-  assignSession,
-  resolveSession
+  // assignSession,
+  // resolveSession
 } from '../api/post';
 import type {
   PendingSessionData,
@@ -17,8 +17,8 @@ import { useCompany } from '../context-provider/CompanyProvider';
 import { useAdminWebSocket } from './useAdminWebSocket';
 
 // Utility function to create unique message key
-const getMessageKey = (msg: any) => {
-  return `${msg.id || 'no-id'}-${msg.content}-${msg.message_type}-${msg.timestamp}`;
+const getMessageKey = (_msg: any) => {
+  return `${_msg.id || 'no-id'}-${_msg.content}-${_msg.message_type}-${_msg.timestamp}`;
 };
 
 // Utility function to check if two messages are duplicates

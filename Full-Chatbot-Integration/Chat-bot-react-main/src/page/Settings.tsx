@@ -1,7 +1,7 @@
 import {
   Checkbox,
   ColorPicker,
-  type CheckboxProps,
+  // type CheckboxProps,
   Button,
   Input,
   Switch,
@@ -10,7 +10,7 @@ import {
 import { useState, useEffect } from "react";
 import { AiOutlineLike } from "react-icons/ai";
 import { FaBars } from "react-icons/fa6";
-import { MdArrowBackIos, MdAttachFile } from "react-icons/md";
+import { MdAttachFile } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
 import { axiosClient } from "../config/axiosConfig";
 import ChatbotEmbedCode from "../components/admin/ChatbotEmbedCode";

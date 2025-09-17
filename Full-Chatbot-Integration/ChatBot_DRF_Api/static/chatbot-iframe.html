@@ -640,9 +640,23 @@
       // Usage: chatbot-iframe.html?company=ZIL001&apiUrl=...&primaryColor=...
       function getUrlParams() {
         const params = new URLSearchParams(window.location.search);
+
+        // Determine API base URL based on current domain
+        let defaultApiUrl;
+        const currentHost = window.location.host;
+
+        if (currentHost.includes('localhost') || currentHost.includes('127.0.0.1')) {
+          // Development environment
+          defaultApiUrl = 'http://localhost:8001/api';
+        } else {
+          // Production environment - use current domain
+          const protocol = window.location.protocol;
+          defaultApiUrl = `${protocol}//${currentHost}/api`;
+        }
+
         return {
           companyId: params.get('company') || 'ZIL001',
-          apiBaseUrl: params.get('apiUrl') || 'http://localhost:8001/api',
+          apiBaseUrl: params.get('apiUrl') || defaultApiUrl,
           primaryColor: params.get('primaryColor') || '#f7941d',
           secondaryColor: params.get('secondaryColor') || '#652d90',
           welcomeMessage: params.get('welcomeMessage') || 'Hello! How can I help you today?',
@@ -1365,11 +1379,27 @@
         // Ensure file URL is absolute and points to the correct server
         let absoluteFileUrl = fileUrl;
         if (!fileUrl.startsWith('http')) {
-          // If relative URL, prepend Django server URL
-          absoluteFileUrl = `http://localhost:8001${fileUrl}`;
+          // If relative URL, prepend current server URL
+          const currentHost = window.location.host;
+          const protocol = window.location.protocol;
+
+          if (currentHost.includes('localhost') || currentHost.includes('127.0.0.1')) {
+            // Development environment
+            absoluteFileUrl = `http://localhost:8001${fileUrl}`;
+          } else {
+            // Production environment
+            absoluteFileUrl = `${protocol}//${currentHost}${fileUrl}`;
+          }
         } else if (fileUrl.includes('localhost:5173') || fileUrl.includes('127.0.0.1:5173')) {
           // If URL points to React dev server, redirect to Django server
-          absoluteFileUrl = fileUrl.replace(/https?:\/\/(localhost|127\.0\.0\.1):5173/, 'http://localhost:8001');
+          const currentHost = window.location.host;
+          const protocol = window.location.protocol;
+
+          if (currentHost.includes('localhost') || currentHost.includes('127.0.0.1')) {
+            absoluteFileUrl = fileUrl.replace(/https?:\/\/(localhost|127\.0\.0\.1):5173/, 'http://localhost:8001');
+          } else {
+            absoluteFileUrl = fileUrl.replace(/https?:\/\/(localhost|127\.0\.0\.1):5173/, `${protocol}//${currentHost}`);
+          }
         }
 
         console.log(`DEBUG: Processed file URL: ${absoluteFileUrl}`);
@@ -1468,11 +1498,27 @@
         // Ensure file URL is absolute and points to the correct server
         let absoluteFileUrl = fileUrl;
         if (!fileUrl.startsWith('http')) {
-          // If relative URL, prepend Django server URL
-          absoluteFileUrl = `http://localhost:8001${fileUrl}`;
+          // If relative URL, prepend current server URL
+          const currentHost = window.location.host;
+          const protocol = window.location.protocol;
+
+          if (currentHost.includes('localhost') || currentHost.includes('127.0.0.1')) {
+            // Development environment
+            absoluteFileUrl = `http://localhost:8001${fileUrl}`;
+          } else {
+            // Production environment
+            absoluteFileUrl = `${protocol}//${currentHost}${fileUrl}`;
+          }
         } else if (fileUrl.includes('localhost:5173') || fileUrl.includes('127.0.0.1:5173')) {
           // If URL points to React dev server, redirect to Django server
-          absoluteFileUrl = fileUrl.replace(/https?:\/\/(localhost|127\.0\.0\.1):5173/, 'http://localhost:8001');
+          const currentHost = window.location.host;
+          const protocol = window.location.protocol;
+
+          if (currentHost.includes('localhost') || currentHost.includes('127.0.0.1')) {
+            absoluteFileUrl = fileUrl.replace(/https?:\/\/(localhost|127\.0\.0\.1):5173/, 'http://localhost:8001');
+          } else {
+            absoluteFileUrl = fileUrl.replace(/https?:\/\/(localhost|127\.0\.0\.1):5173/, `${protocol}//${currentHost}`);
+          }
         }
 
         // Check for duplicate files (same URL and filename)
@@ -1630,7 +1676,17 @@
           return;
         }
 
-        const wsUrl = `ws://localhost:8000/ws/chat/${chatConfig.companyId}/${chatConfig.sessionId}/`;
+        // Determine WebSocket URL based on current domain
+        let wsUrl;
+        const currentHost = window.location.host;
+
+        if (currentHost.includes('localhost') || currentHost.includes('127.0.0.1')) {
+          // Development environment
+          wsUrl = `ws://localhost:8000/ws/chat/${chatConfig.companyId}/${chatConfig.sessionId}/`;
+        } else {
+          // Production environment - use secure WebSocket
+          wsUrl = `wss://${currentHost}/ws/chat/${chatConfig.companyId}/${chatConfig.sessionId}/`;
+        }
         websocket = new WebSocket(wsUrl);
 
         websocket.onopen = function (event) {
@@ -1823,7 +1879,17 @@
         }
 
         try {
-          const configWsUrl = `ws://localhost:8000/ws/config/${chatConfig.companyId}/`;
+          // Determine Config WebSocket URL based on current domain
+          let configWsUrl;
+          const currentHost = window.location.host;
+
+          if (currentHost.includes('localhost') || currentHost.includes('127.0.0.1')) {
+            // Development environment
+            configWsUrl = `ws://localhost:8000/ws/config/${chatConfig.companyId}/`;
+          } else {
+            // Production environment - use secure WebSocket
+            configWsUrl = `wss://${currentHost}/ws/config/${chatConfig.companyId}/`;
+          }
           console.log("Connecting to Config WebSocket:", configWsUrl);
 
           configWebSocket = new WebSocket(configWsUrl);

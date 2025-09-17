@@ -7,7 +7,7 @@ import {
   Form,
   Input,
   Select,
-  message,
+  // message,
   Space,
   Popconfirm,
   Tag,
@@ -125,8 +125,8 @@ const CompanyFAQPageContent: React.FC = () => {
       form.resetFields();
     } catch (error) {
       console.error('Error saving FAQ:', error);
-      console.error('Error details:', error.response?.data);
-      message.error(`Failed to save FAQ: ${error.response?.data?.error || error.message}`);
+      console.error('Error details:', (error as any).response?.data);
+      message.error(`Failed to save FAQ: ${(error as any).response?.data?.error || (error as any).message}`);
     }
   };
 

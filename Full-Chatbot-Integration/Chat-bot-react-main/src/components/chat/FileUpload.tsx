@@ -165,7 +165,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
         throw new Error(error.error || 'Upload failed');
       }
 
-      const result = await response.json();
+      await response.json();
       
       // Update upload status
       setUploads(prev => new Map(prev.set(uploadId, {

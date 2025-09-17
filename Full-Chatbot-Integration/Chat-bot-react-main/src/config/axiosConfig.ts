@@ -64,9 +64,9 @@ axiosClient.interceptors.response.use(
     // Handle company access violations
     if (
       error.response?.status === 403 &&
-      error.response?.data?.error?.includes("company")
+      (error.response?.data as any)?.error?.includes("company")
     ) {
-      console.error("Company access violation:", error.response.data.error);
+      console.error("Company access violation:", (error.response.data as any).error);
       // Could redirect to unauthorized page or show error message
     }
 

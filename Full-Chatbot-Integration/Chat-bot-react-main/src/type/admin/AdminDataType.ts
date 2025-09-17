@@ -11,5 +11,7 @@ type AdminDataType={
     phone:string
 }
 export type ResetPasswordPayload=Pick<AdminDataType,'agent_id'>
-export type AgentListType=Pick<AdminDataType,'company_id'|'email'|'formatted_last_active'|'id'|'generated_password'|'name'|'specialization'|'status'>
+export type AgentListType=Pick<AdminDataType,'company_id'|'email'|'formatted_last_active'|'id'|'generated_password'|'name'|'specialization'|'status'|'phone'> & {
+    is_first_login?: boolean;
+}
 export type CreateAgentPayload=Pick<AdminDataType,"name"|'phone'|'specialization'|'email'>

@@ -12,8 +12,8 @@ import {
   Form,
   InputNumber,
   message,
-  Tag,
-  Pagination,
+  // Tag,
+  // Pagination,
   type MenuProps,
 } from "antd";
 import { FiSearch, FiEye, FiXCircle, FiMoreVertical, FiEdit2, FiSave, FiX } from "react-icons/fi";
@@ -63,14 +63,14 @@ interface PlanData {
 }
 
 // Plan card editing state
-interface EditingPlan {
-  id: number;
-  name: string;
-  for_whom: string;
-  price: number | null;
-  max_agents: string;
-  features_line: string;
-}
+// interface EditingPlan {
+//   id: number;
+//   name: string;
+//   for_whom: string;
+//   price: number | null;
+//   max_agents: string;
+//   features_line: string;
+// }
 
 
 
@@ -480,7 +480,7 @@ export default function Plan() {
           {plansLoading ? (
             <div className="col-span-full text-center py-8">Loading plans...</div>
           ) : plansData && plansData.length > 0 ? (
-            plansData.map((plan) => (
+            plansData.map((plan: any) => (
               <Card
                 key={plan.id}
                 className="relative overflow-hidden border-2 hover:shadow-xl transition-all duration-300"
@@ -639,7 +639,7 @@ export default function Plan() {
                   Expiry Date
                 </label>
                 <p className="text-base">
-                  {new Date(selectedCompany.expiry_date).toLocaleDateString()}
+                  {selectedCompany.expiry_date ? new Date(selectedCompany.expiry_date).toLocaleDateString() : 'N/A'}
                 </p>
               </div>
               <div>

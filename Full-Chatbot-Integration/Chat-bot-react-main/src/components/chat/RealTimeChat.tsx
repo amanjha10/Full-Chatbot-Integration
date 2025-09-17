@@ -517,7 +517,7 @@ export default function RealTimeChat({
                               }}
                               onClick={() => {
                                 const link = document.createElement('a');
-                                link.href = msg.file_url;
+                                link.href = msg.file_url || '#';
                                 link.download = msg.file_name || 'image';
                                 link.style.display = 'none';
                                 document.body.appendChild(link);
@@ -532,7 +532,7 @@ export default function RealTimeChat({
                               <button
                                 onClick={() => {
                                   const link = document.createElement('a');
-                                  link.href = msg.file_url;
+                                  link.href = msg.file_url || '#';
                                   link.download = msg.file_name || 'image';
                                   link.style.display = 'none';
                                   document.body.appendChild(link);

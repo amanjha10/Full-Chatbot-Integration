@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Button,
   Card,
@@ -112,7 +112,7 @@ export default function SuperAdminFAQ() {
         faq.question.toLowerCase().includes(searchText.toLowerCase()) ||
         faq.answer.toLowerCase().includes(searchText.toLowerCase()) ||
         faq.category?.toLowerCase().includes(searchText.toLowerCase()) ||
-        faq.subcategory?.toLowerCase().includes(searchText.toLowerCase())
+        faq.category?.toLowerCase().includes(searchText.toLowerCase())
       );
       setFilteredFAQs(filtered);
     }

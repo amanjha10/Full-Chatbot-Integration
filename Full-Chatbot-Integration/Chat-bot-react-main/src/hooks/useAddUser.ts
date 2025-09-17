@@ -16,7 +16,7 @@ const formHooks=useForm({
     }
 });
 const {handleSubmit}=formHooks;
-const onSubmit=(data:FormType)=>{
+const onSubmit=(_data:FormType)=>{
     // DEAD CODE REMOVED - Debug console.log removed
     // TODO: Implement actual user creation logic
 }

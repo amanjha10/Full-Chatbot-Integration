@@ -18,7 +18,7 @@ export default function Login() {
   const userRole = localStorage.getItem("temp_first_login_role") || "AGENT";
   const isAdminFirstLogin = userRole === "ADMIN";
 
-  const { formHooks, formSubmit, handleFirstLogin } = useLogin({
+  const { formHooks, formSubmit } = useLogin({
     setLoading,
     setIsFirstLogin,
     setFirstLoginData,

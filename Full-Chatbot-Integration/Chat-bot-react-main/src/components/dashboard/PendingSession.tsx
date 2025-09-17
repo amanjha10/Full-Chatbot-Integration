@@ -2,9 +2,7 @@ import { Button, Tag, message, Select } from "antd";
 import { useForm } from "react-hook-form";
 import { HiRefresh } from "react-icons/hi";
 import { MdOutlineAccessTimeFilled } from "react-icons/md";
-import AppSelect from "../../share/form/AppSelect";
 import { TiUserAddOutline } from "react-icons/ti";
-import { agentList } from "../../constant";
 import { useState } from "react";
 import useSWR from "swr";
 import { axiosClient } from "../../config/axiosConfig";
@@ -28,7 +26,7 @@ interface Agent {
 }
 
 export default function PendingSession() {
-  const { control } = useForm();
+  useForm();
   const [assigningSession, setAssigningSession] = useState<number | null>(null);
   const [selectedAgents, setSelectedAgents] = useState<{
     [key: number]: number;

@@ -438,10 +438,15 @@
     function setupMessageListener() {
         window.addEventListener('message', function(event) {
             // Security check - only accept messages from our iframe domain
-            // Accept messages from localhost:8001 (Django server) and localhost:8002 (if used)
+            const currentHost = window.location.host;
+            const currentProtocol = window.location.protocol;
+            const expectedOrigin = `${currentProtocol}//${currentHost}`;
+
+            // Accept messages from current domain or localhost for development
             if (!event.origin.includes('localhost:8001') &&
                 !event.origin.includes('localhost:8002') &&
-                !event.origin.includes('chat.yourdomain.com')) {
+                !event.origin.includes(currentHost)) {
+                console.log('Rejected message from unauthorized origin:', event.origin);
                 return;
             }
 
@@ -467,10 +472,20 @@
 
     function connectSubscriptionWebSocket() {
         try {
-            const wsUrl = `ws://localhost:8001/ws/subscription/${companyId}/`;
+            // Determine WebSocket URL based on current domain
+            let wsUrl;
+            const currentHost = window.location.host;
+
+            if (currentHost.includes('localhost') || currentHost.includes('127.0.0.1')) {
+                // Development environment
+                wsUrl = `ws://localhost:8001/ws/subscription/${companyId}/`;
+            } else {
+                // Production environment - use secure WebSocket
+                wsUrl = `wss://${currentHost}/ws/subscription/${companyId}/`;
+            }
             subscriptionWebSocket = new WebSocket(wsUrl);
 
-            subscriptionWebSocket.onopen = function(event) {
+            subscriptionWebSocket.onopen = function() {
                 console.log('✅ Subscription WebSocket connected');
             };
 
@@ -486,13 +501,13 @@
                 }
             };
 
-            subscriptionWebSocket.onclose = function(event) {
+            subscriptionWebSocket.onclose = function() {
                 console.log('Subscription WebSocket disconnected');
                 // Don't auto-reconnect to avoid spam - WebSocket is optional
                 // setTimeout(connectSubscriptionWebSocket, 5000);
             };
 
-            subscriptionWebSocket.onerror = function(error) {
+            subscriptionWebSocket.onerror = function() {
                 console.warn('Subscription WebSocket not available (this is optional)');
                 // Don't log error details to avoid console spam
             };

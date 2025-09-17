@@ -172,7 +172,7 @@ export const useLogin = ({
 
       console.log("DEBUG: Using endpoint:", endpoint, "for role:", storedRole);
 
-      const response = await axiosClient.post(endpoint, {
+      await axiosClient.post(endpoint, {
         email: firstLoginData.email,
         current_password: data.current_password,
         new_password: data.new_password,
