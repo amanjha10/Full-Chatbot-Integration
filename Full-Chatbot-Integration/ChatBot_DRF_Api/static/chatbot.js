@@ -452,6 +452,10 @@
                 if (isOpen) {
                     toggleChatbot(); // This will close the chatbot
                 }
+            } else if (message.type === 'chatbot_power_off' && message.action === 'clear_cache') {
+                // Handle power off - clear all chatbot cache and reset
+                console.log('🔌 Power off requested - clearing all chatbot cache');
+                clearChatbotCache(message.sessionId, message.companyId);
             } else if (message.type === 'UPDATE_CHATBOT_CONFIG' && message.companyId === companyId) {
                 applyChatbotConfig(message.config);
             }
@@ -510,6 +514,66 @@
         }
 
         console.log('Chatbot widget removed due to subscription cancellation');
+    }
+
+    // Clear all chatbot cache and reset to initial state
+    function clearChatbotCache(sessionId, companyId) {
+        console.log('🧹 Clearing chatbot cache for session:', sessionId);
+
+        try {
+            // 1. Clear all localStorage related to this chatbot
+            const keysToRemove = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && (
+                    key.includes('chatbot') ||
+                    key.includes('chat_') ||
+                    key.includes(sessionId) ||
+                    key.includes(companyId) ||
+                    key.includes('SpellBot') ||
+                    key.includes('chatPersistence')
+                )) {
+                    keysToRemove.push(key);
+                }
+            }
+            keysToRemove.forEach(key => {
+                localStorage.removeItem(key);
+                console.log('🗑️ Removed localStorage key:', key);
+            });
+
+            // 2. Clear sessionStorage
+            sessionStorage.clear();
+            console.log('🗑️ Cleared sessionStorage');
+
+            // 3. Clear chatbot-related cookies
+            const cookies = document.cookie.split(';');
+            cookies.forEach(cookie => {
+                const [name] = cookie.split('=');
+                const cookieName = name.trim();
+                if (cookieName.includes('chatbot') ||
+                    cookieName.includes('chat_') ||
+                    cookieName.includes(companyId) ||
+                    cookieName.includes('SpellBot')) {
+                    document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+                    console.log('🗑️ Cleared cookie:', cookieName);
+                }
+            });
+
+            // 4. Close the chatbot if it's open
+            if (isOpen) {
+                toggleChatbot();
+            }
+
+            // 5. Reset any cached detection data
+            if (typeof detectionReported !== 'undefined') {
+                detectionReported = false;
+            }
+
+            console.log('✅ Chatbot cache cleared successfully');
+
+        } catch (error) {
+            console.error('❌ Error clearing chatbot cache:', error);
+        }
     }
 
     // Apply chatbot configuration changes (called via postMessage from iframe)

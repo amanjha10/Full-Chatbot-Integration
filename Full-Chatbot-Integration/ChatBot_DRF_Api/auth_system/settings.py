@@ -123,6 +123,9 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
+# Allow iframe embedding for chatbot
+X_FRAME_OPTIONS = 'ALLOWALL'
+
 # Media files (uploaded files)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'

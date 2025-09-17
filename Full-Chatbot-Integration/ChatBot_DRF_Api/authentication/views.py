@@ -773,7 +773,7 @@ def plan_history_view(request, plan_id):
 
 
 @api_view(['GET'])
-@permission_classes([IsSuperAdmin])  
+@permission_classes([IsSuperAdmin])
 def plan_types_view(request):
     """
     Get available plan types for dropdown selection.

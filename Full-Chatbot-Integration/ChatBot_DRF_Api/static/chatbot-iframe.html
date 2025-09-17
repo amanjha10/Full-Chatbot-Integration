@@ -48,7 +48,7 @@
         align-items: center;
       }
 
-      .close-btn, .clear-btn {
+      .close-btn, .power-btn {
         background: rgba(255, 255, 255, 0.1);
         border: 1px solid rgba(255, 255, 255, 0.2);
         color: white;
@@ -68,13 +68,85 @@
         font-size: 1.5rem;
       }
 
-      .close-btn:hover, .clear-btn:hover {
+      .close-btn:hover, .power-btn:hover {
         background: rgba(255, 255, 255, 0.2);
         transform: scale(1.1);
       }
 
-      .clear-btn:hover {
-        background: rgba(255, 0, 0, 0.2);
+      .power-btn:hover {
+        background: rgba(255, 193, 7, 0.3);
+      }
+
+      /* Power off confirmation popup */
+      .power-confirmation-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+      }
+
+      .power-confirmation-popup {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        max-width: 320px;
+        width: 90%;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        text-align: center;
+      }
+
+      .power-confirmation-popup h4 {
+        margin: 0 0 16px 0;
+        color: #333;
+        font-size: 18px;
+      }
+
+      .power-confirmation-popup p {
+        margin: 0 0 24px 0;
+        color: #666;
+        font-size: 14px;
+        line-height: 1.4;
+      }
+
+      .power-confirmation-buttons {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+      }
+
+      .power-confirm-btn,
+      .power-cancel-btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.2s;
+      }
+
+      .power-confirm-btn {
+        background: #ff4757;
+        color: white;
+      }
+
+      .power-confirm-btn:hover {
+        background: #ff3742;
+      }
+
+      .power-cancel-btn {
+        background: #f1f2f6;
+        color: #333;
+      }
+
+      .power-cancel-btn:hover {
+        background: #ddd;
       }
 
       .chat-messages {
@@ -463,7 +535,7 @@
     <div class="chat-header">
       <h3 id="chatTitle">SpellBot Assistant</h3>
       <div class="header-buttons">
-        <button class="clear-btn" onclick="clearChat()" title="Start New Chat">🗑️</button>
+        <button class="power-btn" onclick="showPowerOffConfirmation()" title="Turn Off Chat">⚡</button>
         <button class="close-btn" onclick="closeChatbot()">&times;</button>
       </div>
     </div>
@@ -548,6 +620,18 @@
             <polygon points="22,2 15,22 11,13 2,9 22,2"></polygon>
           </svg>
         </button>
+      </div>
+    </div>
+
+    <!-- Power off confirmation popup -->
+    <div class="power-confirmation-overlay" id="powerConfirmationOverlay">
+      <div class="power-confirmation-popup">
+        <h4>Turn Off Chat?</h4>
+        <p>This will clear all chat history and close the chatbot. Are you sure you want to continue?</p>
+        <div class="power-confirmation-buttons">
+          <button class="power-confirm-btn" onclick="confirmPowerOff()">Yes, Turn Off</button>
+          <button class="power-cancel-btn" onclick="hidePowerOffConfirmation()">Cancel</button>
+        </div>
       </div>
     </div>
 
@@ -655,6 +739,30 @@
           localStorage.removeItem(this.storageKey);
           localStorage.removeItem(this.sessionKey);
           console.log("DEBUG: Chat data cleared from localStorage");
+        }
+
+        // Complete reset - clear everything related to this chatbot
+        completeReset() {
+          // Clear specific keys
+          localStorage.removeItem(this.storageKey);
+          localStorage.removeItem(this.sessionKey);
+
+          // Clear any other chatbot-related keys
+          const keysToRemove = [];
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && (
+              key.includes('chatbot') ||
+              key.includes('chat_') ||
+              key.includes(this.companyId) ||
+              key.includes('SpellBot')
+            )) {
+              keysToRemove.push(key);
+            }
+          }
+          keysToRemove.forEach(key => localStorage.removeItem(key));
+
+          console.log("DEBUG: Complete chatbot reset - cleared all related data");
         }
 
         // Update session activity
@@ -1206,10 +1314,25 @@
             const suggestionBtn = document.createElement("button");
             suggestionBtn.className = "suggestion-btn";
             suggestionBtn.textContent = suggestion;
-            suggestionBtn.onclick = () => {
-              document.getElementById("messageInput").value = suggestion;
-              sendMessage();
-            };
+
+            // Check if this is an example (non-clickable)
+            if (suggestion.toLowerCase().startsWith('example:')) {
+              // Make it look like a disabled example
+              suggestionBtn.className = "suggestion-btn example-btn";
+              suggestionBtn.disabled = true;
+              suggestionBtn.style.cursor = "default";
+              suggestionBtn.style.opacity = "0.7";
+              suggestionBtn.style.backgroundColor = "#f5f5f5";
+              suggestionBtn.style.color = "#666";
+              // No onclick for examples
+            } else {
+              // Regular clickable suggestion
+              suggestionBtn.onclick = () => {
+                document.getElementById("messageInput").value = suggestion;
+                sendMessage();
+              };
+            }
+
             suggestionsDiv.appendChild(suggestionBtn);
           });
 
@@ -1226,6 +1349,18 @@
       // Add file message to DOM only (used for restoration and display)
       function addFileMessageToDOM(sender, fileUrl, fileName) {
         console.log(`DEBUG: addFileMessageToDOM called:`, { sender, fileUrl, fileName });
+
+        // Validate inputs - skip if fileName is undefined, null, or empty
+        if (!fileName || fileName === 'undefined' || fileName === 'null') {
+          console.log(`DEBUG: Invalid fileName detected, skipping file message:`, fileName);
+          return;
+        }
+
+        // Validate fileUrl
+        if (!fileUrl || fileUrl === 'undefined' || fileUrl === 'null') {
+          console.log(`DEBUG: Invalid fileUrl detected, skipping file message:`, fileUrl);
+          return;
+        }
 
         // Ensure file URL is absolute and points to the correct server
         let absoluteFileUrl = fileUrl;
@@ -1318,6 +1453,18 @@
 
       // Add file message to chat with persistence
       function addFileMessage(sender, fileUrl, fileName, saveToStorage = true) {
+        // Validate inputs - skip if fileName is undefined, null, or empty
+        if (!fileName || fileName === 'undefined' || fileName === 'null') {
+          console.log(`DEBUG: Invalid fileName in addFileMessage, skipping:`, fileName);
+          return;
+        }
+
+        // Validate fileUrl
+        if (!fileUrl || fileUrl === 'undefined' || fileUrl === 'null') {
+          console.log(`DEBUG: Invalid fileUrl in addFileMessage, skipping:`, fileUrl);
+          return;
+        }
+
         // Ensure file URL is absolute and points to the correct server
         let absoluteFileUrl = fileUrl;
         if (!fileUrl.startsWith('http')) {
@@ -1739,7 +1886,142 @@
         }
       }
 
-      // Clear chat and start fresh
+      // Show power off confirmation popup
+      function showPowerOffConfirmation() {
+        const overlay = document.getElementById("powerConfirmationOverlay");
+        overlay.style.display = "flex";
+      }
+
+      // Hide power off confirmation popup
+      function hidePowerOffConfirmation() {
+        const overlay = document.getElementById("powerConfirmationOverlay");
+        overlay.style.display = "none";
+      }
+
+      // Confirm power off - clear everything and close
+      function confirmPowerOff() {
+        console.log("DEBUG: Power off confirmed - clearing all data and closing");
+
+        // 1. Complete reset of all chatbot data
+        try {
+          if (chatPersistence) {
+            chatPersistence.completeReset();
+          } else {
+            // Fallback if chatPersistence is not available
+            const keysToRemove = [];
+            for (let i = 0; i < localStorage.length; i++) {
+              const key = localStorage.key(i);
+              if (key && (
+                key.includes('chatbot') ||
+                key.includes('chat_') ||
+                key.includes(chatConfig.sessionId) ||
+                key.includes(chatConfig.companyId) ||
+                key.includes('SpellBot')
+              )) {
+                keysToRemove.push(key);
+              }
+            }
+            keysToRemove.forEach(key => localStorage.removeItem(key));
+            console.log("DEBUG: Fallback - cleared localStorage keys:", keysToRemove);
+          }
+        } catch (e) {
+          console.log("LocalStorage clearing error:", e);
+        }
+
+        // 2. Clear all session storage
+        try {
+          sessionStorage.clear();
+          console.log("DEBUG: Cleared sessionStorage");
+        } catch (e) {
+          console.log("SessionStorage not available");
+        }
+
+        // 3. Clear any chatbot-related cookies
+        try {
+          // Get all cookies and remove chatbot-related ones
+          const cookies = document.cookie.split(';');
+          cookies.forEach(cookie => {
+            const [name] = cookie.split('=');
+            const cookieName = name.trim();
+            if (cookieName.includes('chatbot') ||
+                cookieName.includes('chat_') ||
+                cookieName.includes(chatConfig.companyId) ||
+                cookieName.includes('SpellBot')) {
+              // Remove the cookie by setting it to expire in the past
+              document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+              console.log("DEBUG: Cleared cookie:", cookieName);
+            }
+          });
+        } catch (e) {
+          console.log("Cookie clearing error:", e);
+        }
+
+        // 4. Clear in-memory data structures
+        displayedFiles.clear();
+        displayedMessages.clear();
+        console.log("DEBUG: Cleared in-memory data structures");
+
+        // 5. Reset chat state variables
+        if (typeof chatConfig !== 'undefined') {
+          // Don't clear sessionId as it's needed for proper cleanup
+          // but reset other state
+        }
+
+        // 6. Close WebSocket connections
+        if (websocket && websocket.readyState === WebSocket.OPEN) {
+          websocket.close();
+          console.log("DEBUG: Closed WebSocket connection");
+        }
+
+        // 7. Clear the chat messages from DOM
+        const messagesContainer = document.getElementById("chatMessages");
+        if (messagesContainer) {
+          // Keep loading indicator and welcome message, remove everything else
+          const loadingIndicator = document.getElementById("loadingIndicator");
+          const welcomeMessage = document.getElementById("welcomeMessage");
+
+          messagesContainer.innerHTML = '';
+
+          if (loadingIndicator) {
+            messagesContainer.appendChild(loadingIndicator);
+          }
+          if (welcomeMessage) {
+            messagesContainer.appendChild(welcomeMessage);
+            welcomeMessage.style.display = "block"; // Show welcome message again
+          }
+
+          console.log("DEBUG: Cleared chat messages from DOM");
+        }
+
+        // 8. Reset input field
+        const messageInput = document.getElementById("messageInput");
+        if (messageInput) {
+          messageInput.value = "";
+        }
+
+        // 9. Send message to parent window to clear its cache too
+        try {
+          window.parent.postMessage({
+            type: 'chatbot_power_off',
+            action: 'clear_cache',
+            sessionId: chatConfig.sessionId,
+            companyId: chatConfig.companyId
+          }, '*');
+          console.log("DEBUG: Sent power off message to parent window");
+        } catch (error) {
+          console.log("DEBUG: Could not send message to parent:", error);
+        }
+
+        // 10. Hide confirmation popup
+        hidePowerOffConfirmation();
+
+        // 11. Close the chatbot completely after a short delay to ensure cleanup
+        setTimeout(() => {
+          closeChatbot();
+        }, 500);
+      }
+
+      // Clear chat and start fresh (legacy function - kept for compatibility)
       function clearChat() {
         if (confirm("Are you sure you want to start a new chat? This will clear all messages.")) {
           console.log("DEBUG: Clearing chat and starting fresh");

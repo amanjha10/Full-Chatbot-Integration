@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Modal, Button, message } from "antd";
-import { CheckOutlined, CloseOutlined, LoadingOutlined } from "@ant-design/icons";
+import { CheckOutlined, LoadingOutlined } from "@ant-design/icons";
 import { axiosClient } from "../../config/axiosConfig";
 import "./PlanUpgradeModal.css";
 
@@ -53,6 +53,15 @@ const PlanUpgradeModal: React.FC<PlanUpgradeModalProps> = ({
   const [requesting, setRequesting] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
+
+  // Ref to track if we've already shown the pending message to prevent duplicates
+  const hasShownPendingMessage = useRef(false);
+
+  // Custom close handler to reset the pending message flag
+  const handleClose = () => {
+    hasShownPendingMessage.current = false;
+    onClose();
+  };
 
   // Fetch plans from Admin API (accessible to Admin users)
   const fetchPlans = async () => {
@@ -133,12 +142,13 @@ const PlanUpgradeModal: React.FC<PlanUpgradeModalProps> = ({
         });
       }
 
-      // Show info message if there's a pending request
-      if (pendingRequest) {
+      // Show info message if there's a pending request (only once when modal opens)
+      if (pendingRequest && !hasShownPendingMessage.current) {
         message.info(
           `You have a pending upgrade request to ${pendingRequest.requested_plan} plan. Please wait for approval.`,
           5 // Show for 5 seconds
         );
+        hasShownPendingMessage.current = true;
       }
     } catch (error) {
       console.error("Error fetching company plan info:", error);
@@ -155,6 +165,8 @@ const PlanUpgradeModal: React.FC<PlanUpgradeModalProps> = ({
   // Load data when modal opens
   useEffect(() => {
     if (isOpen) {
+      // Reset the pending message flag when modal opens
+      hasShownPendingMessage.current = false;
       fetchPlans();
       fetchCompanyPlanInfo();
     }
@@ -190,7 +202,7 @@ const PlanUpgradeModal: React.FC<PlanUpgradeModalProps> = ({
       if (response.data.message) {
         message.success(response.data.message);
         await fetchCompanyPlanInfo(); // Refresh company plan info
-        onClose();
+        handleClose();
       }
     } catch (error: any) {
       console.error("❌ Error requesting plan upgrade:", error);
@@ -202,11 +214,14 @@ const PlanUpgradeModal: React.FC<PlanUpgradeModalProps> = ({
         console.log("🔍 400 Error details:", errorData);
 
         if (errorData.error && errorData.existing_request) {
-          // Handle pending request error
-          const existingRequest = errorData.existing_request;
-          message.warning(
-            `You already have a pending upgrade request to ${existingRequest.requested_plan} plan. Please wait for approval or contact support.`
-          );
+          // Handle pending request error - only show if we haven't already shown the pending message
+          if (!hasShownPendingMessage.current) {
+            const existingRequest = errorData.existing_request;
+            message.warning(
+              `You already have a pending upgrade request to ${existingRequest.requested_plan} plan. Please wait for approval or contact support.`
+            );
+            hasShownPendingMessage.current = true;
+          }
         } else if (errorData.error) {
           // Handle other 400 errors with specific error message
           message.error(errorData.error);
@@ -322,7 +337,7 @@ const PlanUpgradeModal: React.FC<PlanUpgradeModalProps> = ({
       <Modal
         title="Plan Upgrade"
         open={isOpen}
-        onCancel={onClose}
+        onCancel={handleClose}
         footer={null}
         width={1200}
         centered
@@ -343,7 +358,7 @@ const PlanUpgradeModal: React.FC<PlanUpgradeModalProps> = ({
         </div>
       }
       open={isOpen}
-      onCancel={onClose}
+      onCancel={handleClose}
       footer={null}
       width={1400}
       centered

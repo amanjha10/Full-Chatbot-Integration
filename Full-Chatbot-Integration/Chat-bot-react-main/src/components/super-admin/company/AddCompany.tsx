@@ -28,15 +28,20 @@ export default function AddCompany({
   };
 
   // Get plan types for dropdown (Bronze, Silver, Gold, Platinum, Diamond, Custom)
-  const { data: planTypesData } = useSWR("/auth/plan-types/");
+  const { data: planTypesData, error: planTypesError } = useSWR("/auth/plan-types/");
 
-  const planTypeOptions =
-    planTypesData?.map(
-      (item: { value: string; label: string; is_custom: boolean }) => ({
-        label: item.label,
-        value: item.value,
-      })
-    ) || [];
+  // Debug: Log the response to see what we're getting
+  console.log("planTypesData:", planTypesData);
+  console.log("planTypesError:", planTypesError);
+
+  const planTypeOptions = Array.isArray(planTypesData)
+    ? planTypesData.map(
+        (item: { value: string; label: string; is_custom: boolean }) => ({
+          label: item.label,
+          value: item.value,
+        })
+      )
+    : [];
 
   const { formSubmit, formHooks } = useAddCompany({
     setLoading,

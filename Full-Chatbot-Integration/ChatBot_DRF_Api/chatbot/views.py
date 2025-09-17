@@ -14,6 +14,8 @@ import uuid
 import json
 import re
 import os
+from django.http import FileResponse, Http404, HttpResponse
+from django.shortcuts import render
 
 from .models import ChatSession, UserProfile, ChatMessage, UploadedFile, RAGDocument, ChatbotConfiguration
 from .serializers import (
@@ -3731,3 +3733,26 @@ def admin_company_faq_update_view(request, faq_id):
 def admin_company_faq_delete_view(request, faq_id):
     """Convenience endpoint for deleting FAQ"""
     return admin_company_faq_detail_view(request, faq_id)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def serve_chatbot_js(request):
+    """
+    Serve the chatbot.js file directly
+    GET /api/chatbot/chatbot.js
+    """
+    try:
+        static_file_path = os.path.join(settings.BASE_DIR, 'static', 'chatbot.js')
+        if os.path.exists(static_file_path):
+            with open(static_file_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            response = HttpResponse(content, content_type='application/javascript')
+            response['Access-Control-Allow-Origin'] = '*'
+            response['Access-Control-Allow-Methods'] = 'GET'
+            response['Access-Control-Allow-Headers'] = 'Content-Type'
+            return response
+        else:
+            raise Http404("Chatbot.js file not found")
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

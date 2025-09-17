@@ -570,40 +570,65 @@ def agent_session_messages_view(request, session_id):
             # If no UploadedFile attachments found, check for ChatFile records
             if not attachments_found:
                 from chatbot.models import ChatFile
-                # Look for ChatFile records that match this message's timestamp (within 1 minute)
-                import datetime
-                from django.utils import timezone
 
-                # Check for files uploaded around the same time as this message
-                time_window_start = message.timestamp - datetime.timedelta(minutes=1)
-                time_window_end = message.timestamp + datetime.timedelta(minutes=1)
+                # Only attach files to messages that are specifically file-sharing messages
+                # Check if this message content indicates it's a file share
+                is_file_message = (
+                    'file:' in message.content.lower() or
+                    'shared file:' in message.content.lower() or
+                    '📎' in message.content or
+                    '📷' in message.content or
+                    message.content.strip().endswith('.jpg') or
+                    message.content.strip().endswith('.png') or
+                    message.content.strip().endswith('.pdf') or
+                    message.content.strip().endswith('.doc') or
+                    message.content.strip().endswith('.docx')
+                )
 
-                chat_files = ChatFile.objects.filter(
-                    session_id=message.session.session_id,
-                    created_at__gte=time_window_start,
-                    created_at__lte=time_window_end
-                ).order_by('created_at')
+                if is_file_message:
+                    # Look for ChatFile records that match this message's timestamp (within 30 seconds)
+                    import datetime
+                    from django.utils import timezone
 
-                if chat_files.exists():
-                    # Use the first file found in the time window
-                    chat_file = chat_files.first()
-                    file_url = f"/media/{chat_file.file}"
-                    # Convert to absolute URL for consistency
-                    if not file_url.startswith('http'):
-                        file_url = request.build_absolute_uri(file_url)
-                        # Ensure consistent localhost format
-                        file_url = file_url.replace('127.0.0.1', 'localhost')
+                    # Use a much smaller time window (30 seconds) for more precise matching
+                    time_window_start = message.timestamp - datetime.timedelta(seconds=30)
+                    time_window_end = message.timestamp + datetime.timedelta(seconds=30)
 
-                    message_data['file_url'] = file_url
-                    message_data['file_name'] = chat_file.original_name
-                    message_data['attachments'] = [{
-                        'id': chat_file.id,
-                        'original_name': chat_file.original_name,
-                        'file_url': file_url,
-                        'file_size': chat_file.size,
-                        'file_type': chat_file.mime_type.split('/')[0] if '/' in chat_file.mime_type else 'file'
-                    }]
-                    attachments_found = True
+                    chat_files = ChatFile.objects.filter(
+                        session_id=message.session.session_id,
+                        created_at__gte=time_window_start,
+                        created_at__lte=time_window_end
+                    ).order_by('created_at')
+
+                    if chat_files.exists():
+                        # Use the file closest to the message timestamp
+                        closest_file = None
+                        min_time_diff = None
+
+                        for chat_file in chat_files:
+                            time_diff = abs((message.timestamp - chat_file.created_at).total_seconds())
+                            if min_time_diff is None or time_diff < min_time_diff:
+                                min_time_diff = time_diff
+                                closest_file = chat_file
+
+                        if closest_file:
+                            file_url = f"/media/{closest_file.file}"
+                            # Convert to absolute URL for consistency
+                            if not file_url.startswith('http'):
+                                file_url = request.build_absolute_uri(file_url)
+                                # Ensure consistent localhost format
+                                file_url = file_url.replace('127.0.0.1', 'localhost')
+
+                            message_data['file_url'] = file_url
+                            message_data['file_name'] = closest_file.original_name
+                            message_data['attachments'] = [{
+                                'id': closest_file.id,
+                                'original_name': closest_file.original_name,
+                                'file_url': file_url,
+                                'file_size': closest_file.size,
+                                'file_type': closest_file.mime_type.split('/')[0] if '/' in closest_file.mime_type else 'file'
+                            }]
+                            attachments_found = True
 
             if not attachments_found:
                 message_data['attachments'] = []

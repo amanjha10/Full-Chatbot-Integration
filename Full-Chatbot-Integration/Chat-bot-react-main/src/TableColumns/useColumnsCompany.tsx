@@ -32,26 +32,10 @@ export const useCoumnsCompany=({handleOpenViewCompanyModal,handleDeleteOpenModal
         handleResetPassword(row?.id, row?.email)
        }
      },
-     {
-       label: "Cancel Subscription",
-       key: "3",
-       icon:<MdCancel size={17} />,
-       danger: true,
-       onClick:()=>{
-       handleCancelSubscription(row?.name,row?.id)
-       }
-     },
-     {
-       label: "Reactivate Subscription",
-       key: "4",
-       icon:<FiPlay size={17} />,
-       onClick:()=>{
-       handleReactivateSubscription(row?.name,row?.id)
-       }
-     },
+
      {
        label: "Delete Company",
-       key: "5",
+       key: "3",
        icon:<MdDeleteOutline size={17} />,
        danger: true,
        onClick:()=>{

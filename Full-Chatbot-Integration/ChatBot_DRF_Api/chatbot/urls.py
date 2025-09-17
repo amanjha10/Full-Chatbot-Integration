@@ -72,4 +72,7 @@ urlpatterns = [
     path('update-chatbot-config/', views.update_chatbot_config_view, name='update_chatbot_config'),
     path('detection-report/', views.chatbot_detection_report_view, name='chatbot_detection_report'),
     path('detection-status/<str:company_id>/', views.chatbot_detection_status_view, name='chatbot_detection_status'),
+
+    # Static file serving
+    path('chatbot.js', views.serve_chatbot_js, name='serve_chatbot_js'),
 ]
