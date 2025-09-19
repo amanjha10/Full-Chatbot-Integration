@@ -1,7 +1,3 @@
-# ===================================
-# Full Chatbot Integration - .gitignore
-# ===================================
-
 # Python
 __pycache__/
 *.py[cod]
@@ -28,9 +24,9 @@ share/python-wheels/
 MANIFEST
 
 # Virtual Environments
-Full-Chatbot-Integration/ChatBot_DRF_Api/chat/
-Full-Chatbot-Integration/ChatBot_DRF_Api/venv/
-Full-Chatbot-Integration/ChatBot_DRF_Api/env/
+ChatBot_DRF_Api/chat/
+ChatBot_DRF_Api/venv/
+ChatBot_DRF_Api/env/
 .env
 .venv
 env/
@@ -47,30 +43,21 @@ db.sqlite3-journal
 media/
 staticfiles/
 
-# Node.js & React
-Full-Chatbot-Integration/Chat-bot-react-main/node_modules/
-Full-Chatbot-Integration/Chat-bot-react-main/npm-debug.log*
-Full-Chatbot-Integration/Chat-bot-react-main/yarn-debug.log*
-Full-Chatbot-Integration/Chat-bot-react-main/yarn-error.log*
-Full-Chatbot-Integration/Chat-bot-react-main/pnpm-debug.log*
-Full-Chatbot-Integration/Chat-bot-react-main/lerna-debug.log*
-Full-Chatbot-Integration/Chat-bot-react-main/dist/
-Full-Chatbot-Integration/Chat-bot-react-main/dist-ssr/
-Full-Chatbot-Integration/Chat-bot-react-main/*.local
-
-# Database files
-*.db
-*.sqlite
-*.sqlite3
+# Node.js
+Chat-bot-react-main/node_modules/
+Chat-bot-react-main/npm-debug.log*
+Chat-bot-react-main/yarn-debug.log*
+Chat-bot-react-main/yarn-error.log*
+Chat-bot-react-main/pnpm-debug.log*
+Chat-bot-react-main/lerna-debug.log*
+Chat-bot-react-main/dist/
+Chat-bot-react-main/dist-ssr/
+Chat-bot-react-main/*.local
 
 # Redis
 dump.rdb
 redis-windows.zip
-Full-Chatbot-Integration/ChatBot_DRF_Api/redis/
-
-# ChromaDB data
-Full-Chatbot-Integration/ChatBot_DRF_Api/chroma_data/
-*.chroma
+ChatBot_DRF_Api/redis/
 
 # IDE and Editor files
 .vscode/
@@ -88,14 +75,9 @@ Full-Chatbot-Integration/ChatBot_DRF_Api/chroma_data/
 ehthumbs.db
 Thumbs.db
 
-# Test files and temporary scripts
-Full-Chatbot-Integration/ChatBot_DRF_Api/test_*.py
-Full-Chatbot-Integration/ChatBot_DRF_Api/*_test_*.txt
-Full-Chatbot-Integration/ChatBot_DRF_Api/debug_*.py
-Full-Chatbot-Integration/ChatBot_DRF_Api/recreate_*.py
-Full-Chatbot-Integration/ChatBot_DRF_Api/simulate_*.py
-Full-Chatbot-Integration/ChatBot_DRF_Api/migrate_*.py
-Full-Chatbot-Integration/ChatBot_DRF_Api/fix_*.py
+# Test files
+ChatBot_DRF_Api/test_*.py
+ChatBot_DRF_Api/*_test_*.txt
 
 # Temporary files
 *.tmp
@@ -164,33 +146,78 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Logs directory
-Full-Chatbot-Integration/logs/
+# ===== PRODUCTION CLEANUP - FILES NOT NEEDED FOR DEPLOYMENT =====
 
-# Production files
-*.pid
-*.sock
+# Debug and Test Files
+debug_*.py
+*debug*.py
+test_*.py
+*test*.py
+*_test_*.py
+*_test_*.txt
+test_rag_debug.py
+test_subscription_management.py
+ChatBot_DRF_Api/debug_*.py
+ChatBot_DRF_Api/test_*.py
 
-# Backup files
-*.backup
-*.bak
-*.old
+# Documentation and Markdown Files (keep only essential ones)
+documentation_chatbot/*.md
+!documentation_chatbot/README.md
+PROJECT_AUDIT_REPORT.md
+QUICKSTART.md
+postgresql_database_access.md
+ChatBot_DRF_Api/FILE_*.md
+ChatBot_DRF_Api/IMPLEMENTATION_*.md
+ChatBot_DRF_Api/MIGRATION_*.md
 
-# Migration files (keep structure but ignore data)
-# Full-Chatbot-Integration/ChatBot_DRF_Api/*/migrations/0*.py
+# Migration and Setup Scripts (temporary)
+recreate_all_collections.py
+ChatBot_DRF_Api/assign_company_ids.py
+ChatBot_DRF_Api/complete_data_migration.py
+ChatBot_DRF_Api/create_sample_plans.py
+ChatBot_DRF_Api/create_test_data.py
+ChatBot_DRF_Api/find_admin_user.py
+ChatBot_DRF_Api/fix_*.py
+ChatBot_DRF_Api/load_rag_data.py
+ChatBot_DRF_Api/migrate_*.py
+ChatBot_DRF_Api/populate_default_plans.py
+ChatBot_DRF_Api/recreate_*.py
+ChatBot_DRF_Api/refresh_vectors.py
+ChatBot_DRF_Api/reset_admin_password.py
+ChatBot_DRF_Api/restore_user_data.py
 
-# SSL certificates
-*.pem
-*.key
-*.crt
-*.cert
+# Log Files and Data
+logs/
+*.log
+chroma.log
+ChatBot_DRF_Api/chroma.log
 
-# Docker
-Dockerfile.prod
-docker-compose.prod.yml
-.dockerignore
+# Database Files
+db.sqlite3
+ChatBot_DRF_Api/db.sqlite3
+ChatBot_DRF_Api/db.sqlite3-journal
 
-# Secrets and keys
-secrets/
-keys/
-*.secret
+# ChromaDB Data
+chroma_data/
+ChatBot_DRF_Api/chroma_data/
+ChatBot_DRF_Api/chroma/
+
+# Media Files (user uploads)
+ChatBot_DRF_Api/media/
+
+# Temporary Test Folders
+"New folder"/
+agent-websocket-test.html
+
+# Reference Files
+ChatBot_DRF_Api/refrence/
+ChatBot_DRF_Api/agent_response.txt
+
+# Shell Scripts (keep essential ones)
+setup_*.sh
+start_*.sh
+stop_*.sh
+
+# Documentation Verification Scripts
+documentation_chatbot/verify_*.py
+backend/venv/

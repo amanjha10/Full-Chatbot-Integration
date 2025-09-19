@@ -1,0 +1,1 @@
+import{a as s}from"./index-Bl3f9Dxg.js";const n=a=>s.post("/human-handoff/agent/send-message/",a),o=a=>s.post("/auth/login/",a),c=a=>s.post("/auth/create-enhanced-company/",a),p=a=>s.post("/admin-dashboard/create-agent/",a),r=(a,t)=>s.post(a,t);export{o as L,c as a,p as c,r as p,n as s};

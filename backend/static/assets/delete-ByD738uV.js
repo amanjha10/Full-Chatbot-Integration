@@ -1,0 +1,1 @@
+import{a as t}from"./index-Bl3f9Dxg.js";const d=(e,a)=>t.put(`/auth/update-admin/${a}/`,e),o=(e,a)=>t.put(e,a),s=e=>t.delete(`/auth/delete-admin/${e}/`),p=e=>t.delete(e);export{p as a,s as d,d as e,o as p};

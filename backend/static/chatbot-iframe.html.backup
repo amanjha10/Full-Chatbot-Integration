@@ -1,0 +1,2144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SpellBot Chat</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+        background: #f8fafc;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .chat-header {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color, #f7941d),
+          var(--secondary-color, #3b82f6)
+        );
+        color: white;
+        padding: 1.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border-radius: 12px 12px 0 0;
+      }
+
+      .chat-header h3 {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin: 0;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      }
+
+      .header-buttons {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+      }
+
+      .close-btn, .power-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .close-btn {
+        font-size: 1.5rem;
+      }
+
+      .close-btn:hover, .power-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: scale(1.1);
+      }
+
+      .power-btn:hover {
+        background: rgba(255, 193, 7, 0.3);
+      }
+
+      /* Power off confirmation popup */
+      .power-confirmation-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+      }
+
+      .power-confirmation-popup {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        max-width: 320px;
+        width: 90%;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        text-align: center;
+      }
+
+      .power-confirmation-popup h4 {
+        margin: 0 0 16px 0;
+        color: #333;
+        font-size: 18px;
+      }
+
+      .power-confirmation-popup p {
+        margin: 0 0 24px 0;
+        color: #666;
+        font-size: 14px;
+        line-height: 1.4;
+      }
+
+      .power-confirmation-buttons {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+      }
+
+      .power-confirm-btn,
+      .power-cancel-btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.2s;
+      }
+
+      .power-confirm-btn {
+        background: #ff4757;
+        color: white;
+      }
+
+      .power-confirm-btn:hover {
+        background: #ff3742;
+      }
+
+      .power-cancel-btn {
+        background: #f1f2f6;
+        color: #333;
+      }
+
+      .power-cancel-btn:hover {
+        background: #ddd;
+      }
+
+      .chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .message {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        max-width: 85%;
+      }
+
+      .message.user {
+        align-self: flex-end;
+        flex-direction: row-reverse;
+      }
+
+      .message.bot {
+        align-self: flex-start;
+      }
+
+      .message-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.875rem;
+        font-weight: 600;
+        flex-shrink: 0;
+      }
+
+      .message.user .message-avatar {
+        background: var(--primary-color, #f7941d);
+        color: white;
+      }
+
+      .message.bot .message-avatar {
+        background: var(--secondary-color, #652d90);
+        color: white;
+      }
+
+      .message-content {
+        background: white;
+        padding: 1rem 1.25rem;
+        border-radius: 1.25rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        word-wrap: break-word;
+        line-height: 1.5;
+        font-size: 0.95rem;
+      }
+
+      .message.user .message-content {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color, #f7941d),
+          #ff8c42
+        );
+        color: white;
+        box-shadow: 0 2px 8px rgba(247, 148, 29, 0.3);
+      }
+
+      .message.bot .message-content {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        color: #1f2937;
+      }
+
+      .message-time {
+        font-size: 0.75rem;
+        color: #6b7280;
+        margin-top: 0.25rem;
+      }
+
+      .typing-indicator {
+        display: none;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        max-width: 85%;
+      }
+
+      .typing-dots {
+        display: flex;
+        gap: 0.25rem;
+      }
+
+      .typing-dot {
+        width: 8px;
+        height: 8px;
+        background: #9ca3af;
+        border-radius: 50%;
+        animation: typing 1.4s infinite ease-in-out;
+      }
+
+      .typing-dot:nth-child(1) {
+        animation-delay: -0.32s;
+      }
+      .typing-dot:nth-child(2) {
+        animation-delay: -0.16s;
+      }
+
+      @keyframes typing {
+        0%,
+        80%,
+        100% {
+          transform: scale(0);
+        }
+        40% {
+          transform: scale(1);
+        }
+      }
+
+      .chat-input {
+        border-top: 1px solid #e5e7eb;
+        padding: 1rem;
+        background: white;
+      }
+
+      .input-container {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 1.5rem;
+        padding: 0.75rem 1rem;
+        transition: border-color 0.2s;
+      }
+
+      .input-container:focus-within {
+        border-color: var(--primary-color, #f7941d);
+      }
+
+      .message-input {
+        flex: 1;
+        border: none;
+        background: none;
+        outline: none;
+        resize: none;
+        font-family: inherit;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        max-height: 100px;
+      }
+
+      .file-input {
+        display: none;
+      }
+
+      .file-btn,
+      .send-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 50%;
+        transition: background 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        flex-shrink: 0;
+      }
+
+      .file-btn:hover,
+      .send-btn:hover {
+        background: #e5e7eb;
+      }
+
+      .send-btn {
+        background: var(--primary-color, #f7941d);
+        color: white;
+      }
+
+      .send-btn:hover {
+        background: var(--primary-color, #e6841a);
+      }
+
+      .send-btn:disabled {
+        background: #d1d5db;
+        cursor: not-allowed;
+      }
+
+      .file-preview {
+        display: none;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        background: #f3f4f6;
+        border-radius: 0.5rem;
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+      }
+
+      .file-preview.show {
+        display: flex;
+      }
+
+      .remove-file {
+        background: #ef4444;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        font-size: 0.75rem;
+      }
+
+      .welcome-message {
+        text-align: center;
+        color: #6b7280;
+        font-style: italic;
+        padding: 2rem;
+      }
+
+      /* Scrollbar styling */
+      .chat-messages::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .chat-messages::-webkit-scrollbar-track {
+        background: #f1f5f9;
+      }
+
+      .chat-messages::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 3px;
+      }
+
+      .chat-messages::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+
+      /* Loading indicator */
+      .loading-indicator {
+        display: none;
+        text-align: center;
+        padding: 1rem;
+        color: #6b7280;
+      }
+
+      .loading-indicator.show {
+        display: block;
+      }
+
+      .loading-dots {
+        display: inline-block;
+      }
+
+      .loading-dots::after {
+        content: "";
+        animation: dots 1.5s steps(4, end) infinite;
+      }
+
+      @keyframes dots {
+        0%,
+        20% {
+          content: "";
+        }
+        40% {
+          content: ".";
+        }
+        60% {
+          content: "..";
+        }
+        80%,
+        100% {
+          content: "...";
+        }
+      }
+
+      /* Suggestion buttons */
+      .message-suggestions {
+        margin-top: 0.75rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .suggestion-btn {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color, #f7941d),
+          #ff8c42
+        );
+        color: white;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 25px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 6px rgba(247, 148, 29, 0.3);
+      }
+
+      .suggestion-btn:hover {
+        background: linear-gradient(
+          135deg,
+          var(--secondary-color, #3b82f6),
+          #2563eb
+        );
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+      }
+
+      /* File message styles */
+      .file-message {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 12px;
+        margin: 4px 0;
+      }
+
+      .file-attachment {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .file-icon {
+        font-size: 24px;
+        color: #6c757d;
+      }
+
+      .file-info {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .file-name {
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 4px;
+        word-break: break-word;
+      }
+
+      .file-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .file-download {
+        color: var(--primary-color, #f7941d);
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        padding: 4px 8px;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+      }
+
+      .file-download:hover {
+        background-color: rgba(247, 148, 29, 0.1);
+        text-decoration: underline;
+      }
+
+      /* User file messages */
+      .message.user .file-message {
+        background: #e3f2fd;
+        border-color: #bbdefb;
+      }
+
+      /* Agent file messages */
+      .message.agent .file-message {
+        background: #f3e5f5;
+        border-color: #e1bee7;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="chat-header">
+      <h3 id="chatTitle">SpellBot Assistant</h3>
+      <div class="header-buttons">
+        <button class="power-btn" onclick="showPowerOffConfirmation()" title="Turn Off Chat">⚡</button>
+        <button class="close-btn" onclick="closeChatbot()">&times;</button>
+      </div>
+    </div>
+
+    <div class="chat-messages" id="chatMessages">
+      <div class="loading-indicator" id="loadingIndicator">
+        <div class="loading-dots">Loading</div>
+      </div>
+      <div class="welcome-message" id="welcomeMessage">
+        Hello! How can I help you today?
+      </div>
+
+      <div class="typing-indicator" id="typingIndicator">
+        <div class="message-avatar">
+          <span>🤖</span>
+        </div>
+        <div>
+          <div class="typing-dots">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-input">
+      <div class="file-preview" id="filePreview">
+        <span id="fileName"></span>
+        <button class="remove-file" onclick="removeFile()">&times;</button>
+      </div>
+
+      <div class="input-container">
+        <input
+          type="file"
+          id="fileInput"
+          class="file-input"
+          accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
+          onchange="handleFileSelect(event)"
+        />
+        <button
+          class="file-btn"
+          onclick="document.getElementById('fileInput').click()"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+            ></path>
+            <polyline points="14,2 14,8 20,8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10,9 9,9 8,9"></polyline>
+          </svg>
+        </button>
+
+        <textarea
+          id="messageInput"
+          class="message-input"
+          placeholder="Type your message..."
+          rows="1"
+          onkeydown="handleKeyDown(event)"
+          oninput="autoResize(this)"
+        ></textarea>
+
+        <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22,2 15,22 11,13 2,9 22,2"></polygon>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Power off confirmation popup -->
+    <div class="power-confirmation-overlay" id="powerConfirmationOverlay">
+      <div class="power-confirmation-popup">
+        <h4>Turn Off Chat?</h4>
+        <p>This will clear all chat history and close the chatbot. Are you sure you want to continue?</p>
+        <div class="power-confirmation-buttons">
+          <button class="power-confirm-btn" onclick="confirmPowerOff()">Yes, Turn Off</button>
+          <button class="power-cancel-btn" onclick="hidePowerOffConfirmation()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Configuration - dynamically set from URL parameters
+      // Usage: chatbot-iframe.html?company=ZIL001&apiUrl=...&primaryColor=...
+      function getUrlParams() {
+        const params = new URLSearchParams(window.location.search);
+
+        // Determine API base URL based on current domain
+        let defaultApiUrl;
+        const currentHost = window.location.host;
+
+        if (currentHost.includes('localhost') || currentHost.includes('127.0.0.1')) {
+          // Development environment
+          defaultApiUrl = 'http://localhost:8001/api';
+        } else {
+          // Production environment - use current domain
+          const protocol = window.location.protocol;
+          defaultApiUrl = `${protocol}//${currentHost}/api`;
+        }
+
+        return {
+          companyId: params.get('company') || 'ZIL001',
+          apiBaseUrl: params.get('apiUrl') || defaultApiUrl,
+          primaryColor: params.get('primaryColor') || '#f7941d',
+          secondaryColor: params.get('secondaryColor') || '#652d90',
+          welcomeMessage: params.get('welcomeMessage') || 'Hello! How can I help you today?',
+          chatbotTitle: params.get('title') || 'Support Chat',
+          enableFileUpload: params.get('enableFileUpload') !== 'false'
+        };
+      }
+
+      let chatConfig = {
+        ...getUrlParams(),
+        sessionId: null
+      };
+
+      // Debug: Log the company ID being used
+      console.log('🔍 DEBUG: Chatbot iframe loaded with company ID:', chatConfig.companyId);
+      console.log('DEBUG: Full config:', chatConfig);
+
+      // Clear localStorage if company ID has changed
+      const lastCompanyId = localStorage.getItem('chatbot_company_id');
+      if (lastCompanyId && lastCompanyId !== chatConfig.companyId) {
+        console.log('DEBUG: Company ID changed from', lastCompanyId, 'to', chatConfig.companyId, '- clearing localStorage');
+        localStorage.clear();
+      }
+      localStorage.setItem('chatbot_company_id', chatConfig.companyId);
+
+      // Persistent Chat Storage Manager
+      class ChatPersistence {
+        constructor(companyId) {
+          this.companyId = companyId;
+          this.storageKey = `chatbot_${companyId}`;
+          this.sessionKey = `chatbot_session_${companyId}`;
+        }
+
+        // Save chat message to localStorage
+        saveMessage(message) {
+          const messages = this.getMessages();
+          const messageData = {
+            id: Date.now() + Math.random(),
+            content: message.content,
+            sender: message.sender,
+            timestamp: new Date().toISOString(),
+            suggestions: message.suggestions || null,
+            fileUrl: message.fileUrl || null,
+            fileName: message.fileName || null,
+            sessionId: chatConfig.sessionId
+          };
+
+          messages.push(messageData);
+          localStorage.setItem(this.storageKey, JSON.stringify(messages));
+          console.log("DEBUG: Message saved to localStorage:", messageData);
+          return messageData;
+        }
+
+        // Get all messages from localStorage
+        getMessages() {
+          try {
+            const stored = localStorage.getItem(this.storageKey);
+            return stored ? JSON.parse(stored) : [];
+          } catch (error) {
+            console.error("Error reading messages from localStorage:", error);
+            return [];
+          }
+        }
+
+        // Save session data
+        saveSession(sessionData) {
+          const data = {
+            sessionId: sessionData.sessionId,
+            companyId: this.companyId,
+            createdAt: sessionData.createdAt || new Date().toISOString(),
+            lastActivity: new Date().toISOString(),
+            profileCompleted: sessionData.profileCompleted || false,
+            isEscalated: sessionData.isEscalated || false
+          };
+
+          localStorage.setItem(this.sessionKey, JSON.stringify(data));
+          console.log("DEBUG: Session saved to localStorage:", data);
+          return data;
+        }
+
+        // Get session data
+        getSession() {
+          try {
+            const stored = localStorage.getItem(this.sessionKey);
+            return stored ? JSON.parse(stored) : null;
+          } catch (error) {
+            console.error("Error reading session from localStorage:", error);
+            return null;
+          }
+        }
+
+        // Clear all chat data (for new session)
+        clearChat() {
+          localStorage.removeItem(this.storageKey);
+          localStorage.removeItem(this.sessionKey);
+          console.log("DEBUG: Chat data cleared from localStorage");
+        }
+
+        // Complete reset - clear everything related to this chatbot
+        completeReset() {
+          // Clear specific keys
+          localStorage.removeItem(this.storageKey);
+          localStorage.removeItem(this.sessionKey);
+
+          // Clear any other chatbot-related keys
+          const keysToRemove = [];
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && (
+              key.includes('chatbot') ||
+              key.includes('chat_') ||
+              key.includes(this.companyId) ||
+              key.includes('SpellBot')
+            )) {
+              keysToRemove.push(key);
+            }
+          }
+          keysToRemove.forEach(key => localStorage.removeItem(key));
+
+          console.log("DEBUG: Complete chatbot reset - cleared all related data");
+        }
+
+        // Update session activity
+        updateActivity() {
+          const session = this.getSession();
+          if (session) {
+            session.lastActivity = new Date().toISOString();
+            localStorage.setItem(this.sessionKey, JSON.stringify(session));
+          }
+        }
+
+        // Check if session is expired (older than 24 hours)
+        isSessionExpired() {
+          const session = this.getSession();
+          if (!session || !session.lastActivity) return true;
+
+          const lastActivity = new Date(session.lastActivity);
+          const now = new Date();
+          const hoursDiff = (now - lastActivity) / (1000 * 60 * 60);
+
+          return hoursDiff > 24; // Expire after 24 hours
+        }
+      }
+
+      // Initialize persistence manager
+      let chatPersistence = null;
+
+      // Ensure essential elements exist in the chat container
+      function ensureEssentialElements() {
+        const messagesContainer = document.getElementById("chatMessages");
+
+        // Check and create loading indicator if missing
+        if (!document.getElementById("loadingIndicator")) {
+          const loadingIndicator = document.createElement("div");
+          loadingIndicator.className = "loading-indicator";
+          loadingIndicator.id = "loadingIndicator";
+          loadingIndicator.innerHTML = '<div class="loading-dots">Loading</div>';
+          messagesContainer.appendChild(loadingIndicator);
+        }
+
+        // Check and create welcome message if missing
+        if (!document.getElementById("welcomeMessage")) {
+          const welcomeMessage = document.createElement("div");
+          welcomeMessage.className = "welcome-message";
+          welcomeMessage.id = "welcomeMessage";
+          welcomeMessage.textContent = "Hello! How can I help you today?";
+          messagesContainer.appendChild(welcomeMessage);
+        }
+
+        // Check and create typing indicator if missing
+        if (!document.getElementById("typingIndicator")) {
+          const typingIndicator = document.createElement("div");
+          typingIndicator.className = "typing-indicator";
+          typingIndicator.id = "typingIndicator";
+          typingIndicator.innerHTML = `
+            <div class="message-avatar">
+              <span>🤖</span>
+            </div>
+            <div>
+              <div class="typing-dots">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+              </div>
+            </div>
+          `;
+          messagesContainer.appendChild(typingIndicator);
+        }
+      }
+
+      // Restore chat from localStorage
+      function restoreChat() {
+        if (!chatPersistence) return false;
+
+        console.log("DEBUG: Attempting to restore chat from localStorage");
+
+        // Check if session exists and is not expired
+        const existingSession = chatPersistence.getSession();
+        if (!existingSession || chatPersistence.isSessionExpired()) {
+          console.log("DEBUG: No valid session found or session expired");
+          chatPersistence.clearChat();
+          return false;
+        }
+
+        // Restore session data
+        chatConfig.sessionId = existingSession.sessionId;
+        console.log("DEBUG: Restored session ID:", existingSession.sessionId);
+
+        // Restore messages
+        const messages = chatPersistence.getMessages();
+        console.log("DEBUG: Restoring", messages.length, "messages from localStorage");
+
+        if (messages.length > 0) {
+          // Clear current messages display but preserve essential elements
+          const messagesContainer = document.getElementById("chatMessages");
+          messagesContainer.innerHTML = "";
+
+          // Clear tracking sets to allow restoration of all messages
+          displayedFiles.clear();
+          displayedMessages.clear();
+
+          // Ensure essential elements exist
+          ensureEssentialElements();
+
+          // Hide welcome message since we have chat history
+          const welcomeMessage = document.getElementById("welcomeMessage");
+          if (welcomeMessage) {
+            welcomeMessage.style.display = "none";
+          }
+
+          // Restore each message
+          messages.forEach((msg, index) => {
+            console.log(`DEBUG: Restoring message ${index + 1}:`, {
+              content: msg.content,
+              sender: msg.sender,
+              hasFile: !!(msg.fileUrl && msg.fileName),
+              fileUrl: msg.fileUrl,
+              fileName: msg.fileName
+            });
+            addMessageToDOM(msg.content, msg.sender, msg.suggestions, msg.fileUrl, msg.fileName, false); // false = don't save to localStorage again
+          });
+
+          // Update activity
+          chatPersistence.updateActivity();
+
+          // Connect WebSocket if session exists
+          if (chatConfig.sessionId) {
+            connectWebSocket();
+          }
+
+          console.log("DEBUG: Chat restored successfully");
+          return true;
+        }
+
+        return false;
+      }
+
+      let selectedFile = null;
+      let isTyping = false;
+      let websocket = null;
+      let configWebSocket = null;
+      let isConnected = false;
+
+      // Initialize chatbot
+      function initializeChatbot(config) {
+        if (config) {
+          chatConfig = { ...chatConfig, ...config };
+        }
+
+        // Apply custom colors
+        document.documentElement.style.setProperty(
+          "--primary-color",
+          chatConfig.primaryColor
+        );
+        document.documentElement.style.setProperty(
+          "--secondary-color",
+          chatConfig.secondaryColor
+        );
+
+        // Set welcome message
+        document.getElementById("welcomeMessage").textContent =
+          chatConfig.welcomeMessage;
+
+        // Set title
+        if (chatConfig.companyName) {
+          document.getElementById("chatTitle").textContent =
+            chatConfig.companyName;
+        }
+
+        // Hide file upload if disabled
+        if (!chatConfig.enableFileUpload) {
+          document.querySelector(".file-btn").style.display = "none";
+        }
+
+        // Initialize persistence manager
+        chatPersistence = new ChatPersistence(chatConfig.companyId);
+
+        // Ensure essential elements exist
+        ensureEssentialElements();
+
+        // Try to restore existing chat
+        setTimeout(() => {
+          const restored = restoreChat();
+
+          if (!restored) {
+            // No existing chat, start fresh
+            console.log("DEBUG: Starting fresh chat session");
+            sendInitialWelcomeMessage();
+          } else {
+            console.log("DEBUG: Chat session restored from localStorage");
+          }
+        }, 500);
+
+        // Connect to configuration WebSocket for real-time updates
+        connectConfigWebSocket();
+      }
+
+      // Send initial welcome message
+      async function sendInitialWelcomeMessage() {
+        const chatMessages = document.getElementById("chatMessages");
+        const loadingIndicator = document.getElementById("loadingIndicator");
+        const welcomeMessage = document.getElementById("welcomeMessage");
+
+        // Check if there are already messages (excluding loading and welcome)
+        const messageElements = chatMessages.querySelectorAll(".message");
+        if (messageElements.length > 0) {
+          return; // Don't send welcome if messages already exist
+        }
+
+        // Show loading indicator and hide welcome message
+        loadingIndicator.classList.add("show");
+        welcomeMessage.style.display = "none";
+
+        try {
+          // Send a greeting to trigger the welcome flow from Django API
+          const response = await fetch(
+            `${chatConfig.apiBaseUrl}/chatbot/chat/`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                message: "Hello",
+                company_id: chatConfig.companyId,
+              }),
+            }
+          );
+
+          const data = await response.json();
+
+          if (response.ok) {
+            // Hide loading indicator
+            loadingIndicator.classList.remove("show");
+
+            // Update session ID from Django response
+            if (data.session_id) {
+              chatConfig.sessionId = data.session_id;
+
+              // Save session to localStorage
+              if (chatPersistence) {
+                chatPersistence.saveSession({
+                  sessionId: data.session_id,
+                  createdAt: new Date().toISOString(),
+                  profileCompleted: false,
+                  isEscalated: false
+                });
+              }
+            }
+
+            // Display the bot's welcome response
+            if (data.response) {
+              addMessage(data.response, "bot", data.suggestions);
+            }
+
+            // Connect WebSocket if session is established
+            if (chatConfig.sessionId) {
+              connectWebSocket();
+            }
+          } else {
+            throw new Error(data.error || "Failed to get welcome message");
+          }
+        } catch (error) {
+          console.error("Failed to send initial welcome message:", error);
+
+          // Hide loading indicator
+          loadingIndicator.classList.remove("show");
+
+          // Show a fallback welcome message
+          addMessage(
+            "Hello! 👋 Welcome to our chat assistant. How can I help you today?",
+            "bot",
+            ["Get Started", "Learn More"]
+          );
+        }
+      }
+
+      // Auto-resize textarea
+      function autoResize(textarea) {
+        textarea.style.height = "auto";
+        textarea.style.height = Math.min(textarea.scrollHeight, 100) + "px";
+      }
+
+      // Handle key down events
+      function handleKeyDown(event) {
+        if (event.key === "Enter" && !event.shiftKey) {
+          event.preventDefault();
+          sendMessage();
+        }
+      }
+
+      // Handle file selection
+      function handleFileSelect(event) {
+        const file = event.target.files[0];
+        if (file) {
+          selectedFile = file;
+          document.getElementById("fileName").textContent = file.name;
+          document.getElementById("filePreview").classList.add("show");
+        }
+      }
+
+      // Remove selected file
+      function removeFile() {
+        selectedFile = null;
+        document.getElementById("fileInput").value = "";
+        document.getElementById("filePreview").classList.remove("show");
+      }
+
+      // Send message
+      async function sendMessage() {
+        const messageInput = document.getElementById("messageInput");
+        const message = messageInput.value.trim();
+
+        if (!message && !selectedFile) {
+          return;
+        }
+
+        // Handle file upload first (if any)
+        let fileUrl = null;
+        let fileName = null;
+        let fileUploaded = false;
+
+        if (selectedFile) {
+          try {
+            const formData = new FormData();
+            formData.append("file", selectedFile);
+            formData.append("session_id", chatConfig.sessionId || "");
+            formData.append("company_id", chatConfig.companyId);
+            formData.append("uploader", "user");
+
+            const fileResponse = await fetch(
+              `${chatConfig.apiBaseUrl}/chat/upload/`,
+              {
+                method: "POST",
+                body: formData,
+              }
+            );
+
+            if (fileResponse.ok) {
+              const fileResult = await fileResponse.json();
+              fileUrl = fileResult.url;
+              fileName = fileResult.name;
+              fileUploaded = true;
+            } else {
+              console.error("File upload failed:", fileResponse.status, await fileResponse.text());
+              addMessage("Sorry, file upload failed. Please try again.", "bot");
+              return; // Don't proceed if file upload failed
+            }
+          } catch (error) {
+            console.error("File upload error:", error);
+            addMessage("Sorry, file upload failed. Please try again.", "bot");
+            return; // Don't proceed if file upload failed
+          }
+        }
+
+        // Add user message to chat (with file info if available)
+        if (message || (fileUrl && fileName)) {
+          const messageContent = message || `📎 ${fileName}`;
+          addMessage(messageContent, "user", null, fileUrl, fileName);
+        }
+
+        // Clear input
+        messageInput.value = "";
+        autoResize(messageInput);
+
+        // Try to send via WebSocket first (for escalated sessions)
+        let sentViaWebSocket = false;
+
+        if (isConnected && chatConfig.sessionId) {
+          // Try to send via WebSocket for escalated sessions
+          if (message && message.trim()) {
+            sentViaWebSocket = sendWebSocketMessage(message, fileUrl, fileName);
+          } else if (fileUrl && fileName) {
+            // Send file-only message via WebSocket
+            sentViaWebSocket = sendWebSocketMessage("", fileUrl, fileName);
+          }
+        }
+
+        // Only send chat message if there's actually a message to send
+        if (message && message.trim()) {
+          // Show typing indicator for HTTP requests
+          showTypingIndicator();
+
+          try {
+            // Prepare JSON data
+            const requestData = {
+              company_id: chatConfig.companyId,
+              message: message,
+            };
+
+            if (chatConfig.sessionId)
+              requestData.session_id = chatConfig.sessionId;
+
+            // Send to API
+            const response = await fetch(
+              `${chatConfig.apiBaseUrl}/chatbot/chat/`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(requestData),
+              }
+            );
+
+            const data = await response.json();
+
+            if (response.ok) {
+              // Update session ID and connect WebSocket if new session
+              if (data.session_id && !chatConfig.sessionId) {
+                chatConfig.sessionId = data.session_id;
+
+                // Save new session to localStorage
+                if (chatPersistence) {
+                  chatPersistence.saveSession({
+                    sessionId: data.session_id,
+                    createdAt: new Date().toISOString(),
+                    profileCompleted: false,
+                    isEscalated: false
+                  });
+                }
+
+                // Connect WebSocket for real-time communication
+                connectWebSocket();
+              } else if (data.session_id) {
+                chatConfig.sessionId = data.session_id;
+
+                // Update existing session
+                if (chatPersistence) {
+                  chatPersistence.updateActivity();
+                }
+              }
+
+              // Add bot response with suggestions (Django API format)
+              if (data.response) {
+                addMessage(data.response, "bot", data.suggestions);
+              }
+
+              // Handle escalation
+              if (data.escalated) {
+                addMessage(
+                  "Your conversation has been escalated to a human agent. Please wait for assistance.",
+                  "bot"
+                );
+                // Connect WebSocket for real-time agent communication
+                connectWebSocket();
+              }
+            } else {
+              addMessage(
+                "Sorry, I encountered an error. Please try again.",
+                "bot"
+              );
+            }
+          } catch (error) {
+            console.error("Chat error:", error);
+            addMessage(
+              "Sorry, I encountered a connection error. Please try again.",
+              "bot"
+            );
+          } finally {
+            hideTypingIndicator();
+          }
+        }
+        // File upload is handled at the beginning of sendMessage function
+
+        // Always clear file after sending (whether WebSocket or HTTP)
+        removeFile();
+      }
+
+      // Add message to chat with persistence
+      function addMessage(content, sender, suggestions = null, fileUrl = null, fileName = null, saveToStorage = true) {
+        // Check for duplicate messages (same content and sender within 1 second)
+        const messageKey = `${content}|${sender}`;
+        const now = Date.now();
+        const lastMessageTime = displayedMessages.get(messageKey);
+
+        if (lastMessageTime && (now - lastMessageTime) < 1000) {
+          return;
+        }
+        displayedMessages.set(messageKey, now);
+
+        // Add to DOM
+        addMessageToDOM(content, sender, suggestions, fileUrl, fileName, saveToStorage);
+
+        // Save to localStorage if enabled
+        if (saveToStorage && chatPersistence) {
+          chatPersistence.saveMessage({
+            content: content,
+            sender: sender,
+            suggestions: suggestions,
+            fileUrl: fileUrl,
+            fileName: fileName
+          });
+
+          // Update session activity
+          chatPersistence.updateActivity();
+        }
+      }
+
+      // Add message to DOM only (used for restoration)
+      function addMessageToDOM(content, sender, suggestions = null, fileUrl = null, fileName = null, saveToStorage = true) {
+
+        const messagesContainer = document.getElementById("chatMessages");
+        const welcomeMessage = document.getElementById("welcomeMessage");
+
+        // Hide welcome message after first interaction
+        if (welcomeMessage) {
+          welcomeMessage.style.display = "none";
+        }
+
+        // Handle file messages
+        if (fileUrl && fileName) {
+          console.log(`DEBUG: addMessageToDOM detected file message, calling addFileMessageToDOM`);
+          addFileMessageToDOM(sender, fileUrl, fileName);
+          return;
+        } else {
+          console.log(`DEBUG: addMessageToDOM - regular text message:`, { content, sender, hasFileUrl: !!fileUrl, hasFileName: !!fileName });
+        }
+
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `message ${sender}`;
+
+        const avatar = document.createElement("div");
+        avatar.className = "message-avatar";
+        avatar.textContent = sender === "user" ? "U" : sender === "agent" ? "👤" : "🤖";
+
+        const messageContent = document.createElement("div");
+        messageContent.className = "message-content";
+        // Use innerHTML to support HTML content from Django API
+        messageContent.innerHTML = content;
+
+        const messageTime = document.createElement("div");
+        messageTime.className = "message-time";
+        messageTime.textContent = new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+
+        messageDiv.appendChild(avatar);
+        const contentWrapper = document.createElement("div");
+        contentWrapper.appendChild(messageContent);
+
+        // Add suggestions if provided (for bot messages)
+        if (suggestions && suggestions.length > 0 && sender === "bot") {
+          const suggestionsDiv = document.createElement("div");
+          suggestionsDiv.className = "message-suggestions";
+
+          suggestions.forEach((suggestion) => {
+            const suggestionBtn = document.createElement("button");
+            suggestionBtn.className = "suggestion-btn";
+            suggestionBtn.textContent = suggestion;
+
+            // Check if this is an example (non-clickable)
+            if (suggestion.toLowerCase().startsWith('example:')) {
+              // Make it look like a disabled example
+              suggestionBtn.className = "suggestion-btn example-btn";
+              suggestionBtn.disabled = true;
+              suggestionBtn.style.cursor = "default";
+              suggestionBtn.style.opacity = "0.7";
+              suggestionBtn.style.backgroundColor = "#f5f5f5";
+              suggestionBtn.style.color = "#666";
+              // No onclick for examples
+            } else {
+              // Regular clickable suggestion
+              suggestionBtn.onclick = () => {
+                document.getElementById("messageInput").value = suggestion;
+                sendMessage();
+              };
+            }
+
+            suggestionsDiv.appendChild(suggestionBtn);
+          });
+
+          contentWrapper.appendChild(suggestionsDiv);
+        }
+
+        contentWrapper.appendChild(messageTime);
+        messageDiv.appendChild(contentWrapper);
+
+        messagesContainer.appendChild(messageDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+
+      // Add file message to DOM only (used for restoration and display)
+      function addFileMessageToDOM(sender, fileUrl, fileName) {
+        console.log(`DEBUG: addFileMessageToDOM called:`, { sender, fileUrl, fileName });
+
+        // Validate inputs - skip if fileName is undefined, null, or empty
+        if (!fileName || fileName === 'undefined' || fileName === 'null') {
+          console.log(`DEBUG: Invalid fileName detected, skipping file message:`, fileName);
+          return;
+        }
+
+        // Validate fileUrl
+        if (!fileUrl || fileUrl === 'undefined' || fileUrl === 'null') {
+          console.log(`DEBUG: Invalid fileUrl detected, skipping file message:`, fileUrl);
+          return;
+        }
+
+        // Ensure file URL is absolute and points to the correct server
+        let absoluteFileUrl = fileUrl;
+        if (!fileUrl.startsWith('http')) {
+          // If relative URL, prepend current server URL
+          const currentHost = window.location.host;
+          const protocol = window.location.protocol;
+
+          if (currentHost.includes('localhost') || currentHost.includes('127.0.0.1')) {
+            // Development environment
+            absoluteFileUrl = `http://localhost:8001${fileUrl}`;
+          } else {
+            // Production environment
+            absoluteFileUrl = `${protocol}//${currentHost}${fileUrl}`;
+          }
+        } else if (fileUrl.includes('localhost:5173') || fileUrl.includes('127.0.0.1:5173')) {
+          // If URL points to React dev server, redirect to Django server
+          const currentHost = window.location.host;
+          const protocol = window.location.protocol;
+
+          if (currentHost.includes('localhost') || currentHost.includes('127.0.0.1')) {
+            absoluteFileUrl = fileUrl.replace(/https?:\/\/(localhost|127\.0\.0\.1):5173/, 'http://localhost:8001');
+          } else {
+            absoluteFileUrl = fileUrl.replace(/https?:\/\/(localhost|127\.0\.0\.1):5173/, `${protocol}//${currentHost}`);
+          }
+        }
+
+        console.log(`DEBUG: Processed file URL: ${absoluteFileUrl}`);
+
+        // Check for duplicate files (same URL and filename)
+        const fileKey = `${absoluteFileUrl}|${fileName}|${sender}`;
+        if (displayedFiles.has(fileKey)) {
+          console.log(`DEBUG: Duplicate file detected, skipping: ${fileKey}`);
+          return;
+        }
+        displayedFiles.add(fileKey);
+        console.log(`DEBUG: Adding file to DOM: ${fileKey}`);
+
+        const messagesContainer = document.getElementById("chatMessages");
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `message ${sender}`;
+
+        const avatar = document.createElement("div");
+        avatar.className = "message-avatar";
+        avatar.textContent = sender === "user" ? "U" : sender === "agent" ? "👤" : "🤖";
+
+        const messageContent = document.createElement("div");
+        messageContent.className = "message-content file-message";
+
+        // Create file display with image preview
+        const fileDiv = document.createElement("div");
+        fileDiv.className = "file-attachment";
+
+        // Check if file is an image (match the working implementation)
+        const isImage = /\.(jpg|jpeg|png|gif|bmp|webp|svg)$/i.test(fileName);
+        console.log(`DEBUG: File type detection - fileName: ${fileName}, isImage: ${isImage}`);
+
+        if (isImage) {
+          console.log(`DEBUG: Creating image preview for: ${fileName}`);
+          // Use the same structure as the working addFileMessage function
+          fileDiv.innerHTML = `
+            <div class="file-image-preview">
+              <img src="${absoluteFileUrl}" alt="${fileName}" style="max-width: 200px; max-height: 200px; border-radius: 8px; cursor: pointer;" onclick="downloadFile('${absoluteFileUrl}', '${fileName}')">
+              <div class="file-name" style="margin-top: 8px; font-size: 12px; color: #666;">${fileName}</div>
+              <div class="file-actions" style="margin-top: 4px;">
+                <a href="javascript:void(0)" onclick="downloadFile('${absoluteFileUrl}', '${fileName}')" class="file-download">Download</a>
+              </div>
+            </div>
+          `;
+        } else {
+          console.log(`DEBUG: Creating file download for: ${fileName}`);
+          // Use the same structure as the working addFileMessage function
+          fileDiv.innerHTML = `
+            <div class="file-icon">📎</div>
+            <div class="file-info">
+              <div class="file-name">${fileName}</div>
+              <div class="file-actions">
+                <a href="javascript:void(0)" onclick="downloadFile('${absoluteFileUrl}', '${fileName}')" class="file-download">Download</a>
+              </div>
+            </div>
+          `;
+        }
+
+        const messageTime = document.createElement("div");
+        messageTime.className = "message-time";
+        messageTime.textContent = new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+
+        messageContent.appendChild(fileDiv);
+        messageDiv.appendChild(avatar);
+
+        const contentWrapper = document.createElement("div");
+        contentWrapper.appendChild(messageContent);
+        contentWrapper.appendChild(messageTime);
+        messageDiv.appendChild(contentWrapper);
+
+        messagesContainer.appendChild(messageDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+
+      // Track displayed files and messages to prevent duplicates
+      const displayedFiles = new Set();
+      const displayedMessages = new Map();
+
+      // Add file message to chat with persistence
+      function addFileMessage(sender, fileUrl, fileName, saveToStorage = true) {
+        // Validate inputs - skip if fileName is undefined, null, or empty
+        if (!fileName || fileName === 'undefined' || fileName === 'null') {
+          console.log(`DEBUG: Invalid fileName in addFileMessage, skipping:`, fileName);
+          return;
+        }
+
+        // Validate fileUrl
+        if (!fileUrl || fileUrl === 'undefined' || fileUrl === 'null') {
+          console.log(`DEBUG: Invalid fileUrl in addFileMessage, skipping:`, fileUrl);
+          return;
+        }
+
+        // Ensure file URL is absolute and points to the correct server
+        let absoluteFileUrl = fileUrl;
+        if (!fileUrl.startsWith('http')) {
+          // If relative URL, prepend current server URL
+          const currentHost = window.location.host;
+          const protocol = window.location.protocol;
+
+          if (currentHost.includes('localhost') || currentHost.includes('127.0.0.1')) {
+            // Development environment
+            absoluteFileUrl = `http://localhost:8001${fileUrl}`;
+          } else {
+            // Production environment
+            absoluteFileUrl = `${protocol}//${currentHost}${fileUrl}`;
+          }
+        } else if (fileUrl.includes('localhost:5173') || fileUrl.includes('127.0.0.1:5173')) {
+          // If URL points to React dev server, redirect to Django server
+          const currentHost = window.location.host;
+          const protocol = window.location.protocol;
+
+          if (currentHost.includes('localhost') || currentHost.includes('127.0.0.1')) {
+            absoluteFileUrl = fileUrl.replace(/https?:\/\/(localhost|127\.0\.0\.1):5173/, 'http://localhost:8001');
+          } else {
+            absoluteFileUrl = fileUrl.replace(/https?:\/\/(localhost|127\.0\.0\.1):5173/, `${protocol}//${currentHost}`);
+          }
+        }
+
+        // Check for duplicate files (same URL and filename)
+        const fileKey = `${absoluteFileUrl}|${fileName}|${sender}`;
+        if (displayedFiles.has(fileKey)) {
+          return;
+        }
+        displayedFiles.add(fileKey);
+
+        // Save to localStorage if enabled
+        if (saveToStorage && chatPersistence) {
+          chatPersistence.saveMessage({
+            content: `📎 ${fileName}`,
+            sender: sender,
+            suggestions: null,
+            fileUrl: absoluteFileUrl,
+            fileName: fileName
+          });
+
+          // Update session activity
+          chatPersistence.updateActivity();
+        }
+
+        const messagesContainer = document.getElementById("chatMessages");
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `message ${sender}`;
+
+        const avatar = document.createElement("div");
+        avatar.className = "message-avatar";
+        avatar.textContent = sender === "user" ? "U" : sender === "agent" ? "👤" : "🤖";
+
+        const messageContent = document.createElement("div");
+        messageContent.className = "message-content file-message";
+
+        // Create file display with image preview
+        const fileDiv = document.createElement("div");
+        fileDiv.className = "file-attachment";
+
+        // Check if file is an image
+        const isImage = /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(fileName);
+
+        if (isImage) {
+          fileDiv.innerHTML = `
+            <div class="file-image-preview">
+              <img src="${absoluteFileUrl}" alt="${fileName}" style="max-width: 200px; max-height: 200px; border-radius: 8px; cursor: pointer;" onclick="downloadFile('${absoluteFileUrl}', '${fileName}')">
+              <div class="file-name" style="margin-top: 8px; font-size: 12px; color: #666;">${fileName}</div>
+              <div class="file-actions" style="margin-top: 4px;">
+                <a href="javascript:void(0)" onclick="downloadFile('${absoluteFileUrl}', '${fileName}')" class="file-download">Download</a>
+              </div>
+            </div>
+          `;
+        } else {
+          fileDiv.innerHTML = `
+            <div class="file-icon">📎</div>
+            <div class="file-info">
+              <div class="file-name">${fileName}</div>
+              <div class="file-actions">
+                <a href="javascript:void(0)" onclick="downloadFile('${absoluteFileUrl}', '${fileName}')" class="file-download">Download</a>
+              </div>
+            </div>
+          `;
+        }
+
+        messageContent.appendChild(fileDiv);
+
+        const messageTime = document.createElement("div");
+        messageTime.className = "message-time";
+        messageTime.textContent = new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+
+        messageDiv.appendChild(avatar);
+        const contentWrapper = document.createElement("div");
+        contentWrapper.appendChild(messageContent);
+        contentWrapper.appendChild(messageTime);
+        messageDiv.appendChild(contentWrapper);
+
+        messagesContainer.appendChild(messageDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+
+      // Show typing indicator
+      function showTypingIndicator() {
+        if (!isTyping) {
+          isTyping = true;
+          const typingIndicator = document.getElementById("typingIndicator");
+          if (typingIndicator) {
+            typingIndicator.style.display = "flex";
+            const messagesContainer = document.getElementById("chatMessages");
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+          } else {
+            console.warn("Typing indicator element not found");
+          }
+        }
+      }
+
+      // Hide typing indicator
+      function hideTypingIndicator() {
+        isTyping = false;
+        const typingIndicator = document.getElementById("typingIndicator");
+        if (typingIndicator) {
+          typingIndicator.style.display = "none";
+        } else {
+          console.warn("Typing indicator element not found");
+        }
+      }
+
+      // Close chatbot using postMessage for cross-origin communication
+      function closeChatbot() {
+        try {
+          // Send message to parent window to close chatbot
+          window.parent.postMessage({
+            type: 'CLOSE_CHATBOT',
+            companyId: chatConfig.companyId
+          }, '*');
+        } catch (error) {
+          console.error('Failed to send close message to parent:', error);
+        }
+      }
+
+      // Download file function for images and other files
+      function downloadFile(fileUrl, fileName) {
+        try {
+          // Create a temporary anchor element for download
+          const link = document.createElement('a');
+          link.href = fileUrl;
+          link.download = fileName;
+          link.style.display = 'none';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        } catch (error) {
+          console.error('Failed to download file:', error);
+          // Fallback: open in new tab if download fails
+          window.open(fileUrl, '_blank');
+        }
+      }
+
+      // Listen for configuration from parent window
+      window.addEventListener("message", function (event) {
+        if (event.data.type === "CHATBOT_CONFIG") {
+          initializeChatbot(event.data.config);
+        }
+      });
+
+      // WebSocket connection management
+      function connectWebSocket() {
+        if (websocket && websocket.readyState === WebSocket.OPEN) {
+          return; // Already connected
+        }
+
+        if (!chatConfig.sessionId) {
+          console.log("No session ID available for WebSocket connection");
+          return;
+        }
+
+        // Determine WebSocket URL based on current domain
+        let wsUrl;
+        const currentHost = window.location.host;
+
+        if (currentHost.includes('localhost') || currentHost.includes('127.0.0.1')) {
+          // Development environment
+          wsUrl = `ws://localhost:8000/ws/chat/${chatConfig.companyId}/${chatConfig.sessionId}/`;
+        } else {
+          // Production environment - use secure WebSocket
+          wsUrl = `wss://${currentHost}/ws/chat/${chatConfig.companyId}/${chatConfig.sessionId}/`;
+        }
+        websocket = new WebSocket(wsUrl);
+
+        websocket.onopen = function (event) {
+          console.log("WebSocket connected");
+          isConnected = true;
+          updateConnectionStatus(true);
+
+          // Request file list to sync existing files
+          if (chatConfig.sessionId && chatConfig.companyId) {
+            websocket.send(JSON.stringify({
+              type: 'request_file_list',
+              session_id: chatConfig.sessionId,
+              company_id: chatConfig.companyId
+            }));
+          }
+        };
+
+        websocket.onmessage = function (event) {
+          const data = JSON.parse(event.data);
+          handleWebSocketMessage(data);
+        };
+
+        websocket.onclose = function (event) {
+          console.log("WebSocket disconnected");
+          isConnected = false;
+          updateConnectionStatus(false);
+          // Don't auto-reconnect to avoid spam
+        };
+
+        websocket.onerror = function (error) {
+          console.log("WebSocket not available - using HTTP API only");
+          isConnected = false;
+          updateConnectionStatus(false);
+          // Close the websocket to prevent further errors
+          if (websocket) {
+            websocket.close();
+            websocket = null;
+          }
+        };
+      }
+
+      // Handle WebSocket messages
+      function handleWebSocketMessage(data) {
+        switch (data.type) {
+          case "chat_message":
+            if (data.sender_type === "agent") {
+              // If there's a file, include it in the message
+              if (data.file_url && data.file_name) {
+                // For file messages, use the file name as content if no message text
+                const messageContent = data.message || `📎 ${data.file_name}`;
+                addMessage(messageContent, "agent", data.suggestions, data.file_url, data.file_name);
+              } else {
+                // Regular text message
+                addMessage(data.message, "agent", data.suggestions);
+              }
+            }
+            break;
+
+          case "typing_indicator":
+            if (data.sender_type === "agent") {
+              if (data.is_typing) {
+                showTypingIndicator("Agent is typing...");
+              } else {
+                hideTypingIndicator();
+              }
+            }
+            break;
+
+          case "system_message":
+            addMessage("bot", data.message);
+            break;
+
+          case "agent_joined":
+            addMessage(
+              "bot",
+              `🟢 ${data.agent_name} has joined the conversation`
+            );
+            break;
+
+          case "agent_left":
+            addMessage(
+              "bot",
+              `🔴 ${data.agent_name} has left the conversation`
+            );
+            break;
+
+          case "error":
+            // Only log unexpected errors, not session state messages
+            if (!data.message.includes("Session not escalated")) {
+              console.error("WebSocket error:", data.message);
+            }
+            break;
+
+          case "config_update":
+            console.log("Received configuration update:", data.config);
+            // Update chatbot configuration in real-time
+            if (data.config && data.company_id === chatConfig.companyId) {
+              updateChatbotConfiguration(data.config);
+            }
+            break;
+
+          case "connection_established":
+            console.log("WebSocket connection established:", data.message);
+            break;
+
+          case "file_shared":
+            // Show file message in chat
+            const senderType = data.uploader === "user" ? "user" : "agent";
+            addFileMessage(senderType, data.url, data.name);
+            break;
+
+          case "file_list":
+            // Handle file list for reconnection sync
+            if (data.files && data.files.length > 0) {
+              data.files.forEach(file => {
+                const senderType = file.uploader === "user" ? "user" : "agent";
+                addFileMessage(senderType, file.url, file.original_name, false); // false = don't save to localStorage again
+              });
+            }
+            break;
+
+          default:
+            console.log("Unknown WebSocket message type:", data.type);
+        }
+      }
+
+      // Update chatbot configuration in real-time
+      function updateChatbotConfiguration(newConfig) {
+        console.log("Applying new configuration:", newConfig);
+
+        // Update global config
+        if (newConfig.primary_color) {
+          chatConfig.primaryColor = newConfig.primary_color;
+          document.documentElement.style.setProperty(
+            "--primary-color",
+            newConfig.primary_color
+          );
+        }
+
+        if (newConfig.secondary_color) {
+          chatConfig.secondaryColor = newConfig.secondary_color;
+          document.documentElement.style.setProperty(
+            "--secondary-color",
+            newConfig.secondary_color
+          );
+        }
+
+        if (newConfig.position) {
+          chatConfig.position = newConfig.position;
+          // Apply position change to parent window using postMessage
+          try {
+            window.parent.postMessage({
+              type: 'UPDATE_CHATBOT_CONFIG',
+              companyId: chatConfig.companyId,
+              config: {
+                position: newConfig.position,
+                iframeWidth: newConfig.iframe_width || chatConfig.iframeWidth,
+                iframeHeight: newConfig.iframe_height || chatConfig.iframeHeight,
+              }
+            }, '*');
+            console.log('Sent config update to parent window');
+          } catch (error) {
+            console.error('Failed to send config update to parent:', error);
+          }
+        }
+
+        if (newConfig.iframe_width) {
+          chatConfig.iframeWidth = newConfig.iframe_width;
+        }
+
+        if (newConfig.iframe_height) {
+          chatConfig.iframeHeight = newConfig.iframe_height;
+        }
+
+        if (newConfig.welcome_message) {
+          chatConfig.welcomeMessage = newConfig.welcome_message;
+        }
+
+        if (newConfig.company_name) {
+          chatConfig.companyName = newConfig.company_name;
+        }
+
+        console.log("Configuration updated successfully!");
+      }
+
+      // Connect to configuration WebSocket for real-time updates
+      function connectConfigWebSocket() {
+        if (configWebSocket && configWebSocket.readyState === WebSocket.OPEN) {
+          return; // Already connected
+        }
+
+        try {
+          // Determine Config WebSocket URL based on current domain
+          let configWsUrl;
+          const currentHost = window.location.host;
+
+          if (currentHost.includes('localhost') || currentHost.includes('127.0.0.1')) {
+            // Development environment
+            configWsUrl = `ws://localhost:8000/ws/config/${chatConfig.companyId}/`;
+          } else {
+            // Production environment - use secure WebSocket
+            configWsUrl = `wss://${currentHost}/ws/config/${chatConfig.companyId}/`;
+          }
+          console.log("Connecting to Config WebSocket:", configWsUrl);
+
+          configWebSocket = new WebSocket(configWsUrl);
+
+          configWebSocket.onopen = function (event) {
+            console.log("Config WebSocket connected successfully");
+          };
+
+          configWebSocket.onmessage = function (event) {
+            const data = JSON.parse(event.data);
+            if (data.type === "config_update") {
+              console.log(
+                "Received config update via dedicated WebSocket:",
+                data.config
+              );
+              updateChatbotConfiguration(data.config);
+            }
+          };
+
+          configWebSocket.onclose = function (event) {
+            console.log("Config WebSocket disconnected");
+          };
+
+          configWebSocket.onerror = function (error) {
+            console.log(
+              "Config WebSocket error - using main WebSocket for updates"
+            );
+          };
+        } catch (error) {
+          console.log("Config WebSocket not supported - using main WebSocket");
+        }
+      }
+
+      // Send message via WebSocket
+      function sendWebSocketMessage(message, fileUrl = null, fileName = null) {
+        if (websocket && websocket.readyState === WebSocket.OPEN) {
+          websocket.send(
+            JSON.stringify({
+              type: "chat_message",
+              message: message,
+              sender_type: "user",
+              sender_name: "User",
+              file_url: fileUrl,
+              file_name: fileName,
+              session_id: chatConfig.sessionId,
+            })
+          );
+          return true;
+        }
+        return false;
+      }
+
+      // Update connection status indicator
+      function updateConnectionStatus(connected) {
+        const header = document.querySelector(".chat-header h3");
+        if (header) {
+          const statusIndicator = connected ? "🟢" : "🔴";
+          const originalText = header.textContent.replace(/^[🟢🔴]\s*/, "");
+          header.textContent = `${statusIndicator} ${originalText}`;
+        }
+      }
+
+      // Show power off confirmation popup
+      function showPowerOffConfirmation() {
+        const overlay = document.getElementById("powerConfirmationOverlay");
+        overlay.style.display = "flex";
+      }
+
+      // Hide power off confirmation popup
+      function hidePowerOffConfirmation() {
+        const overlay = document.getElementById("powerConfirmationOverlay");
+        overlay.style.display = "none";
+      }
+
+      // Confirm power off - clear everything and close
+      function confirmPowerOff() {
+        console.log("DEBUG: Power off confirmed - clearing all data and closing");
+
+        // 1. Complete reset of all chatbot data
+        try {
+          if (chatPersistence) {
+            chatPersistence.completeReset();
+          } else {
+            // Fallback if chatPersistence is not available
+            const keysToRemove = [];
+            for (let i = 0; i < localStorage.length; i++) {
+              const key = localStorage.key(i);
+              if (key && (
+                key.includes('chatbot') ||
+                key.includes('chat_') ||
+                key.includes(chatConfig.sessionId) ||
+                key.includes(chatConfig.companyId) ||
+                key.includes('SpellBot')
+              )) {
+                keysToRemove.push(key);
+              }
+            }
+            keysToRemove.forEach(key => localStorage.removeItem(key));
+            console.log("DEBUG: Fallback - cleared localStorage keys:", keysToRemove);
+          }
+        } catch (e) {
+          console.log("LocalStorage clearing error:", e);
+        }
+
+        // 2. Clear all session storage
+        try {
+          sessionStorage.clear();
+          console.log("DEBUG: Cleared sessionStorage");
+        } catch (e) {
+          console.log("SessionStorage not available");
+        }
+
+        // 3. Clear any chatbot-related cookies
+        try {
+          // Get all cookies and remove chatbot-related ones
+          const cookies = document.cookie.split(';');
+          cookies.forEach(cookie => {
+            const [name] = cookie.split('=');
+            const cookieName = name.trim();
+            if (cookieName.includes('chatbot') ||
+                cookieName.includes('chat_') ||
+                cookieName.includes(chatConfig.companyId) ||
+                cookieName.includes('SpellBot')) {
+              // Remove the cookie by setting it to expire in the past
+              document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+              console.log("DEBUG: Cleared cookie:", cookieName);
+            }
+          });
+        } catch (e) {
+          console.log("Cookie clearing error:", e);
+        }
+
+        // 4. Clear in-memory data structures
+        displayedFiles.clear();
+        displayedMessages.clear();
+        console.log("DEBUG: Cleared in-memory data structures");
+
+        // 5. Reset chat state variables
+        if (typeof chatConfig !== 'undefined') {
+          // Don't clear sessionId as it's needed for proper cleanup
+          // but reset other state
+        }
+
+        // 6. Close WebSocket connections
+        if (websocket && websocket.readyState === WebSocket.OPEN) {
+          websocket.close();
+          console.log("DEBUG: Closed WebSocket connection");
+        }
+
+        // 7. Clear the chat messages from DOM
+        const messagesContainer = document.getElementById("chatMessages");
+        if (messagesContainer) {
+          // Keep loading indicator and welcome message, remove everything else
+          const loadingIndicator = document.getElementById("loadingIndicator");
+          const welcomeMessage = document.getElementById("welcomeMessage");
+
+          messagesContainer.innerHTML = '';
+
+          if (loadingIndicator) {
+            messagesContainer.appendChild(loadingIndicator);
+          }
+          if (welcomeMessage) {
+            messagesContainer.appendChild(welcomeMessage);
+            welcomeMessage.style.display = "block"; // Show welcome message again
+          }
+
+          console.log("DEBUG: Cleared chat messages from DOM");
+        }
+
+        // 8. Reset input field
+        const messageInput = document.getElementById("messageInput");
+        if (messageInput) {
+          messageInput.value = "";
+        }
+
+        // 9. Send message to parent window to clear its cache too
+        try {
+          window.parent.postMessage({
+            type: 'chatbot_power_off',
+            action: 'clear_cache',
+            sessionId: chatConfig.sessionId,
+            companyId: chatConfig.companyId
+          }, '*');
+          console.log("DEBUG: Sent power off message to parent window");
+        } catch (error) {
+          console.log("DEBUG: Could not send message to parent:", error);
+        }
+
+        // 10. Hide confirmation popup
+        hidePowerOffConfirmation();
+
+        // 11. Close the chatbot completely after a short delay to ensure cleanup
+        setTimeout(() => {
+          closeChatbot();
+        }, 500);
+      }
+
+      // Clear chat and start fresh (legacy function - kept for compatibility)
+      function clearChat() {
+        if (confirm("Are you sure you want to start a new chat? This will clear all messages.")) {
+          console.log("DEBUG: Clearing chat and starting fresh");
+
+          // Clear localStorage
+          if (chatPersistence) {
+            chatPersistence.clearChat();
+          }
+
+          // Clear DOM but preserve essential elements
+          const messagesContainer = document.getElementById("chatMessages");
+          messagesContainer.innerHTML = "";
+
+          // Ensure essential elements exist
+          ensureEssentialElements();
+
+          // Show welcome message for fresh start
+          const welcomeMessage = document.getElementById("welcomeMessage");
+          if (welcomeMessage) {
+            welcomeMessage.style.display = "block";
+          }
+
+          // Reset session
+          chatConfig.sessionId = null;
+
+          // Disconnect WebSocket
+          if (websocket) {
+            websocket.close();
+            websocket = null;
+            isConnected = false;
+          }
+
+          // Reset file tracking
+          displayedFiles.clear();
+          displayedMessages.clear();
+
+          // Start fresh
+          setTimeout(() => {
+            sendInitialWelcomeMessage();
+          }, 500);
+
+          console.log("DEBUG: Chat cleared successfully");
+        }
+      }
+
+      // Make functions available globally for iframe communication
+      window.initializeChatbot = initializeChatbot;
+      window.clearChat = clearChat;
+
+      // Initialize with default config
+      initializeChatbot();
+    </script>
+  </body>
+</html>

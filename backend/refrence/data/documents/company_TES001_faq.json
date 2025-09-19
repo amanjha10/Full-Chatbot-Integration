@@ -1,0 +1,21 @@
+{
+  "company_info": {
+    "company_id": "TES001",
+    "company_name": "Test Company Ltd",
+    "created_at": "2025-09-18T05:00:27.885929+00:00",
+    "last_updated": "2025-09-18T06:41:21.365196+00:00"
+  },
+  "company_faqs": {
+    "Company Info": [
+      {
+        "chunk_id": "company_TES001_d3ef31e8",
+        "question": "Where is your Location ?",
+        "answer": "we are located at lokanthali",
+        "section": "Company FAQ",
+        "document": "TES001 Company FAQ",
+        "created_at": "2025-09-18T06:41:21.365158+00:00",
+        "updated_at": "2025-09-18T06:41:21.365184+00:00"
+      }
+    ]
+  }
+}
